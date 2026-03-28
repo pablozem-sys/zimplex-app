@@ -18,14 +18,14 @@ body {
   max-width: 430px;
   margin: 0 auto;
   min-height: 100svh;
-  background: white;
+  background: #f7f8fc;
   position: relative;
-  box-shadow: 0 0 40px rgba(0,0,0,0.08);
+  box-shadow: 0 0 60px rgba(0,0,0,0.10);
 }
 
 .page-content {
   padding: 16px;
-  padding-bottom: 90px;
+  padding-bottom: 110px;
 }
 
 ::-webkit-scrollbar { width: 4px; }

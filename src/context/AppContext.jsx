@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from 'react'
+import { createContext, useContext, useState, useEffect } from 'react'
 
 const initialProducts = [
   { id: 1, name: 'Palta', price: 1000, stock: 50, description: 'Paltas frescas', lowStockThreshold: 10 },
@@ -37,14 +37,28 @@ const initialGoals = [
   { id: 2, name: 'Nueva vitrina', target: 200000, current: 150000, deadline: '2026-05-01' },
 ]
 
+function loadFromStorage(key, fallback) {
+  try {
+    const stored = localStorage.getItem(key)
+    return stored ? JSON.parse(stored) : fallback
+  } catch {
+    return fallback
+  }
+}
+
 const AppContext = createContext(null)
 
 export function AppProvider({ children }) {
-  const [products, setProducts] = useState(initialProducts)
-  const [sales, setSales] = useState(initialSales)
-  const [orders, setOrders] = useState(initialOrders)
-  const [goals, setGoals] = useState(initialGoals)
+  const [products, setProducts] = useState(() => loadFromStorage('mns_products', initialProducts))
+  const [sales, setSales] = useState(() => loadFromStorage('mns_sales', initialSales))
+  const [orders, setOrders] = useState(() => loadFromStorage('mns_orders', initialOrders))
+  const [goals, setGoals] = useState(() => loadFromStorage('mns_goals', initialGoals))
   const [activeTab, setActiveTab] = useState('dashboard')
+
+  useEffect(() => { localStorage.setItem('mns_products', JSON.stringify(products)) }, [products])
+  useEffect(() => { localStorage.setItem('mns_sales', JSON.stringify(sales)) }, [sales])
+  useEffect(() => { localStorage.setItem('mns_orders', JSON.stringify(orders)) }, [orders])
+  useEffect(() => { localStorage.setItem('mns_goals', JSON.stringify(goals)) }, [goals])
 
   const addSale = (sale) => {
     const newSale = { ...sale, id: Date.now(), date: fmt(new Date()) }
@@ -86,6 +100,13 @@ export function AppProvider({ children }) {
     setGoals(prev => prev.filter(g => g.id !== id))
   }
 
+  const resetData = () => {
+    setProducts(initialProducts)
+    setSales(initialSales)
+    setOrders(initialOrders)
+    setGoals(initialGoals)
+  }
+
   // Derived data
   const todaySales = sales.filter(s => s.date === fmt(new Date()))
   const todayTotal = todaySales.reduce((sum, s) => sum + s.total, 0)
@@ -97,7 +118,6 @@ export function AppProvider({ children }) {
   const pendingOrders = orders.filter(o => o.status === 'pendiente').length
   const lowStockProducts = products.filter(p => p.stock <= p.lowStockThreshold).length
 
-  // Last 7 days chart data
   const last7Days = Array.from({ length: 7 }, (_, i) => {
     const date = daysAgo(6 - i)
     const daySales = sales.filter(s => s.date === date)
@@ -112,6 +132,7 @@ export function AppProvider({ children }) {
       addSale, addProduct, updateProduct, deleteProduct,
       addOrder, updateOrderStatus,
       addGoal, updateGoalProgress, deleteGoal,
+      resetData,
       todayTotal, monthTotal, pendingOrders, lowStockProducts, last7Days,
       todaySalesCount: todaySales.length,
     }}>
