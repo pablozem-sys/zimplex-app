@@ -3,7 +3,7 @@ import { useApp } from '../context/AppContext'
 import { Plus, Target, X, Trash2 } from 'lucide-react'
 
 const fmt = (n) => new Intl.NumberFormat('es-CL', { style: 'currency', currency: 'CLP', maximumFractionDigits: 0 }).format(n)
-const inputClass = 'w-full bg-gray-50 border border-gray-200 rounded-2xl px-4 py-3.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#2D68F6] focus:border-transparent'
+const inputClass = 'w-full bg-gray-50 border border-gray-200 rounded-2xl px-4 py-3.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#7C3AED] focus:border-transparent'
 
 function CreateGoalModal({ onClose, onAdd }) {
   const [form, setForm] = useState({ name: '', target: '', deadline: '' })
@@ -44,7 +44,7 @@ function CreateGoalModal({ onClose, onAdd }) {
               className={inputClass} />
           </div>
           <button type="submit"
-            className="w-full bg-[#2D68F6] text-white font-semibold py-4 rounded-2xl active:scale-[0.98] transition-all mt-2 shadow-lg shadow-blue-200">
+            className="w-full bg-[#7C3AED] text-white font-semibold py-4 rounded-2xl active:scale-[0.98] transition-all mt-2 shadow-lg shadow-violet-200">
             Crear meta
           </button>
         </form>
@@ -79,7 +79,7 @@ function AddFundsModal({ goal, onClose, onAdd }) {
         <div className="flex gap-2 mb-5">
           {suggestions.map(s => (
             <button key={s} onClick={() => setAmount(s)}
-              className={`flex-1 py-2.5 rounded-2xl text-xs font-semibold transition-all ${parseInt(amount) === s ? 'bg-[#2D68F6] text-white shadow-md shadow-blue-200' : 'bg-gray-100 text-gray-600'}`}>
+              className={`flex-1 py-2.5 rounded-2xl text-xs font-semibold transition-all ${parseInt(amount) === s ? 'bg-[#7C3AED] text-white shadow-md shadow-violet-200' : 'bg-gray-100 text-gray-600'}`}>
               +{s >= 1000 ? `${s / 1000}k` : s}
             </button>
           ))}
@@ -87,7 +87,7 @@ function AddFundsModal({ goal, onClose, onAdd }) {
 
         <button onClick={() => { onAdd(goal.id, parseInt(amount) || 0); onClose() }}
           disabled={!amount || parseInt(amount) <= 0}
-          className="w-full bg-[#2D68F6] disabled:bg-gray-200 disabled:text-gray-400 text-white font-semibold py-4 rounded-2xl active:scale-[0.98] transition-all shadow-lg shadow-blue-200 disabled:shadow-none">
+          className="w-full bg-[#7C3AED] disabled:bg-gray-200 disabled:text-gray-400 text-white font-semibold py-4 rounded-2xl active:scale-[0.98] transition-all shadow-lg shadow-violet-200 disabled:shadow-none">
           Agregar {amount ? fmt(parseInt(amount)) : ''}
         </button>
       </div>
@@ -112,14 +112,14 @@ export default function Goals() {
           <p className="text-sm text-gray-400 mt-0.5">{goals.length} metas activas</p>
         </div>
         <button onClick={() => setShowCreate(true)}
-          className="flex items-center gap-1.5 bg-[#2D68F6] text-white text-sm font-semibold px-4 py-2.5 rounded-2xl active:scale-95 transition-all shadow-md shadow-blue-200">
+          className="flex items-center gap-1.5 bg-[#7C3AED] text-white text-sm font-semibold px-4 py-2.5 rounded-2xl active:scale-95 transition-all shadow-md shadow-violet-200">
           <Plus size={16} />
           Nueva
         </button>
       </div>
 
       {goals.length > 0 && (
-        <div className="bg-gradient-to-br from-[#2D68F6] to-[#5794F7] rounded-[24px] p-5 mb-5 text-white shadow-xl shadow-blue-200">
+        <div className="bg-gradient-to-br from-[#7C3AED] to-[#A78BFA] rounded-[24px] p-5 mb-5 text-white shadow-xl shadow-violet-200">
           <p className="text-sm font-medium text-blue-100 mb-1">Progreso total</p>
           <p className="text-3xl font-bold mb-0.5">{fmt(totalAchieved)}</p>
           <p className="text-sm text-blue-200 mb-4">de {fmt(totalGoals)}</p>
@@ -161,14 +161,14 @@ function GoalCard({ goal, onAdd, onDelete }) {
   const daysLeft = Math.ceil((new Date(goal.deadline) - new Date()) / (1000 * 60 * 60 * 24))
   const done = progress >= 100
 
-  const barColor = done ? '#7CD09B' : progress > 60 ? '#2D68F6' : progress > 30 ? '#5794F7' : '#DC4B56'
+  const barColor = done ? '#7CD09B' : progress > 60 ? '#7C3AED' : progress > 30 ? '#A78BFA' : '#DC4B56'
 
   return (
     <div className="bg-white border border-gray-100 rounded-[20px] p-4 shadow-sm">
       <div className="flex items-start justify-between mb-3">
         <div className="flex items-center gap-3">
-          <div className={`w-11 h-11 rounded-2xl flex items-center justify-center ${done ? 'bg-green-50' : 'bg-blue-50'}`}>
-            <Target size={18} className={done ? 'text-[#7CD09B]' : 'text-[#2D68F6]'} />
+          <div className={`w-11 h-11 rounded-2xl flex items-center justify-center ${done ? 'bg-green-50' : 'bg-violet-50'}`}>
+            <Target size={18} className={done ? 'text-[#7CD09B]' : 'text-[#7C3AED]'} />
           </div>
           <div>
             <p className="text-sm font-semibold text-gray-900">{goal.name}</p>
@@ -201,7 +201,7 @@ function GoalCard({ goal, onAdd, onDelete }) {
 
       {!done && (
         <button onClick={onAdd}
-          className="w-full bg-gray-50 border border-gray-200 text-gray-600 text-sm font-semibold py-3 rounded-2xl active:scale-95 transition-all hover:bg-blue-50 hover:border-blue-200 hover:text-[#2D68F6]">
+          className="w-full bg-gray-50 border border-gray-200 text-gray-600 text-sm font-semibold py-3 rounded-2xl active:scale-95 transition-all hover:bg-violet-50 hover:border-blue-200 hover:text-[#7C3AED]">
           + Agregar progreso
         </button>
       )}

@@ -6,7 +6,7 @@ const fmt = (n) => new Intl.NumberFormat('es-CL', { style: 'currency', currency:
 
 const paymentColors = {
   efectivo: 'text-emerald-600 bg-emerald-50',
-  transferencia: 'text-[#2D68F6] bg-blue-50',
+  transferencia: 'text-[#7C3AED] bg-violet-50',
   tarjeta: 'text-purple-600 bg-purple-50',
 }
 const paymentLabels = { efectivo: 'Efectivo', transferencia: 'Transf.', tarjeta: 'Tarjeta' }
@@ -15,7 +15,7 @@ const CustomTooltip = ({ active, payload }) => {
   if (active && payload && payload.length) {
     return (
       <div className="bg-white border border-gray-100 rounded-2xl px-3 py-2 shadow-lg">
-        <p className="text-[#2D68F6] font-semibold text-sm">{fmt(payload[0].value)}</p>
+        <p className="text-[#7C3AED] font-semibold text-sm">{fmt(payload[0].value)}</p>
       </div>
     )
   }
@@ -33,8 +33,8 @@ export default function Dashboard() {
       value: fmt(todayTotal),
       sub: `${todaySalesCount} transacciones`,
       icon: TrendingUp,
-      color: 'text-[#2D68F6]',
-      bg: 'bg-blue-50',
+      color: 'text-[#7C3AED]',
+      bg: 'bg-violet-50',
     },
     {
       label: 'Ventas del Mes',
@@ -74,7 +74,7 @@ export default function Dashboard() {
           </p>
           <h1 className="text-xl font-bold text-gray-900 mt-0.5">MiNegocioSimple</h1>
         </div>
-        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#2D68F6] to-[#5794F7] flex items-center justify-center shadow-md shadow-blue-200">
+        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#7C3AED] to-[#A78BFA] flex items-center justify-center shadow-md shadow-violet-200">
           <span className="text-white font-bold text-sm">M</span>
         </div>
       </div>
@@ -103,7 +103,7 @@ export default function Dashboard() {
       {/* CTA */}
       <button
         onClick={() => setActiveTab('ventas')}
-        className="w-full bg-[#2D68F6] active:scale-[0.98] text-white font-semibold py-4 rounded-[18px] flex items-center justify-center gap-2 transition-all duration-200 shadow-lg shadow-blue-200 mb-5"
+        className="w-full bg-[#7C3AED] active:scale-[0.98] text-white font-semibold py-4 rounded-[18px] flex items-center justify-center gap-2 transition-all duration-200 shadow-lg shadow-violet-200 mb-5"
       >
         <Plus size={20} />
         Registrar venta
@@ -119,8 +119,8 @@ export default function Dashboard() {
           <AreaChart data={last7Days} margin={{ top: 0, right: 4, left: -30, bottom: 0 }}>
             <defs>
               <linearGradient id="colorSales" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="#2D68F6" stopOpacity={0.12} />
-                <stop offset="95%" stopColor="#2D68F6" stopOpacity={0} />
+                <stop offset="5%" stopColor="#7C3AED" stopOpacity={0.12} />
+                <stop offset="95%" stopColor="#7C3AED" stopOpacity={0} />
               </linearGradient>
             </defs>
             <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" vertical={false} />
@@ -128,9 +128,9 @@ export default function Dashboard() {
             <YAxis tick={{ fontSize: 10, fill: '#9ca3af' }} tickLine={false} axisLine={false}
               tickFormatter={(v) => v >= 1000 ? `${v / 1000}k` : v} />
             <Tooltip content={<CustomTooltip />} />
-            <Area type="monotone" dataKey="total" stroke="#2D68F6" strokeWidth={2.5}
-              fill="url(#colorSales)" dot={{ r: 3, fill: '#2D68F6', strokeWidth: 0 }}
-              activeDot={{ r: 5, fill: '#2D68F6' }} />
+            <Area type="monotone" dataKey="total" stroke="#7C3AED" strokeWidth={2.5}
+              fill="url(#colorSales)" dot={{ r: 3, fill: '#7C3AED', strokeWidth: 0 }}
+              activeDot={{ r: 5, fill: '#7C3AED' }} />
           </AreaChart>
         </ResponsiveContainer>
       </div>
@@ -140,15 +140,15 @@ export default function Dashboard() {
         <div className="bg-white rounded-[20px] border border-gray-100 shadow-sm overflow-hidden mb-2">
           <div className="flex items-center justify-between px-4 pt-4 pb-3">
             <h2 className="text-sm font-semibold text-gray-900">Últimas ventas</h2>
-            <button onClick={() => setActiveTab('ventas')} className="flex items-center gap-1 text-xs text-[#2D68F6] font-medium">
+            <button onClick={() => setActiveTab('ventas')} className="flex items-center gap-1 text-xs text-[#7C3AED] font-medium">
               Ver todo <ArrowRight size={12} />
             </button>
           </div>
           <div>
             {recentSales.map((sale, i) => (
               <div key={sale.id} className={`flex items-center gap-3 px-4 py-3 ${i < recentSales.length - 1 ? 'border-b border-gray-50' : ''}`}>
-                <div className="w-8 h-8 rounded-2xl bg-blue-50 flex items-center justify-center flex-shrink-0">
-                  <TrendingUp size={14} className="text-[#2D68F6]" />
+                <div className="w-8 h-8 rounded-2xl bg-violet-50 flex items-center justify-center flex-shrink-0">
+                  <TrendingUp size={14} className="text-[#7C3AED]" />
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium text-gray-900 truncate">{sale.productName} ×{sale.quantity}</p>

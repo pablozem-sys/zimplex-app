@@ -3,11 +3,11 @@ import { useApp } from '../context/AppContext'
 import { Plus, X, ChevronDown, MessageCircle } from 'lucide-react'
 
 const fmt = (n) => new Intl.NumberFormat('es-CL', { style: 'currency', currency: 'CLP', maximumFractionDigits: 0 }).format(n)
-const inputClass = 'w-full bg-gray-50 border border-gray-200 rounded-2xl px-4 py-3.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#2D68F6] focus:border-transparent'
+const inputClass = 'w-full bg-gray-50 border border-gray-200 rounded-2xl px-4 py-3.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#7C3AED] focus:border-transparent'
 
 const statusConfig = {
   pendiente: { label: 'Pendiente', color: 'text-amber-600', bg: 'bg-amber-50', dot: 'bg-amber-400' },
-  pagado: { label: 'Pagado', color: 'text-[#2D68F6]', bg: 'bg-blue-50', dot: 'bg-[#2D68F6]' },
+  pagado: { label: 'Pagado', color: 'text-[#7C3AED]', bg: 'bg-violet-50', dot: 'bg-[#7C3AED]' },
   entregado: { label: 'Entregado', color: 'text-[#7CD09B]', bg: 'bg-green-50', dot: 'bg-[#7CD09B]' },
 }
 
@@ -70,9 +70,9 @@ function CreateOrderModal({ onClose, onAdd, products }) {
               <button type="button" onClick={() => setForm(f => ({ ...f, quantity: Math.max(1, f.quantity - 1) }))}
                 className="w-12 h-12 rounded-2xl bg-gray-100 text-gray-600 font-bold text-xl flex items-center justify-center active:scale-95">−</button>
               <input type="number" min="1" value={form.quantity} onChange={e => setForm(f => ({ ...f, quantity: parseInt(e.target.value) || 1 }))}
-                className="flex-1 bg-gray-50 border border-gray-200 rounded-2xl px-4 py-3 text-center font-bold focus:outline-none focus:ring-2 focus:ring-[#2D68F6] focus:border-transparent" />
+                className="flex-1 bg-gray-50 border border-gray-200 rounded-2xl px-4 py-3 text-center font-bold focus:outline-none focus:ring-2 focus:ring-[#7C3AED] focus:border-transparent" />
               <button type="button" onClick={() => setForm(f => ({ ...f, quantity: f.quantity + 1 }))}
-                className="w-12 h-12 rounded-2xl bg-[#2D68F6] text-white font-bold text-xl flex items-center justify-center active:scale-95 shadow-md shadow-blue-200">+</button>
+                className="w-12 h-12 rounded-2xl bg-[#7C3AED] text-white font-bold text-xl flex items-center justify-center active:scale-95 shadow-md shadow-violet-200">+</button>
             </div>
           </div>
           <div>
@@ -84,14 +84,14 @@ function CreateOrderModal({ onClose, onAdd, products }) {
           </div>
 
           {total > 0 && (
-            <div className="bg-gradient-to-r from-[#2D68F6] to-[#5794F7] rounded-2xl p-4 flex items-center justify-between shadow-lg shadow-blue-200">
+            <div className="bg-gradient-to-r from-[#7C3AED] to-[#A78BFA] rounded-2xl p-4 flex items-center justify-between shadow-lg shadow-violet-200">
               <span className="text-sm text-blue-100">Total</span>
               <span className="text-xl font-bold text-white">{fmt(total)}</span>
             </div>
           )}
 
           <button type="submit"
-            className="w-full bg-[#2D68F6] text-white font-semibold py-4 rounded-2xl active:scale-[0.98] transition-all shadow-lg shadow-blue-200">
+            className="w-full bg-[#7C3AED] text-white font-semibold py-4 rounded-2xl active:scale-[0.98] transition-all shadow-lg shadow-violet-200">
             Crear pedido
           </button>
 
@@ -123,7 +123,7 @@ export default function Orders() {
           <p className="text-sm text-gray-400 mt-0.5">{orders.length} pedidos registrados</p>
         </div>
         <button onClick={() => setShowCreate(true)}
-          className="flex items-center gap-1.5 bg-[#2D68F6] text-white text-sm font-semibold px-4 py-2.5 rounded-2xl active:scale-95 transition-all shadow-md shadow-blue-200">
+          className="flex items-center gap-1.5 bg-[#7C3AED] text-white text-sm font-semibold px-4 py-2.5 rounded-2xl active:scale-95 transition-all shadow-md shadow-violet-200">
           <Plus size={16} />
           Crear
         </button>
@@ -134,7 +134,7 @@ export default function Orders() {
         {['todos', 'pendiente', 'pagado', 'entregado'].map(f => (
           <button key={f} onClick={() => setFilter(f)}
             className={`px-4 py-2 rounded-2xl text-xs font-semibold whitespace-nowrap transition-all ${
-              filter === f ? 'bg-[#2D68F6] text-white shadow-md shadow-blue-200' : 'bg-white text-gray-500 border border-gray-200'
+              filter === f ? 'bg-[#7C3AED] text-white shadow-md shadow-violet-200' : 'bg-white text-gray-500 border border-gray-200'
             }`}>
             {filterLabels[f]}
           </button>
@@ -192,7 +192,7 @@ function OrderCard({ order, onStatusChange }) {
       <div className="flex gap-2 mt-2">
         {order.status !== 'entregado' && (
           <button onClick={nextStatus}
-            className="flex-1 bg-[#2D68F6] text-white text-xs font-semibold py-3 rounded-2xl active:scale-95 transition-all shadow-md shadow-blue-100">
+            className="flex-1 bg-[#7C3AED] text-white text-xs font-semibold py-3 rounded-2xl active:scale-95 transition-all shadow-md shadow-blue-100">
             {order.status === 'pendiente' ? 'Marcar como pagado' : 'Marcar como entregado'}
           </button>
         )}

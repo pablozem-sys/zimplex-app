@@ -3,60 +3,84 @@ import { useApp } from '../context/AppContext'
 import { Plus, AlertTriangle, Package, X, Trash2, Pencil } from 'lucide-react'
 
 const fmt = (n) => new Intl.NumberFormat('es-CL', { style: 'currency', currency: 'CLP', maximumFractionDigits: 0 }).format(n)
-const inputClass = 'w-full bg-gray-50 border border-gray-200 rounded-2xl px-4 py-3.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#2D68F6] focus:border-transparent'
+const inputClass = 'w-full bg-gray-50 border border-gray-200 rounded-2xl px-4 py-3.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#7C3AED] focus:border-transparent'
+
+const UNITS = ['unidades', 'kg', 'gramos', 'litros', 'ml', 'metros', 'cajas', 'docenas', 'bolsas', 'porciones']
 
 function ProductFormModal({ title, initial, onClose, onSave }) {
   const [form, setForm] = useState(initial)
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    onSave({ name: form.name, price: parseInt(form.price), stock: parseInt(form.stock), description: form.description })
+    onSave({ name: form.name, price: parseInt(form.price), stock: parseInt(form.stock), description: form.description, unit: form.unit || 'unidades' })
     onClose()
   }
 
   return (
     <div className="fixed inset-0 bg-black/40 z-50 flex items-end justify-center" onClick={onClose}>
-      <div className="bg-white w-full max-w-[430px] rounded-t-[32px] p-6 pb-10" onClick={e => e.stopPropagation()}>
-        <div className="w-10 h-1 bg-gray-200 rounded-full mx-auto mb-5" />
-        <div className="flex items-center justify-between mb-5">
-          <h2 className="text-lg font-bold text-gray-900">{title}</h2>
-          <button onClick={onClose} className="w-9 h-9 rounded-full bg-gray-100 flex items-center justify-center">
-            <X size={16} className="text-gray-500" />
-          </button>
-        </div>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2 block">Nombre</label>
-            <input required value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))}
-              placeholder="Ej: Tomate cherry" className={inputClass} />
+      <div
+        className="bg-white w-full max-w-[430px] rounded-t-[32px] overflow-y-auto"
+        style={{ maxHeight: 'calc(100vh - 80px)', marginBottom: '84px' }}
+        onClick={e => e.stopPropagation()}
+      >
+        <div className="p-6 pb-10">
+          <div className="w-10 h-1 bg-gray-200 rounded-full mx-auto mb-5" />
+          <div className="flex items-center justify-between mb-5">
+            <h2 className="text-lg font-bold text-gray-900">{title}</h2>
+            <button onClick={onClose} className="w-9 h-9 rounded-full bg-gray-100 flex items-center justify-center">
+              <X size={16} className="text-gray-500" />
+            </button>
           </div>
-          <div className="grid grid-cols-2 gap-3">
+          <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2 block">Precio</label>
-              <div className="relative">
-                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm">$</span>
-                <input required type="number" value={form.price} onChange={e => setForm(f => ({ ...f, price: e.target.value }))}
-                  placeholder="0" className={`${inputClass} pl-8`} />
+              <label className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2 block">Nombre</label>
+              <input required value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))}
+                placeholder="Ej: Tomate cherry" className={inputClass} />
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2 block">Precio</label>
+                <div className="relative">
+                  <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm">$</span>
+                  <input required type="number" value={form.price} onChange={e => setForm(f => ({ ...f, price: e.target.value }))}
+                    placeholder="0" className={`${inputClass} pl-8`} />
+                </div>
+              </div>
+              <div>
+                <label className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2 block">Stock</label>
+                <input required type="number" value={form.stock} onChange={e => setForm(f => ({ ...f, stock: e.target.value }))}
+                  placeholder="0" className={inputClass} />
               </div>
             </div>
             <div>
-              <label className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2 block">Stock</label>
-              <input required type="number" value={form.stock} onChange={e => setForm(f => ({ ...f, stock: e.target.value }))}
-                placeholder="0" className={inputClass} />
+              <label className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2 block">Unidad de medida</label>
+              <div className="flex flex-wrap gap-2">
+                {UNITS.map(u => (
+                  <button key={u} type="button"
+                    onClick={() => setForm(f => ({ ...f, unit: u }))}
+                    className={`px-3 py-1.5 rounded-xl text-xs font-semibold border transition-all ${
+                      (form.unit || 'unidades') === u
+                        ? 'bg-violet-50 border-[#7C3AED] text-[#7C3AED]'
+                        : 'bg-gray-50 border-gray-200 text-gray-500'
+                    }`}>
+                    {u}
+                  </button>
+                ))}
+              </div>
             </div>
-          </div>
-          <div>
-            <label className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2 block">
-              Descripción <span className="text-gray-300 normal-case font-normal">(opcional)</span>
-            </label>
-            <input value={form.description} onChange={e => setForm(f => ({ ...f, description: e.target.value }))}
-              placeholder="Descripción breve" className={inputClass} />
-          </div>
-          <button type="submit"
-            className="w-full bg-[#2D68F6] text-white font-semibold py-4 rounded-2xl mt-2 active:scale-[0.98] transition-all shadow-lg shadow-blue-200">
-            Guardar
-          </button>
-        </form>
+            <div>
+              <label className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2 block">
+                Descripción <span className="text-gray-300 normal-case font-normal">(opcional)</span>
+              </label>
+              <input value={form.description} onChange={e => setForm(f => ({ ...f, description: e.target.value }))}
+                placeholder="Descripción breve" className={inputClass} />
+            </div>
+            <button type="submit"
+              className="w-full bg-[#7C3AED] text-white font-semibold py-4 rounded-2xl mt-2 active:scale-[0.98] transition-all shadow-lg shadow-violet-200">
+              Guardar
+            </button>
+          </form>
+        </div>
       </div>
     </div>
   )
@@ -65,7 +89,7 @@ function ProductFormModal({ title, initial, onClose, onSave }) {
 function DeleteConfirmModal({ product, onClose, onConfirm }) {
   return (
     <div className="fixed inset-0 bg-black/40 z-50 flex items-end justify-center" onClick={onClose}>
-      <div className="bg-white w-full max-w-[430px] rounded-t-[32px] p-6 pb-10" onClick={e => e.stopPropagation()}>
+      <div className="bg-white w-full max-w-[430px] rounded-t-[32px] p-6 pb-10" style={{ marginBottom: '84px' }} onClick={e => e.stopPropagation()}>
         <div className="w-10 h-1 bg-gray-200 rounded-full mx-auto mb-5" />
         <div className="w-14 h-14 rounded-full bg-red-50 flex items-center justify-center mx-auto mb-4">
           <Trash2 size={24} className="text-[#DC4B56]" />
@@ -106,7 +130,7 @@ export default function Products() {
           <p className="text-sm text-gray-400 mt-0.5">{products.length} productos en stock</p>
         </div>
         <button onClick={() => setShowAdd(true)}
-          className="flex items-center gap-1.5 bg-[#2D68F6] text-white text-sm font-semibold px-4 py-2.5 rounded-2xl active:scale-95 transition-all shadow-md shadow-blue-200">
+          className="flex items-center gap-1.5 bg-[#7C3AED] text-white text-sm font-semibold px-4 py-2.5 rounded-2xl active:scale-95 transition-all shadow-md shadow-violet-200">
           <Plus size={16} />
           Agregar
         </button>
@@ -160,12 +184,12 @@ export default function Products() {
 
       {showAdd && (
         <ProductFormModal title="Agregar producto"
-          initial={{ name: '', price: '', stock: '', description: '' }}
+          initial={{ name: '', price: '', stock: '', description: '', unit: 'unidades' }}
           onClose={() => setShowAdd(false)} onSave={addProduct} />
       )}
       {editingProduct && (
         <ProductFormModal title="Editar producto"
-          initial={{ name: editingProduct.name, price: editingProduct.price, stock: editingProduct.stock, description: editingProduct.description || '' }}
+          initial={{ name: editingProduct.name, price: editingProduct.price, stock: editingProduct.stock, description: editingProduct.description || '', unit: editingProduct.unit || 'unidades' }}
           onClose={() => setEditingProduct(null)} onSave={(data) => updateProduct(editingProduct.id, data)} />
       )}
       {deletingProduct && (
@@ -181,8 +205,8 @@ function ProductCard({ product, onEdit, onDelete }) {
 
   return (
     <div className="bg-white border border-gray-100 rounded-2xl p-4 flex items-center gap-3 shadow-sm">
-      <div className={`w-11 h-11 rounded-2xl flex items-center justify-center flex-shrink-0 ${isLow ? 'bg-red-50' : 'bg-blue-50'}`}>
-        <Package size={18} className={isLow ? 'text-[#DC4B56]' : 'text-[#2D68F6]'} />
+      <div className={`w-11 h-11 rounded-2xl flex items-center justify-center flex-shrink-0 ${isLow ? 'bg-red-50' : 'bg-violet-50'}`}>
+        <Package size={18} className={isLow ? 'text-[#DC4B56]' : 'text-[#7C3AED]'} />
       </div>
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2">
@@ -190,7 +214,7 @@ function ProductCard({ product, onEdit, onDelete }) {
           {isLow && <span className="text-[10px] font-bold text-[#DC4B56] bg-red-50 px-1.5 py-0.5 rounded-full">BAJO</span>}
         </div>
         <p className="text-xs text-gray-400 mt-0.5">
-          {fmt(product.price)} · Stock: <span className={`font-semibold ${isLow ? 'text-[#DC4B56]' : 'text-gray-700'}`}>{product.stock}</span>
+          {fmt(product.price)}/{product.unit || 'und'} · Stock: <span className={`font-semibold ${isLow ? 'text-[#DC4B56]' : 'text-gray-700'}`}>{product.stock} {product.unit || 'und'}</span>
         </p>
       </div>
       <div className="flex items-center gap-1.5 flex-shrink-0">

@@ -1,140 +1,213 @@
 import { createContext, useContext, useState, useEffect } from 'react'
-
-const initialProducts = [
-  { id: 1, name: 'Palta', price: 1000, stock: 50, description: 'Paltas frescas', lowStockThreshold: 10 },
-  { id: 2, name: 'Huevos', price: 300, stock: 8, description: 'Huevos de campo', lowStockThreshold: 20 },
-  { id: 3, name: 'Pan', price: 500, stock: 80, description: 'Pan artesanal', lowStockThreshold: 15 },
-  { id: 4, name: 'Leche', price: 800, stock: 25, description: 'Leche fresca 1L', lowStockThreshold: 10 },
-]
-
-const today = new Date()
-const fmt = (d) => d.toISOString().split('T')[0]
-const daysAgo = (n) => { const d = new Date(today); d.setDate(d.getDate() - n); return fmt(d) }
-
-const initialSales = [
-  { id: 1, productId: 1, productName: 'Palta', quantity: 5, unitPrice: 1000, total: 5000, customer: 'María González', paymentMethod: 'efectivo', date: fmt(today) },
-  { id: 2, productId: 3, productName: 'Pan', quantity: 4, unitPrice: 500, total: 2000, customer: 'Carlos Pérez', paymentMethod: 'transferencia', date: fmt(today) },
-  { id: 3, productId: 2, productName: 'Huevos', quantity: 12, unitPrice: 300, total: 3600, customer: '', paymentMethod: 'efectivo', date: fmt(today) },
-  { id: 4, productId: 1, productName: 'Palta', quantity: 3, unitPrice: 1000, total: 3000, customer: 'Ana Martínez', paymentMethod: 'tarjeta', date: daysAgo(1) },
-  { id: 5, productId: 3, productName: 'Pan', quantity: 10, unitPrice: 500, total: 5000, customer: '', paymentMethod: 'efectivo', date: daysAgo(1) },
-  { id: 6, productId: 4, productName: 'Leche', quantity: 8, unitPrice: 800, total: 6400, customer: 'Pedro López', paymentMethod: 'transferencia', date: daysAgo(2) },
-  { id: 7, productId: 1, productName: 'Palta', quantity: 10, unitPrice: 1000, total: 10000, customer: '', paymentMethod: 'efectivo', date: daysAgo(2) },
-  { id: 8, productId: 2, productName: 'Huevos', quantity: 20, unitPrice: 300, total: 6000, customer: 'Lucía Silva', paymentMethod: 'tarjeta', date: daysAgo(3) },
-  { id: 9, productId: 3, productName: 'Pan', quantity: 15, unitPrice: 500, total: 7500, customer: '', paymentMethod: 'efectivo', date: daysAgo(3) },
-  { id: 10, productId: 1, productName: 'Palta', quantity: 7, unitPrice: 1000, total: 7000, customer: 'Roberto Castro', paymentMethod: 'transferencia', date: daysAgo(4) },
-  { id: 11, productId: 4, productName: 'Leche', quantity: 5, unitPrice: 800, total: 4000, customer: '', paymentMethod: 'efectivo', date: daysAgo(5) },
-  { id: 12, productId: 2, productName: 'Huevos', quantity: 30, unitPrice: 300, total: 9000, customer: 'Valentina Rojas', paymentMethod: 'transferencia', date: daysAgo(6) },
-]
-
-const initialOrders = [
-  { id: 1, customer: 'María González', productId: 1, productName: 'Palta', quantity: 5, total: 5000, status: 'pendiente', note: '', date: fmt(today) },
-  { id: 2, customer: 'Carlos Pérez', productId: 3, productName: 'Pan', quantity: 10, total: 5000, status: 'pagado', note: 'Sin sal', date: fmt(today) },
-  { id: 3, customer: 'Ana Martínez', productId: 2, productName: 'Huevos', quantity: 24, total: 7200, status: 'entregado', note: '', date: daysAgo(1) },
-]
-
-const initialGoals = [
-  { id: 1, name: 'Vacaciones', target: 1000000, current: 320000, deadline: '2026-12-31' },
-  { id: 2, name: 'Nueva vitrina', target: 200000, current: 150000, deadline: '2026-05-01' },
-]
-
-function loadFromStorage(key, fallback) {
-  try {
-    const stored = localStorage.getItem(key)
-    return stored ? JSON.parse(stored) : fallback
-  } catch {
-    return fallback
-  }
-}
+import { supabase } from '../lib/supabase'
 
 const AppContext = createContext(null)
 
+const fmt = (d) => d.toISOString().split('T')[0]
+const daysAgo = (n) => { const d = new Date(); d.setDate(d.getDate() - n); return fmt(d) }
+
 export function AppProvider({ children }) {
-  const [products, setProducts] = useState(() => loadFromStorage('mns_products', initialProducts))
-  const [sales, setSales] = useState(() => loadFromStorage('mns_sales', initialSales))
-  const [orders, setOrders] = useState(() => loadFromStorage('mns_orders', initialOrders))
-  const [goals, setGoals] = useState(() => loadFromStorage('mns_goals', initialGoals))
+  const [products, setProducts] = useState([])
+  const [sales, setSales] = useState([])
+  const [orders, setOrders] = useState([])
+  const [goals, setGoals] = useState([])
   const [activeTab, setActiveTab] = useState('dashboard')
+  const [loading, setLoading] = useState(true)
+  const [userId, setUserId] = useState(null)
 
-  useEffect(() => { localStorage.setItem('mns_products', JSON.stringify(products)) }, [products])
-  useEffect(() => { localStorage.setItem('mns_sales', JSON.stringify(sales)) }, [sales])
-  useEffect(() => { localStorage.setItem('mns_orders', JSON.stringify(orders)) }, [orders])
-  useEffect(() => { localStorage.setItem('mns_goals', JSON.stringify(goals)) }, [goals])
+  // ─── GET USER ─────────────────────────────────────────────────────────────
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setUserId(session?.user?.id ?? 'demo')
+    })
+  }, [])
 
-  const addSale = (sale) => {
-    const newSale = { ...sale, id: Date.now(), date: fmt(new Date()) }
-    setSales(prev => [newSale, ...prev])
-    setProducts(prev => prev.map(p =>
-      p.id === sale.productId ? { ...p, stock: Math.max(0, p.stock - sale.quantity) } : p
-    ))
+  // ─── LOAD DATA ────────────────────────────────────────────────────────────
+  useEffect(() => {
+    if (!userId) return
+    loadAll()
+  }, [userId])
+
+  async function loadAll() {
+    setLoading(true)
+    const [p, s, o, g] = await Promise.all([
+      supabase.from('products').select('*').order('created_at', { ascending: false }),
+      supabase.from('sales').select('*').order('created_at', { ascending: false }),
+      supabase.from('orders').select('*').order('created_at', { ascending: false }),
+      supabase.from('goals').select('*').order('created_at', { ascending: false }),
+    ])
+    setProducts((p.data || []).map(dbToProduct))
+    setSales((s.data || []).map(dbToSale))
+    setOrders((o.data || []).map(dbToOrder))
+    setGoals(g.data || [])
+    setLoading(false)
   }
 
-  const addProduct = (product) => {
-    setProducts(prev => [...prev, { ...product, id: Date.now(), lowStockThreshold: 10 }])
+  // ─── DB MAPPERS ───────────────────────────────────────────────────────────
+  const dbToProduct = (r) => ({
+    id: r.id,
+    name: r.name,
+    price: r.price,
+    stock: r.stock,
+    lowStockThreshold: r.low_stock_threshold,
+    description: r.description,
+    unit: r.unit || 'unidades',
+  })
+
+  const dbToSale = (r) => ({
+    id: r.id,
+    productId: r.product_id,
+    productName: r.product_name,
+    quantity: r.quantity,
+    unitPrice: r.unit_price,
+    total: r.total,
+    customer: r.customer,
+    paymentMethod: r.payment_method,
+    date: r.date,
+  })
+
+  const dbToOrder = (r) => ({
+    id: r.id,
+    customer: r.customer,
+    productId: r.product_id,
+    productName: r.product_name,
+    quantity: r.quantity,
+    total: r.total,
+    status: r.status,
+    note: r.note,
+    date: r.date,
+  })
+
+  // ─── PRODUCTS ─────────────────────────────────────────────────────────────
+  const addProduct = async (product) => {
+    const { data, error } = await supabase.from('products').insert({
+      user_id: userId,
+      name: product.name,
+      price: product.price,
+      stock: product.stock,
+      low_stock_threshold: product.lowStockThreshold || 10,
+      description: product.description || null,
+      unit: product.unit || 'unidades',
+    }).select().single()
+    if (!error && data) setProducts(prev => [dbToProduct(data), ...prev])
   }
 
-  const updateProduct = (id, data) => {
-    setProducts(prev => prev.map(p => p.id === id ? { ...p, ...data } : p))
+  const updateProduct = async (id, changes) => {
+    const dbChanges = {}
+    if (changes.name !== undefined) dbChanges.name = changes.name
+    if (changes.price !== undefined) dbChanges.price = changes.price
+    if (changes.stock !== undefined) dbChanges.stock = changes.stock
+    if (changes.lowStockThreshold !== undefined) dbChanges.low_stock_threshold = changes.lowStockThreshold
+    if (changes.description !== undefined) dbChanges.description = changes.description
+    if (changes.unit !== undefined) dbChanges.unit = changes.unit
+    await supabase.from('products').update(dbChanges).eq('id', id)
+    setProducts(prev => prev.map(p => p.id === id ? { ...p, ...changes } : p))
   }
 
-  const deleteProduct = (id) => {
+  const deleteProduct = async (id) => {
+    await supabase.from('products').delete().eq('id', id)
     setProducts(prev => prev.filter(p => p.id !== id))
   }
 
-  const addOrder = (order) => {
-    setOrders(prev => [{ ...order, id: Date.now(), date: fmt(new Date()) }, ...prev])
+  // ─── SALES ────────────────────────────────────────────────────────────────
+  const addSale = async (sale) => {
+    const { data, error } = await supabase.from('sales').insert({
+      user_id: userId,
+      product_id: sale.productId,
+      product_name: sale.productName,
+      quantity: sale.quantity,
+      unit_price: sale.unitPrice,
+      total: sale.total,
+      customer: sale.customer || null,
+      payment_method: sale.paymentMethod,
+      date: fmt(new Date()),
+    }).select().single()
+
+    if (!error && data) {
+      setSales(prev => [dbToSale(data), ...prev])
+      const product = products.find(p => p.id === sale.productId)
+      if (product) {
+        await updateProduct(sale.productId, {
+          stock: Math.max(0, product.stock - sale.quantity)
+        })
+      }
+    }
   }
 
-  const updateOrderStatus = (id, status) => {
+  // ─── ORDERS ───────────────────────────────────────────────────────────────
+  const addOrder = async (order) => {
+    const { data, error } = await supabase.from('orders').insert({
+      user_id: userId,
+      customer: order.customer,
+      product_id: order.productId || null,
+      product_name: order.productName,
+      quantity: order.quantity,
+      total: order.total,
+      status: 'pendiente',
+      note: order.note || null,
+      date: fmt(new Date()),
+    }).select().single()
+    if (!error && data) setOrders(prev => [dbToOrder(data), ...prev])
+  }
+
+  const updateOrderStatus = async (id, status) => {
+    await supabase.from('orders').update({ status }).eq('id', id)
     setOrders(prev => prev.map(o => o.id === id ? { ...o, status } : o))
   }
 
-  const addGoal = (goal) => {
-    setGoals(prev => [...prev, { ...goal, id: Date.now(), current: 0 }])
+  // ─── GOALS ────────────────────────────────────────────────────────────────
+  const addGoal = async (goal) => {
+    const { data, error } = await supabase.from('goals').insert({
+      user_id: userId,
+      name: goal.name,
+      target: goal.target,
+      current: 0,
+      deadline: goal.deadline || null,
+    }).select().single()
+    if (!error && data) setGoals(prev => [...prev, data])
   }
 
-  const updateGoalProgress = (id, amount) => {
-    setGoals(prev => prev.map(g => g.id === id ? { ...g, current: Math.min(g.target, g.current + amount) } : g))
+  const updateGoalProgress = async (id, amount) => {
+    const goal = goals.find(g => g.id === id)
+    if (!goal) return
+    const newCurrent = Math.min(goal.target, goal.current + amount)
+    await supabase.from('goals').update({ current: newCurrent }).eq('id', id)
+    setGoals(prev => prev.map(g => g.id === id ? { ...g, current: newCurrent } : g))
   }
 
-  const deleteGoal = (id) => {
+  const deleteGoal = async (id) => {
+    await supabase.from('goals').delete().eq('id', id)
     setGoals(prev => prev.filter(g => g.id !== id))
   }
 
-  const resetData = () => {
-    setProducts(initialProducts)
-    setSales(initialSales)
-    setOrders(initialOrders)
-    setGoals(initialGoals)
-  }
+  // ─── DERIVED ─────────────────────────────────────────────────────────────
+  const todayStr = fmt(new Date())
+  const currentMonth = todayStr.slice(0, 7)
 
-  // Derived data
-  const todaySales = sales.filter(s => s.date === fmt(new Date()))
+  const todaySales = sales.filter(s => s.date === todayStr)
   const todayTotal = todaySales.reduce((sum, s) => sum + s.total, 0)
-
-  const currentMonth = fmt(new Date()).slice(0, 7)
-  const monthSales = sales.filter(s => s.date.startsWith(currentMonth))
-  const monthTotal = monthSales.reduce((sum, s) => sum + s.total, 0)
-
+  const monthTotal = sales.filter(s => s.date?.startsWith(currentMonth)).reduce((sum, s) => sum + s.total, 0)
   const pendingOrders = orders.filter(o => o.status === 'pendiente').length
   const lowStockProducts = products.filter(p => p.stock <= p.lowStockThreshold).length
 
   const last7Days = Array.from({ length: 7 }, (_, i) => {
     const date = daysAgo(6 - i)
-    const daySales = sales.filter(s => s.date === date)
-    const total = daySales.reduce((sum, s) => sum + s.total, 0)
+    const total = sales.filter(s => s.date === date).reduce((sum, s) => sum + s.total, 0)
     const label = new Date(date + 'T12:00:00').toLocaleDateString('es-CL', { weekday: 'short' })
     return { date, label: label.charAt(0).toUpperCase() + label.slice(1), total }
   })
 
   return (
     <AppContext.Provider value={{
-      products, sales, orders, goals, activeTab, setActiveTab,
+      products, sales, orders, goals,
+      activeTab, setActiveTab,
+      loading,
       addSale, addProduct, updateProduct, deleteProduct,
       addOrder, updateOrderStatus,
       addGoal, updateGoalProgress, deleteGoal,
-      resetData,
-      todayTotal, monthTotal, pendingOrders, lowStockProducts, last7Days,
+      todayTotal, monthTotal, pendingOrders, lowStockProducts,
       todaySalesCount: todaySales.length,
+      last7Days,
     }}>
       {children}
     </AppContext.Provider>

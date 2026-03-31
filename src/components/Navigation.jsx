@@ -24,14 +24,14 @@ export default function Navigation() {
                 onClick={() => setActiveTab(id)}
                 className="flex flex-col items-center gap-1 flex-1 py-1.5 rounded-2xl transition-all duration-200 active:scale-95"
               >
-                <div className={`w-10 h-8 flex items-center justify-center rounded-2xl transition-all duration-200 ${active ? 'bg-blue-50' : ''}`}>
+                <div className={`w-10 h-8 flex items-center justify-center rounded-2xl transition-all duration-200 ${active ? 'bg-violet-50' : ''}`}>
                   <Icon
                     size={20}
-                    className={active ? 'text-[#2D68F6]' : 'text-gray-400'}
+                    className={active ? 'text-[#7C3AED]' : 'text-gray-400'}
                     strokeWidth={active ? 2.5 : 1.8}
                   />
                 </div>
-                <span className={`text-[10px] font-semibold transition-colors ${active ? 'text-[#2D68F6]' : 'text-gray-400'}`}>
+                <span className={`text-[10px] font-semibold transition-colors ${active ? 'text-[#7C3AED]' : 'text-gray-400'}`}>
                   {label}
                 </span>
               </button>
