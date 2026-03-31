@@ -60,10 +60,10 @@ export function AppProvider({ children }) {
     productName: r.product_name,
     quantity: r.quantity,
     unitPrice: r.unit_price,
-    total: r.total,
-    customer: r.customer,
+    total: r.total_amount,
+    customer: r.customer_name,
     paymentMethod: r.payment_method,
-    date: r.date,
+    date: r.sale_date,
   })
 
   const dbToOrder = (r) => ({
@@ -117,10 +117,10 @@ export function AppProvider({ children }) {
       product_name: sale.productName,
       quantity: sale.quantity,
       unit_price: sale.unitPrice,
-      total: sale.total,
-      customer: sale.customer || null,
+      total_amount: sale.total,
+      customer_name: sale.customer || null,
       payment_method: sale.paymentMethod,
-      date: fmt(new Date()),
+      sale_date: fmt(new Date()),
     }).select().single()
 
     if (error) return { error }
