@@ -8,6 +8,7 @@ import Products from './pages/Products'
 import Orders from './pages/Orders'
 import Goals from './pages/Goals'
 import AuthPage from './pages/auth/AuthPage'
+import Profile from './pages/Profile'
 import './index.css'
 
 function AppContent() {
@@ -19,6 +20,7 @@ function AppContent() {
     productos: <Products />,
     pedidos: <Orders />,
     metas: <Goals />,
+    perfil: <Profile />,
   }
 
   return (

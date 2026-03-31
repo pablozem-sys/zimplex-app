@@ -1,5 +1,5 @@
 import { useApp } from '../context/AppContext'
-import { LayoutDashboard, ShoppingCart, Package, ClipboardList, Target } from 'lucide-react'
+import { LayoutDashboard, ShoppingCart, Package, ClipboardList, Target, UserCircle } from 'lucide-react'
 
 const tabs = [
   { id: 'dashboard', label: 'Inicio', icon: LayoutDashboard },
@@ -7,6 +7,7 @@ const tabs = [
   { id: 'productos', label: 'Stock', icon: Package },
   { id: 'pedidos', label: 'Pedidos', icon: ClipboardList },
   { id: 'metas', label: 'Metas', icon: Target },
+  { id: 'perfil', label: 'Perfil', icon: UserCircle },
 ]
 
 export default function Navigation() {
