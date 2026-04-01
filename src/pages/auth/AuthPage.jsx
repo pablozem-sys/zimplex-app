@@ -124,10 +124,6 @@ export default function AuthPage() {
           </button>
         </form>
 
-        {/* Demo mode notice */}
-        <p className="text-center text-xs text-gray-400 mt-4">
-          ¿Sin cuenta? Usa <strong>demo@demo.com</strong> / <strong>123456</strong>
-        </p>
       </div>
     </div>
   )

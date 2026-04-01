@@ -42,13 +42,13 @@ function ProductFormModal({ title, initial, onClose, onSave }) {
                 <label className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2 block">Precio</label>
                 <div className="relative">
                   <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm">$</span>
-                  <input required type="number" value={form.price} onChange={e => setForm(f => ({ ...f, price: e.target.value }))}
+                  <input required type="number" min="0" value={form.price} onChange={e => setForm(f => ({ ...f, price: e.target.value }))}
                     placeholder="0" className={`${inputClass} pl-8`} />
                 </div>
               </div>
               <div>
                 <label className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2 block">Stock</label>
-                <input required type="number" value={form.stock} onChange={e => setForm(f => ({ ...f, stock: e.target.value }))}
+                <input required type="number" min="0" value={form.stock} onChange={e => setForm(f => ({ ...f, stock: e.target.value }))}
                   placeholder="0" className={inputClass} />
               </div>
             </div>
