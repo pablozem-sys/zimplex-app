@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabase'
-import { User, Mail, Store, LogOut, Save, Loader2 } from 'lucide-react'
+import { User, Mail, Store, LogOut, Save, Loader2, Check } from 'lucide-react'
+import { useApp } from '../context/AppContext'
 
-const inputClass = 'w-full bg-gray-50 border border-gray-200 rounded-2xl px-4 py-3.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#7C3AED] focus:border-transparent'
+const inputClass = 'w-full bg-gray-50 border border-gray-200 rounded-2xl px-4 py-3.5 text-sm focus:outline-none focus:ring-2 focus:border-transparent'
 
 export default function Profile() {
+  const { theme, setTheme, themes } = useApp()
   const [user, setUser] = useState(null)
   const [name, setName] = useState('')
   const [businessName, setBusinessName] = useState('')
@@ -46,8 +48,8 @@ export default function Profile() {
 
       {/* Avatar */}
       <div className="flex flex-col items-center mb-6">
-        <div className="w-20 h-20 rounded-full flex items-center justify-center text-2xl font-bold text-white shadow-lg shadow-violet-200 mb-3"
-          style={{ background: 'linear-gradient(135deg, #7C3AED, #A78BFA)' }}>
+        <div className="w-20 h-20 rounded-full flex items-center justify-center text-2xl font-bold text-white mb-3"
+          style={{ background: 'var(--color-gradient)', boxShadow: '0 8px 24px var(--color-primary-shadow)' }}>
           {initials}
         </div>
         {name && <p className="text-base font-semibold text-gray-900">{name}</p>}
@@ -86,11 +88,34 @@ export default function Profile() {
         </div>
 
         <button type="submit" disabled={loading}
-          className="w-full bg-[#7C3AED] text-white font-semibold py-4 rounded-2xl flex items-center justify-center gap-2 active:scale-[0.98] transition-all shadow-lg shadow-violet-200 disabled:opacity-60">
+          className="w-full text-white font-semibold py-4 rounded-2xl flex items-center justify-center gap-2 active:scale-[0.98] transition-all disabled:opacity-60"
+          style={{ background: 'var(--color-primary)', boxShadow: '0 8px 20px var(--color-primary-shadow)' }}>
           {loading ? <Loader2 size={18} className="animate-spin" /> : <Save size={18} />}
           {success ? '¡Guardado!' : 'Guardar cambios'}
         </button>
       </form>
+
+      {/* Selector de color */}
+      <div className="mb-6">
+        <label className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-3 block">Color de la plataforma</label>
+        <div className="flex gap-3">
+          {themes.map(t => (
+            <button
+              key={t.id}
+              onClick={() => setTheme(t)}
+              className="relative w-10 h-10 rounded-full transition-transform active:scale-95"
+              style={{ background: t.gradient }}
+              title={t.name}
+            >
+              {theme.id === t.id && (
+                <span className="absolute inset-0 flex items-center justify-center">
+                  <Check size={16} color="white" strokeWidth={3} />
+                </span>
+              )}
+            </button>
+          ))}
+        </div>
+      </div>
 
       {/* Logout */}
       <button onClick={handleLogout}

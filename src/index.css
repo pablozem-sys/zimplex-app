@@ -1,6 +1,13 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 @import "tailwindcss";
 
+:root {
+  --color-primary: #7C3AED;
+  --color-primary-light: #EDE9FE;
+  --color-primary-shadow: rgba(124, 58, 237, 0.25);
+  --color-gradient: linear-gradient(135deg, #7C3AED, #A78BFA);
+}
+
 * {
   box-sizing: border-box;
 }
@@ -15,17 +22,30 @@ body {
 
 #root {
   width: 100%;
-  max-width: 430px;
-  margin: 0 auto;
   min-height: 100svh;
   background: #f7f8fc;
   position: relative;
-  box-shadow: 0 0 60px rgba(0,0,0,0.10);
+}
+
+/* Mobile: simular app centrada */
+@media (max-width: 767px) {
+  #root {
+    max-width: 430px;
+    margin: 0 auto;
+    box-shadow: 0 0 60px rgba(0,0,0,0.10);
+  }
 }
 
 .page-content {
   padding: 16px;
   padding-bottom: 110px;
+}
+
+@media (min-width: 768px) {
+  .page-content {
+    padding: 24px;
+    padding-bottom: 24px;
+  }
 }
 
 ::-webkit-scrollbar { width: 4px; }

@@ -9,6 +9,7 @@ import Orders from './pages/Orders'
 import Goals from './pages/Goals'
 import AuthPage from './pages/auth/AuthPage'
 import Profile from './pages/Profile'
+import Landing from './pages/Landing'
 import './index.css'
 
 function AppContent() {
@@ -24,17 +25,32 @@ function AppContent() {
   }
 
   return (
-    <div className="max-w-md mx-auto relative h-screen flex flex-col overflow-hidden" style={{ background: '#FAF8FF' }}>
-      <div className="flex-1 overflow-y-auto pb-20">
-        {pages[activeTab]}
+    <div className="flex h-screen" style={{ background: '#FAF8FF' }}>
+      {/* Sidebar — solo desktop */}
+      <div className="hidden md:flex">
+        <Navigation />
       </div>
-      <Navigation />
+
+      {/* Contenido principal */}
+      <div className="flex-1 flex flex-col overflow-hidden">
+        <div className="flex-1 overflow-y-auto pb-20 md:pb-6">
+          <div className="max-w-3xl mx-auto">
+            {pages[activeTab]}
+          </div>
+        </div>
+      </div>
+
+      {/* Bottom nav — solo mobile */}
+      <div className="md:hidden">
+        <Navigation />
+      </div>
     </div>
   )
 }
 
 export default function App() {
   const [session, setSession] = useState(undefined) // undefined = loading
+  const [showAuth, setShowAuth] = useState(false)
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -60,7 +76,8 @@ export default function App() {
 
   const hasSupabase = !!(import.meta.env.VITE_SUPABASE_URL)
   if (!session && hasSupabase) {
-    return <AuthPage />
+    if (showAuth) return <AuthPage />
+    return <Landing onLogin={() => setShowAuth(true)} />
   }
 
   return (

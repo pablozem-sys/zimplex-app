@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect } from 'react'
 import { supabase } from '../lib/supabase'
+import { THEMES, DEFAULT_THEME, applyTheme } from '../lib/themes'
 
 const AppContext = createContext(null)
 
@@ -14,6 +15,19 @@ export function AppProvider({ children }) {
   const [activeTab, setActiveTab] = useState('dashboard')
   const [loading, setLoading] = useState(true)
   const [userId, setUserId] = useState(null)
+  const [theme, setThemeState] = useState(() => {
+    const saved = localStorage.getItem('app-theme')
+    return THEMES.find(t => t.id === saved) || DEFAULT_THEME
+  })
+
+  useEffect(() => {
+    applyTheme(theme)
+  }, [theme])
+
+  const setTheme = (t) => {
+    localStorage.setItem('app-theme', t.id)
+    setThemeState(t)
+  }
 
   // ─── GET USER ─────────────────────────────────────────────────────────────
   useEffect(() => {
@@ -203,6 +217,7 @@ export function AppProvider({ children }) {
       products, sales, orders, goals,
       activeTab, setActiveTab,
       loading,
+      theme, setTheme, themes: THEMES,
       addSale, addProduct, updateProduct, deleteProduct,
       addOrder, updateOrderStatus,
       addGoal, updateGoalProgress, deleteGoal,
