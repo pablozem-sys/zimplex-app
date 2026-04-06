@@ -50,7 +50,8 @@ function AppContent() {
 
 export default function App() {
   const [session, setSession] = useState(undefined) // undefined = loading
-  const [showAuth, setShowAuth] = useState(false)
+  const path = window.location.pathname
+  const [showAuth, setShowAuth] = useState(path === '/login' || path === '/signup')
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
