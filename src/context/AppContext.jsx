@@ -17,8 +17,12 @@ export function AppProvider({ children }) {
   const [userId, setUserId] = useState(null)
   const [plan, setPlan] = useState('free')
   const [theme, setThemeState] = useState(() => {
-    const saved = localStorage.getItem('app-theme')
-    return THEMES.find(t => t.id === saved) || DEFAULT_THEME
+    try {
+      const saved = localStorage.getItem('app-theme')
+      return THEMES.find(t => t.id === saved) || DEFAULT_THEME
+    } catch {
+      return DEFAULT_THEME
+    }
   })
 
   useEffect(() => {
@@ -26,7 +30,7 @@ export function AppProvider({ children }) {
   }, [theme])
 
   const setTheme = (t) => {
-    localStorage.setItem('app-theme', t.id)
+    try { localStorage.setItem('app-theme', t.id) } catch { /* private mode */ }
     setThemeState(t)
   }
 
@@ -45,19 +49,24 @@ export function AppProvider({ children }) {
 
   async function loadAll() {
     setLoading(true)
-    const [p, s, o, g, profile] = await Promise.all([
-      supabase.from('products').select('*').order('created_at', { ascending: false }),
-      supabase.from('sales').select('*').order('created_at', { ascending: false }),
-      supabase.from('orders').select('*').order('created_at', { ascending: false }),
-      supabase.from('goals').select('*').order('created_at', { ascending: false }),
-      supabase.from('profiles').select('plan').eq('id', userId).single(),
-    ])
-    setProducts((p.data || []).map(dbToProduct))
-    setSales((s.data || []).map(dbToSale))
-    setOrders((o.data || []).map(dbToOrder))
-    setGoals(g.data || [])
-    setPlan(profile.data?.plan || 'free')
-    setLoading(false)
+    try {
+      const [p, s, o, g, profile] = await Promise.all([
+        supabase.from('products').select('*').order('created_at', { ascending: false }),
+        supabase.from('sales').select('*').order('created_at', { ascending: false }),
+        supabase.from('orders').select('*').order('created_at', { ascending: false }),
+        supabase.from('goals').select('*').order('created_at', { ascending: false }),
+        supabase.from('profiles').select('plan').eq('id', userId).single(),
+      ])
+      setProducts((p.data || []).map(dbToProduct))
+      setSales((s.data || []).map(dbToSale))
+      setOrders((o.data || []).map(dbToOrder))
+      setGoals(g.data || [])
+      setPlan(profile.data?.plan || 'free')
+    } catch (err) {
+      console.error('Error loading data:', err)
+    } finally {
+      setLoading(false)
+    }
   }
 
   // ─── DB MAPPERS ───────────────────────────────────────────────────────────

@@ -11,30 +11,30 @@ const UPGRADE_URL = 'https://minegociosimple.lemonsqueezy.com/checkout/buy/ef3fd
 // ─── DATA ───────────────────────────────────────────────────────────────────
 
 const problems = [
-  { icon: DollarSign, text: 'No sabés cuánto ganás realmente', color: '#EF4444', bg: '#FEF2F2' },
-  { icon: MessageCircle, text: 'Perdés pedidos en el chat de WhatsApp', color: '#F59E0B', bg: '#FFFBEB' },
-  { icon: Package, text: 'No controlás cuánto stock te queda', color: '#8B5CF6', bg: '#F5F3FF' },
-  { icon: AlertCircle, text: 'Manejás todo en tu cabeza o en Excel', color: '#EC4899', bg: '#FDF2F8' },
+  { icon: DollarSign, text: 'No sabes cuánto ganas realmente', color: '#EF4444', bg: '#FEF2F2' },
+  { icon: MessageCircle, text: 'Pierdes pedidos en el chat de WhatsApp', color: '#F59E0B', bg: '#FFFBEB' },
+  { icon: Package, text: 'No controlas cuánto stock te queda', color: '#8B5CF6', bg: '#F5F3FF' },
+  { icon: AlertCircle, text: 'Manejas todo en tu cabeza o en Excel', color: '#EC4899', bg: '#FDF2F8' },
 ]
 
 const solutions = [
-  { icon: TrendingUp, title: 'Registrá ventas en segundos', desc: 'Sin planillas, sin fórmulas. Tocás tres botones y la venta queda guardada.', color: '#2563EB', bg: '#EFF6FF' },
-  { icon: BarChart2, title: 'Visualizá tu negocio en tiempo real', desc: 'Cuánto ganaste hoy, esta semana y este mes. Todo visible de un vistazo.', color: '#059669', bg: '#ECFDF5' },
-  { icon: Package, title: 'Controlá stock automáticamente', desc: 'Cada venta descuenta del stock. Recibís alerta cuando algo se está por agotar.', color: '#D97706', bg: '#FFFBEB' },
+  { icon: TrendingUp, title: 'Registra ventas en segundos', desc: 'Sin planillas, sin fórmulas. Tocas tres botones y la venta queda guardada.', color: '#2563EB', bg: '#EFF6FF' },
+  { icon: BarChart2, title: 'Visualiza tu negocio en tiempo real', desc: 'Cuánto ganaste hoy, esta semana y este mes. Todo visible de un vistazo.', color: '#059669', bg: '#ECFDF5' },
+  { icon: Package, title: 'Controla el stock automáticamente', desc: 'Cada venta descuenta del stock. Recibes una alerta cuando algo se está por agotar.', color: '#D97706', bg: '#FFFBEB' },
   { icon: ShoppingBag, title: 'Todo en un solo lugar', desc: 'Ventas, pedidos, productos y metas. Sin saltar entre apps ni chats.', color: '#7C3AED', bg: '#F5F3FF' },
 ]
 
 const steps = [
-  { num: '01', title: 'Registrá tus ventas', desc: 'Cada vez que vendés, lo cargás en segundos. Producto, cantidad, forma de pago.' },
-  { num: '02', title: 'Visualizá tu negocio', desc: 'Un dashboard simple te muestra cuánto ganás, qué vendés más y cómo va tu mes.' },
-  { num: '03', title: 'Tomá mejores decisiones', desc: 'Con datos claros, sabés qué producto empujar, cuándo reponer y cuánto podés gastar.' },
+  { num: '01', title: 'Registra tus ventas', desc: 'Cada vez que vendes, lo cargas en segundos. Producto, cantidad, forma de pago.' },
+  { num: '02', title: 'Visualiza tu negocio', desc: 'Un dashboard simple te muestra cuánto ganas, qué vendes más y cómo va tu mes.' },
+  { num: '03', title: 'Toma mejores decisiones', desc: 'Con datos claros, sabes qué producto empujar, cuándo reponer y cuánto puedes gastar.' },
 ]
 
 const benefits = [
-  { icon: Clock, title: 'Ahorrás tiempo', desc: 'Lo que antes te llevaba una hora en Excel, ahora son segundos.' },
+  { icon: Clock, title: 'Ahorras tiempo', desc: 'Lo que antes te llevaba una hora en Excel, ahora son segundos.' },
   { icon: AlertCircle, title: 'Menos errores', desc: 'Sin números a mano, sin fórmulas rotas, sin olvidos.' },
-  { icon: DollarSign, title: 'Claridad financiera', desc: 'Sabés exactamente cuánto entra, cuánto sale y cuánto ganás.' },
-  { icon: TrendingUp, title: 'Crecé con datos', desc: 'Tomás decisiones basadas en números reales, no en intuición.' },
+  { icon: DollarSign, title: 'Claridad financiera', desc: 'Sabes exactamente cuánto entra, cuánto sale y cuánto ganas.' },
+  { icon: TrendingUp, title: 'Crece con datos', desc: 'Tomas decisiones basadas en números reales, no en intuición.' },
 ]
 
 const freeFeatures = [
@@ -98,12 +98,12 @@ function Hero({ onLogin }) {
       </div>
 
       <h1 className="text-4xl md:text-6xl font-extrabold text-gray-900 leading-tight tracking-tight mb-5">
-        Ordená tu negocio<br />
+        Ordena tu negocio<br />
         <span style={{ color: '#2563EB' }}>en minutos, sin Excel</span>
       </h1>
 
       <p className="text-lg md:text-xl text-gray-500 max-w-xl mx-auto mb-10 leading-relaxed">
-        Registrá tus ventas, controlá tu dinero y entendé cuánto ganás realmente. Sin complicaciones.
+        Registra tus ventas, controla tu dinero y entiende cuánto ganas realmente. Sin complicaciones.
       </p>
 
       <div className="flex flex-col sm:flex-row gap-3 justify-center mb-12">
@@ -156,7 +156,7 @@ function Problem() {
         </div>
 
         <p className="text-center text-gray-400 mt-8 text-sm">
-          Si te identificás con alguno de estos, Mi Negocio Simple es para vos.
+          Si te identificas con alguno de estos, Mi Negocio Simple es para ti.
         </p>
       </div>
     </section>
@@ -173,7 +173,7 @@ function Solution() {
             Simple, claro, y en tu bolsillo
           </h2>
           <p className="text-gray-400 mt-3 max-w-md mx-auto">
-            Todo lo que necesitás para entender tu negocio, sin necesitar ser contador.
+            Todo lo que necesitas para entender tu negocio, sin necesitar ser contador.
           </p>
         </div>
 
@@ -233,7 +233,7 @@ function Benefits() {
         <div className="text-center mb-12">
           <p className="text-sm font-semibold text-blue-500 uppercase tracking-widest mb-3">Beneficios</p>
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
-            Lo que ganás al usarlo
+            Lo que ganas al usarlo
           </h2>
         </div>
 
@@ -262,7 +262,7 @@ function Pricing() {
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
             Sin sorpresas
           </h2>
-          <p className="text-gray-400 mt-3">Empezá gratis. Pasá a Pro cuando estés listo.</p>
+          <p className="text-gray-400 mt-3">Empieza gratis. Pasa a Pro cuando estés listo.</p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
@@ -306,7 +306,7 @@ function Pricing() {
               <span className="text-4xl font-extrabold text-white">$5</span>
               <span className="text-blue-200 mb-1.5">USD / mes</span>
             </div>
-            <p className="text-sm text-blue-200 mb-7">Todo lo que necesitás para crecer</p>
+            <p className="text-sm text-blue-200 mb-7">Todo lo que necesitas para crecer</p>
 
             <a href={UPGRADE_URL} target="_blank" rel="noreferrer"
               className="flex items-center justify-center gap-2 w-full py-3.5 rounded-2xl bg-white font-semibold text-sm hover:bg-blue-50 transition-all mb-7"
@@ -364,10 +364,10 @@ function FinalCTA() {
         style={{ background: 'linear-gradient(135deg, #1D4ED8, #2563EB, #3B82F6)' }}>
         <Zap size={32} color="white" className="mx-auto mb-5 opacity-80" />
         <h2 className="text-3xl md:text-4xl font-extrabold text-white mb-4">
-          Empezá hoy a ordenar tu negocio
+          Empieza hoy a ordenar tu negocio
         </h2>
         <p className="text-blue-100 mb-8 max-w-md mx-auto">
-          Miles de emprendedores ya entienden su negocio. Unite gratis, en menos de 2 minutos.
+          Miles de emprendedores ya entienden su negocio. Únete gratis, en menos de 2 minutos.
         </p>
         <a href={SIGNUP_URL}
           className="inline-flex items-center gap-2 px-8 py-4 bg-white font-bold rounded-2xl text-base transition-all hover:bg-blue-50 active:scale-[0.98]"
