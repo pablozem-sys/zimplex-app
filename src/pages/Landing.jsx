@@ -1,134 +1,137 @@
 import {
-  ShoppingBag, ArrowRight, CheckCircle2, TrendingUp, Package,
-  MessageCircle, BarChart2, AlertCircle, Zap, DollarSign,
-  Star, ChevronRight, X, Check, Heart
+  Check, ArrowRight, Star, TrendingUp, Package, BarChart2,
+  X, ChevronRight, Heart, ShoppingBag, MessageCircle
 } from 'lucide-react'
+
+// ─── BRAND ──────────────────────────────────────────────────────────────────
+const BLUE       = '#3A86FF'
+const TEAL       = '#2EC4B6'
+const GRAD       = 'linear-gradient(135deg, #3A86FF 0%, #2EC4B6 100%)'
+const POPPINS    = "'Poppins', sans-serif"
 
 const SIGNUP_URL  = 'https://zimplex.app/signup'
 const LOGIN_URL   = 'https://zimplex.app/login'
 const UPGRADE_URL = 'https://minegociosimple.lemonsqueezy.com/checkout/buy/ef3fd402-6b9a-4693-9c4b-5a4974929973'
-const VIOLET      = '#7C3AED'
-const VIOLET_DARK = '#6D28D9'
-const VIOLET_SOFT = '#EDE9FE'
-const VIOLET_MED  = '#A78BFA'
 
-// ─── DATA ───────────────────────────────────────────────────────────────────
+// ─── DATA ────────────────────────────────────────────────────────────────────
 
 const problems = [
   { emoji: '😮‍💨', title: 'Vendes todos los días, pero no sabes cuánto ganas realmente', desc: 'A fin de mes no entiendes a dónde fue la plata.' },
-  { emoji: '💬',   title: 'Se te pierden pedidos en WhatsApp', desc: 'Entre mensajes, fotos y audios, los pedidos se mezclan y se olvidan.' },
-  { emoji: '📦',   title: 'No sabes cuánto stock te queda', desc: 'Un cliente pide y tú no tienes. Ventas perdidas por no llevar el control.' },
-  { emoji: '📋',   title: 'Todo lo llevas en tu cabeza o en Excel', desc: 'Y cuando necesitas un dato importante, no está donde deberías buscarlo.' },
+  { emoji: '💬',   title: 'Se te pierden pedidos en WhatsApp',                           desc: 'Entre mensajes, fotos y audios, los pedidos se mezclan y se olvidan.' },
+  { emoji: '📦',   title: 'No sabes cuánto stock te queda',                              desc: 'Un cliente pide y tú no tienes. Ventas perdidas por no llevar el control.' },
+  { emoji: '📋',   title: 'Todo lo llevas en tu cabeza o en Excel',                      desc: 'Y cuando necesitas un dato importante, no está donde deberías buscarlo.' },
 ]
 
-const solutionBullets = [
-  'Registra cada venta en segundos',
-  'Ve cuánto ganas día a día',
-  'Controla tu stock sin esfuerzo',
-  'Ten todo en un solo lugar',
-]
-
-const stats = [
-  { value: '10s', label: 'Para registrar una venta' },
-  { value: '100%', label: 'Desde el celular' },
-  { value: '0', label: 'Conocimiento técnico' },
-  { value: '$0', label: 'Para empezar hoy' },
+const coreBenefits = [
+  { icon: TrendingUp,    title: 'Registra ventas en segundos',    desc: 'Sin planillas ni fórmulas. Tres toques y la venta queda guardada al instante.',                   color: BLUE, bg: '#EFF6FF' },
+  { icon: Package,       title: 'Controla tu stock sin esfuerzo', desc: 'Alerta automática cuando algo se agota. Nunca más pierdas una venta por falta de stock.',         color: TEAL, bg: '#F0FDFA' },
+  { icon: BarChart2,     title: 'Entiende tu negocio de verdad',  desc: 'Ve cuánto ganas hoy, esta semana y este mes. Un vistazo y tienes toda la claridad.',              color: BLUE, bg: '#EFF6FF' },
 ]
 
 const steps = [
-  { num: 1, title: 'Registra tus ventas', desc: 'Selecciona el producto, la cantidad y confirma. En 10 segundos ya tienes tu venta registrada y el stock actualizado.' },
-  { num: 2, title: 'Mira cómo crece tu negocio', desc: 'Tu dashboard te muestra cuánto vendiste hoy, esta semana y este mes. Un vistazo y ya sabes cómo va todo.' },
-  { num: 3, title: 'Toma mejores decisiones', desc: 'Con datos reales sabes qué producto vende más, cuándo reponer y cuánto estás ganando de verdad.' },
+  { num: 1, title: 'Registra tus ventas',         desc: 'Selecciona el producto, la cantidad y confirma. En 10 segundos está registrado y el stock actualizado.' },
+  { num: 2, title: 'Mira cómo crece tu negocio',  desc: 'Tu dashboard te muestra cuánto vendiste hoy, esta semana y este mes. Un vistazo y ya sabes todo.' },
+  { num: 3, title: 'Toma mejores decisiones',      desc: 'Con datos reales sabes qué producto vende más, cuándo reponer y cuánto estás ganando de verdad.' },
 ]
 
-const features = [
-  { icon: ShoppingBag, title: 'Registrar ventas', desc: 'Selecciona el producto, la cantidad y el método de pago. Tu stock se actualiza solo. En 10 segundos.', bg: VIOLET_SOFT, color: VIOLET },
-  { icon: Package,     title: 'Control de stock', desc: 'Alerta automática cuando un producto está por agotarse. Nunca más perderás una venta por falta de stock.', bg: '#F0FDF4', color: '#059669' },
-  { icon: BarChart2,   title: 'Dashboard diario', desc: 'Ventas del día, del mes y gráfico de los últimos 7 días. Un vistazo y ya sabes cómo va tu negocio.', bg: '#F9FAFB', color: '#374151' },
-  { icon: MessageCircle, title: 'Pedidos por WhatsApp', desc: 'Crea pedidos y genera el mensaje automático para tu cliente. Un toque y se abre WhatsApp listo para enviar.', bg: '#F0FDF4', color: '#25D366' },
-  { icon: Star,        title: 'Metas financieras', desc: '¿Vacaciones? ¿Renovar stock? Define una meta, pon la fecha y ve tu progreso cada día.', bg: '#FFF7ED', color: '#F59E0B' },
-  { icon: Zap,         title: '100% desde el celular', desc: 'Sin descargar nada. Se abre en el navegador de tu teléfono y funciona como una app nativa.', bg: VIOLET_SOFT, color: VIOLET },
-]
-
-const benefits = [
-  { icon: BarChart2,     title: 'Sabes cuánto ganas de verdad', desc: 'Sin estimaciones. Número real, todos los días.', bg: VIOLET_SOFT, color: VIOLET },
-  { icon: CheckCircle2,  title: 'Dejas de perder ventas', desc: 'Alerta de stock bajo y pedidos organizados. Ninguna se pierde.', bg: '#F0FDF4', color: '#059669' },
-  { icon: ShoppingBag,   title: 'Tienes control de tu negocio', desc: 'Un solo lugar con toda la info. Sin cuadernos, sin Excel.', bg: VIOLET_SOFT, color: VIOLET },
-  { icon: Heart,         title: 'Te sientes más tranquilo', desc: 'Saber cómo va tu negocio da paz mental. Dejas de vivir adivinando.', bg: '#FFF7ED', color: '#F59E0B' },
+const emotionalBenefits = [
+  { icon: BarChart2,     title: 'Sabes cuánto ganas de verdad', desc: 'Sin estimaciones. Número real, todos los días.',                            color: BLUE, bg: '#EFF6FF' },
+  { icon: Check,         title: 'Dejas de perder ventas',       desc: 'Alerta de stock bajo y pedidos organizados. Ninguna venta se pierde.',       color: TEAL, bg: '#F0FDFA' },
+  { icon: ShoppingBag,   title: 'Tienes control total',         desc: 'Un solo lugar con toda la info. Sin cuadernos, sin Excel.',                  color: BLUE, bg: '#EFF6FF' },
+  { icon: Heart,         title: 'Te sientes más tranquilo',     desc: 'Saber cómo va tu negocio da paz mental. Dejas de vivir adivinando.',         color: TEAL, bg: '#F0FDFA' },
 ]
 
 const testimonials = [
-  { quote: '"Antes vendía todos los días, pero no sabía si realmente estaba ganando plata. Ahora tengo todo claro en un solo lugar."', name: 'María Contreras', role: 'Vende jugos y empanadas, Valparaíso', initial: 'M', color: VIOLET },
-  { quote: '"Lo mejor es el control de stock. Me avisaba cuando me quedaba poco y dejé de perder ventas. Muy recomendado."', name: 'Carlos Morales', role: 'Frutas y verduras, Santiago', initial: 'C', color: '#059669' },
-  { quote: '"Lo del WhatsApp automático me cambió la vida. Antes escribía el mismo mensaje 20 veces al día. Ahora es un toque y listo."', name: 'Valentina Rojas', role: 'Ropa por encargo, Concepción', initial: 'V', color: VIOLET },
+  { quote: '"Antes vendía todos los días, pero no sabía si realmente estaba ganando plata. Ahora tengo todo claro en un solo lugar."', name: 'María Contreras', role: 'Jugos y empanadas, Valparaíso',  initial: 'M' },
+  { quote: '"Lo mejor es el control de stock. Me avisaba cuando me quedaba poco y dejé de perder ventas. Muy recomendado."',           name: 'Carlos Morales',  role: 'Frutas y verduras, Santiago',    initial: 'C' },
+  { quote: '"Lo del WhatsApp automático me cambió la vida. Antes escribía el mismo mensaje 20 veces al día. Ahora es un toque."',      name: 'Valentina Rojas', role: 'Ropa por encargo, Concepción',   initial: 'V' },
 ]
 
-const freeFeatures  = ['Registro de ventas', 'Control básico de stock', 'Visualización simple', 'Hasta 100 ventas al mes']
-const proFeatures   = ['Ventas ilimitadas', 'Control de stock avanzado', 'Reportes completos', 'Pedidos por WhatsApp', 'Insights automáticos', 'Prioridad en soporte']
-const proExcluded   = ['Control de stock avanzado', 'Reportes completos', 'Integración pedidos WhatsApp', 'Soporte prioritario']
+const freeFeatures = ['Registro de ventas', 'Control básico de stock', 'Visualización simple', 'Hasta 100 ventas al mes']
+const proExcluded  = ['Control de stock avanzado', 'Reportes completos', 'Pedidos por WhatsApp', 'Soporte prioritario']
+const proFeatures  = ['Ventas ilimitadas', 'Control de stock avanzado', 'Reportes completos', 'Pedidos por WhatsApp', 'Insights automáticos', 'Prioridad en soporte']
 
 const faqs = [
-  { q: '¿Necesito descargar una app?', a: 'No. Zimplex funciona directo en el navegador de tu celular. Sin descargar nada. Puedes guardarla en tu pantalla de inicio y se comporta como una app normal.' },
-  { q: '¿Funciona sin internet?', a: 'Necesitas conexión para sincronizar los datos, pero está optimizada para funcionar bien con conexiones lentas o inestables como las de datos móviles.' },
-  { q: '¿Mis datos están seguros?', a: 'Sí. Tus datos se almacenan de forma segura en servidores con encriptación. Solo tú tienes acceso a la información de tu negocio.' },
-  { q: '¿Para qué tipo de negocios sirve?', a: 'Para cualquier negocio pequeño que vende productos: frutas, ropa, comida hecha en casa, artesanías, cosméticos, abarrotes y mucho más. Si vendes por WhatsApp, ferias o en tu casa, esto es para ti.' },
-  { q: '¿Puedo cancelar en cualquier momento?', a: 'Sí, sin ningún problema. Sin contratos, sin cargos extra. Si cancelas el plan Pro, sigues usando el plan Gratis sin perder tus datos.' },
+  { q: '¿Necesito descargar una app?',       a: 'No. Zimplex funciona directo en el navegador de tu celular. Sin descargar nada. Puedes guardarla en tu pantalla de inicio y se comporta como una app nativa.' },
+  { q: '¿Funciona sin internet?',             a: 'Necesitas conexión para sincronizar datos, pero está optimizada para conexiones lentas o inestables como las de datos móviles.' },
+  { q: '¿Mis datos están seguros?',           a: 'Sí. Tus datos se almacenan con encriptación en servidores seguros. Solo tú tienes acceso a la información de tu negocio.' },
+  { q: '¿Para qué tipo de negocios sirve?',   a: 'Para cualquier negocio pequeño: frutas, ropa, comida casera, artesanías, cosméticos y más. Si vendes por WhatsApp, ferias o en tu casa, esto es para ti.' },
+  { q: '¿Puedo cancelar en cualquier momento?', a: 'Sí, sin contratos ni cargos extra. Si cancelas Pro, sigues usando el plan Gratis sin perder tus datos.' },
 ]
 
-// ─── PHONE MOCKUP ─────────────────────────────────────────────────────────────
+// ─── SVG LOGO ────────────────────────────────────────────────────────────────
+
+function ZimplexLogo({ size = 32 }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="zgrad" x1="0" y1="0" x2="32" y2="32" gradientUnits="userSpaceOnUse">
+          <stop stopColor="#3A86FF" />
+          <stop offset="1" stopColor="#2EC4B6" />
+        </linearGradient>
+      </defs>
+      <rect width="32" height="32" rx="9" fill="url(#zgrad)" />
+      <path d="M8 9.5H24L8 22.5H24" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  )
+}
+
+// ─── PHONE MOCKUP ────────────────────────────────────────────────────────────
 
 function PhoneMockup() {
   const bars = [55, 70, 40, 85, 60, 75, 100]
   return (
-    <div className="mx-auto" style={{ maxWidth: 260, background: 'white', borderRadius: 32, padding: 8, boxShadow: '0 24px 80px rgba(0,0,0,0.12), 0 0 0 1px rgba(0,0,0,0.05)' }}>
-      <div style={{ background: '#FAF8FF', borderRadius: 26, overflow: 'hidden' }}>
-        {/* Status bar */}
-        <div className="flex justify-between px-4 pt-3 pb-1">
-          <span className="text-xs font-semibold text-gray-600">9:41</span>
+    <div style={{
+      maxWidth: 260, margin: '0 auto', background: 'white',
+      borderRadius: 32, padding: 8,
+      boxShadow: '0 24px 80px rgba(58,134,255,0.14), 0 0 0 1px rgba(58,134,255,0.07)'
+    }}>
+      <div style={{ background: '#F8FAFC', borderRadius: 26, overflow: 'hidden' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', padding: '12px 16px 4px' }}>
+          <span style={{ fontSize: 11, fontWeight: 600, color: '#64748B', fontFamily: POPPINS }}>9:41</span>
         </div>
-        {/* Header */}
-        <div className="bg-white px-4 pb-3 border-b border-gray-100">
-          <p className="text-xs text-gray-400">Buenos días</p>
-          <p className="text-base font-bold text-gray-900">Dashboard</p>
+        <div style={{ background: 'white', padding: '0 16px 12px', borderBottom: '1px solid #F1F5F9' }}>
+          <p style={{ fontSize: 11, color: '#9CA3AF', fontFamily: POPPINS }}>Buenos días</p>
+          <p style={{ fontSize: 15, fontWeight: 700, color: '#111827', fontFamily: POPPINS }}>Dashboard</p>
         </div>
-        {/* KPI cards */}
-        <div className="grid grid-cols-2 gap-2 p-3">
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, padding: 12 }}>
           {[
-            { label: 'Ventas Hoy', value: '$48.000', sub: '↑ 12%', subColor: '#7CD09B' },
-            { label: 'Ventas Mes', value: '$820k',   sub: '↑ 8%',  subColor: '#7CD09B' },
+            { label: 'Ventas Hoy', value: '$48.000', sub: '↑ 12%',      subColor: TEAL },
+            { label: 'Ventas Mes', value: '$820k',   sub: '↑ 8%',       subColor: TEAL },
             { label: 'Pedidos',    value: '3',        sub: 'pendientes', subColor: '#F59E0B', valueColor: '#F59E0B' },
-            { label: 'Stock bajo', value: '2',        sub: 'productos',  subColor: '#94A3B8', valueColor: '#DC4B56' },
+            { label: 'Stock bajo', value: '2',        sub: 'productos',  subColor: '#94A3B8', valueColor: '#EF4444' },
           ].map(({ label, value, sub, subColor, valueColor }) => (
-            <div key={label} className="bg-white rounded-xl p-3 shadow-sm">
-              <p className="text-xs text-gray-400 mb-1">{label}</p>
-              <p className="text-base font-bold" style={{ color: valueColor || '#111827' }}>{value}</p>
-              <p className="text-xs" style={{ color: subColor }}>{sub}</p>
+            <div key={label} style={{ background: 'white', borderRadius: 12, padding: 10, boxShadow: '0 1px 4px rgba(0,0,0,0.06)' }}>
+              <p style={{ fontSize: 10, color: '#9CA3AF', marginBottom: 2, fontFamily: POPPINS }}>{label}</p>
+              <p style={{ fontSize: 15, fontWeight: 700, color: valueColor || '#111827', fontFamily: POPPINS }}>{value}</p>
+              <p style={{ fontSize: 10, color: subColor, fontFamily: POPPINS }}>{sub}</p>
             </div>
           ))}
         </div>
-        {/* Chart */}
-        <div className="px-3 pb-2">
-          <div className="bg-white rounded-xl p-3 shadow-sm">
-            <p className="text-xs text-gray-500 font-medium mb-2">Últimos 7 días</p>
-            <div className="flex items-end justify-between gap-1" style={{ height: 40 }}>
+        <div style={{ padding: '0 12px 8px' }}>
+          <div style={{ background: 'white', borderRadius: 12, padding: 10, boxShadow: '0 1px 4px rgba(0,0,0,0.06)' }}>
+            <p style={{ fontSize: 10, color: '#64748B', fontWeight: 500, marginBottom: 6, fontFamily: POPPINS }}>Últimos 7 días</p>
+            <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: 3, height: 36 }}>
               {bars.map((h, i) => (
-                <div key={i} className="flex-1 rounded-sm" style={{ height: `${h}%`, background: i === 6 ? VIOLET : VIOLET_SOFT }} />
+                <div key={i} style={{
+                  flex: 1, borderRadius: 3,
+                  height: `${h}%`,
+                  background: i === 6 ? GRAD : (i % 2 === 0 ? '#DBEAFE' : '#CCFBF1')
+                }} />
               ))}
             </div>
           </div>
         </div>
-        {/* CTA button */}
-        <div className="px-3 pb-4">
-          <div className="w-full py-3 rounded-xl text-center text-sm font-semibold text-white" style={{ background: VIOLET }}>
+        <div style={{ padding: '0 12px 12px' }}>
+          <div style={{ background: GRAD, borderRadius: 12, padding: '10px 0', textAlign: 'center', color: 'white', fontSize: 12, fontWeight: 600, fontFamily: POPPINS }}>
             + Registrar venta
           </div>
         </div>
-        {/* Bottom nav */}
-        <div className="bg-white border-t border-gray-100 flex justify-around py-2 px-2">
+        <div style={{ background: 'white', borderTop: '1px solid #F1F5F9', display: 'flex', justifyContent: 'space-around', padding: '8px 8px' }}>
           {['Inicio', 'Ventas', 'Stock', 'Pedidos', 'Metas'].map((label, i) => (
-            <div key={label} className="flex flex-col items-center gap-0.5">
-              {i === 0 && <div className="w-1.5 h-1.5 rounded-full" style={{ background: VIOLET }} />}
-              <span className="text-xs font-semibold" style={{ color: i === 0 ? VIOLET : '#9CA3AF' }}>{label}</span>
+            <div key={label} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}>
+              {i === 0 && <div style={{ width: 5, height: 5, borderRadius: '50%', background: BLUE }} />}
+              <span style={{ fontSize: 10, fontWeight: i === 0 ? 600 : 400, color: i === 0 ? BLUE : '#9CA3AF', fontFamily: POPPINS }}>{label}</span>
             </div>
           ))}
         </div>
@@ -137,50 +140,77 @@ function PhoneMockup() {
   )
 }
 
-// ─── COMPONENTS ──────────────────────────────────────────────────────────────
+// ─── SHARED COMPONENTS ───────────────────────────────────────────────────────
 
-function Badge({ children, style = {} }) {
+function BtnPrimary({ href, onClick, children, style = {} }) {
+  const base = {
+    background: GRAD, color: 'white',
+    padding: '14px 28px', borderRadius: 14,
+    fontSize: 16, fontWeight: 600,
+    display: 'inline-flex', alignItems: 'center', gap: 8,
+    cursor: 'pointer', border: 'none', textDecoration: 'none',
+    transition: 'opacity 0.15s, transform 0.15s',
+    boxShadow: '0 8px 24px rgba(58,134,255,0.28)',
+    fontFamily: POPPINS, ...style
+  }
+  if (href) return <a href={href} style={base}>{children}</a>
+  return <button onClick={onClick} style={base}>{children}</button>
+}
+
+function BtnSecondary({ href, onClick, children, style = {} }) {
+  const base = {
+    background: 'white', color: BLUE,
+    padding: '14px 28px', borderRadius: 14,
+    fontSize: 16, fontWeight: 600,
+    display: 'inline-flex', alignItems: 'center', gap: 8,
+    cursor: 'pointer', border: '2px solid #E2E8F0', textDecoration: 'none',
+    transition: 'border-color 0.15s, background 0.15s',
+    fontFamily: POPPINS, ...style
+  }
+  if (href) return <a href={href} style={base}>{children}</a>
+  return <button onClick={onClick} style={base}>{children}</button>
+}
+
+function Chip({ children, style = {} }) {
   return (
-    <span className="inline-block text-xs font-semibold px-3 py-1.5 rounded-full" style={{ background: VIOLET_SOFT, color: VIOLET, ...style }}>
+    <span style={{
+      display: 'inline-block', padding: '6px 16px', borderRadius: 999,
+      fontSize: 12, fontWeight: 600, fontFamily: POPPINS,
+      background: 'linear-gradient(135deg, #EFF6FF, #F0FDFA)',
+      color: BLUE, border: '1px solid rgba(58,134,255,0.14)',
+      ...style
+    }}>
       {children}
     </span>
   )
 }
 
-function BtnPrimary({ href, onClick, children, style = {} }) {
-  const cls = "inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-2xl text-white font-semibold text-base transition-all hover:opacity-90 active:scale-[0.98]"
-  const s = { background: VIOLET, boxShadow: `0 12px 32px rgba(124,58,237,0.3)`, ...style }
-  if (href) return <a href={href} className={cls} style={s}>{children}</a>
-  return <button onClick={onClick} className={cls} style={s}>{children}</button>
-}
-
-function BtnSecondary({ href, onClick, children, style = {} }) {
-  const cls = "inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-2xl font-semibold text-base bg-white border-2 border-gray-200 transition-all hover:border-violet-300 hover:bg-violet-50 active:scale-[0.98]"
-  const s = { color: VIOLET, ...style }
-  if (href) return <a href={href} className={cls} style={s}>{children}</a>
-  return <button onClick={onClick} className={cls} style={s}>{children}</button>
-}
+// ─── SECTIONS ────────────────────────────────────────────────────────────────
 
 function Header({ onLogin }) {
   return (
-    <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100">
-      <div className="max-w-6xl mx-auto px-5 py-3 flex items-center justify-between">
-        <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: VIOLET }}>
-            <ShoppingBag size={16} color="white" />
-          </div>
-          <span className="font-bold text-gray-900">Zimplex</span>
-        </div>
-        <div className="hidden md:flex items-center gap-7">
-          <a href="#como-funciona" className="text-sm text-gray-500 font-medium hover:text-gray-800 transition-colors">Cómo funciona</a>
-          <a href="#beneficios"    className="text-sm text-gray-500 font-medium hover:text-gray-800 transition-colors">Beneficios</a>
-          <a href="#precios"       className="text-sm text-gray-500 font-medium hover:text-gray-800 transition-colors">Precios</a>
-        </div>
-        <div className="flex items-center gap-2">
-          <button onClick={onLogin} className="hidden md:block text-sm font-medium px-4 py-2 rounded-xl transition-colors hover:bg-gray-50" style={{ color: '#6B7280' }}>
+    <header style={{
+      position: 'sticky', top: 0, zIndex: 50,
+      background: 'rgba(255,255,255,0.88)', backdropFilter: 'blur(16px)',
+      borderBottom: '1px solid #F1F5F9'
+    }}>
+      <div style={{ maxWidth: 1100, margin: '0 auto', padding: '0 24px', height: 64, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <a href="#" style={{ display: 'flex', alignItems: 'center', gap: 10, textDecoration: 'none' }}>
+          <ZimplexLogo size={34} />
+          <span style={{ fontWeight: 700, fontSize: 17, color: '#111827', fontFamily: POPPINS, letterSpacing: '-0.3px' }}>Zimplex</span>
+        </a>
+
+        <nav className="hidden md:flex" style={{ gap: 28, display: 'flex', alignItems: 'center' }}>
+          {[['#como-funciona', 'Cómo funciona'], ['#beneficios', 'Beneficios'], ['#precios', 'Precios']].map(([href, label]) => (
+            <a key={label} href={href} style={{ color: '#64748B', fontSize: 14, fontWeight: 500, textDecoration: 'none', fontFamily: POPPINS }}>{label}</a>
+          ))}
+        </nav>
+
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          <button onClick={onLogin} className="hidden md:block" style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#64748B', fontSize: 14, fontWeight: 500, fontFamily: POPPINS }}>
             Entrar
           </button>
-          <BtnPrimary href={SIGNUP_URL} style={{ padding: '10px 18px', fontSize: 14, boxShadow: 'none' }}>
+          <BtnPrimary href={SIGNUP_URL} style={{ padding: '10px 18px', fontSize: 14, boxShadow: '0 4px 12px rgba(58,134,255,0.22)' }}>
             Empezar gratis
           </BtnPrimary>
         </div>
@@ -191,71 +221,70 @@ function Header({ onLogin }) {
 
 function MobileCTABar({ onLogin }) {
   return (
-    <div className="md:hidden fixed bottom-0 left-0 right-0 z-40 flex gap-2.5 p-3 bg-white border-t border-gray-100"
-      style={{ boxShadow: '0 -4px 24px rgba(0,0,0,0.08)' }}>
-      <BtnSecondary onClick={onLogin} style={{ flex: 1, fontSize: 14, padding: '12px 16px' }}>
-        Ya tengo cuenta
-      </BtnSecondary>
-      <BtnPrimary href={SIGNUP_URL} style={{ flex: 1, fontSize: 14, padding: '12px 16px', boxShadow: 'none' }}>
-        Empezar gratis
-      </BtnPrimary>
+    <div className="md:hidden" style={{
+      position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 40,
+      display: 'flex', gap: 10, padding: '12px 16px',
+      background: 'rgba(255,255,255,0.96)', backdropFilter: 'blur(16px)',
+      borderTop: '1px solid #F1F5F9', boxShadow: '0 -4px 24px rgba(0,0,0,0.05)'
+    }}>
+      <BtnSecondary onClick={onLogin} style={{ flex: 1, justifyContent: 'center', padding: '12px 16px', fontSize: 14 }}>Ya tengo cuenta</BtnSecondary>
+      <BtnPrimary   href={SIGNUP_URL}  style={{ flex: 1, justifyContent: 'center', padding: '12px 16px', fontSize: 14, boxShadow: 'none' }}>Comenzar gratis</BtnPrimary>
     </div>
   )
 }
 
 function Hero({ onLogin }) {
   return (
-    <section className="pt-20 pb-24 px-5 text-center relative overflow-hidden">
-      <div className="absolute inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse 80% 50% at 50% -20%, rgba(124,58,237,0.08) 0%, transparent 60%)' }} />
-      <div className="max-w-4xl mx-auto relative">
-        <Badge>✦ Hecho para emprendedores como tú</Badge>
+    <section style={{ paddingTop: 80, paddingBottom: 96, paddingLeft: 24, paddingRight: 24, textAlign: 'center', position: 'relative', overflow: 'hidden' }}>
+      <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', background: 'radial-gradient(ellipse 70% 50% at 50% -10%, rgba(58,134,255,0.07) 0%, transparent 65%)' }} />
 
-        <h1 className="mt-6 font-black text-gray-900 leading-tight" style={{ fontSize: 'clamp(2.2rem, 5vw, 3.5rem)', letterSpacing: '-0.02em' }}>
+      <div style={{ maxWidth: 860, margin: '0 auto', position: 'relative' }}>
+        <Chip>✦ Para emprendedores que venden por WhatsApp</Chip>
+
+        <h1 style={{ marginTop: 24, fontSize: 'clamp(2.2rem, 5vw, 3.8rem)', fontWeight: 800, lineHeight: 1.15, letterSpacing: '-0.03em', color: '#111827', fontFamily: POPPINS }}>
           Deja de adivinar<br />cuánto ganas.
-          <br /><span style={{ background: `linear-gradient(135deg, ${VIOLET}, ${VIOLET_MED})`, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
-            Empieza a tener control real.
-          </span>
+        </h1>
+        <h1 style={{ margin: '4px 0 0', fontSize: 'clamp(2.2rem, 5vw, 3.8rem)', fontWeight: 800, lineHeight: 1.15, letterSpacing: '-0.03em', background: GRAD, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text', fontFamily: POPPINS }}>
+          Empieza a tener control real.
         </h1>
 
-        <p className="mt-5 text-lg text-gray-500 max-w-xl mx-auto leading-relaxed">
+        <p style={{ marginTop: 20, fontSize: 17, color: '#64748B', lineHeight: 1.7, maxWidth: 520, margin: '20px auto 0', fontFamily: POPPINS }}>
           Registra tus ventas en segundos, controla tu stock y entiende tu negocio sin usar Excel.
         </p>
 
-        <div className="mt-8 flex flex-col sm:flex-row gap-3 justify-center">
+        <div style={{ marginTop: 32, display: 'flex', flexWrap: 'wrap', gap: 12, justifyContent: 'center' }}>
           <BtnPrimary href={SIGNUP_URL} style={{ fontSize: 17, padding: '16px 32px' }}>
-            Empezar gratis <ArrowRight size={18} />
+            Comenzar gratis <ArrowRight size={18} />
           </BtnPrimary>
           <BtnSecondary onClick={onLogin} style={{ fontSize: 17, padding: '16px 32px' }}>
             Ya tengo cuenta
           </BtnSecondary>
         </div>
 
-        {/* Trust badges */}
-        <div className="mt-8 flex flex-wrap justify-center gap-4">
+        <div style={{ marginTop: 24, display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 20 }}>
           {['Sin tarjeta de crédito', 'Gratis para empezar', 'Listo en 2 minutos'].map(t => (
-            <span key={t} className="flex items-center gap-1.5 text-sm text-gray-400">
-              <CheckCircle2 size={14} style={{ color: '#7CD09B' }} />
-              {t}
+            <span key={t} style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 13, color: '#94A3B8', fontFamily: POPPINS }}>
+              <Check size={13} color={TEAL} strokeWidth={2.5} />{t}
             </span>
           ))}
         </div>
 
-        {/* Phone mockup */}
-        <div className="mt-16">
+        <div style={{ marginTop: 64 }}>
           <PhoneMockup />
         </div>
 
-        {/* Social proof */}
-        <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-5 text-sm text-gray-500">
-          <div className="flex items-center gap-2">
-            <div className="flex -space-x-2">
-              {[{ bg: VIOLET, l: 'M' }, { bg: VIOLET, l: 'V' }, { bg: '#059669', l: 'C' }, { bg: '#DC2626', l: 'A' }].map(({ bg, l }) => (
-                <div key={l} className="w-8 h-8 rounded-full border-2 border-white flex items-center justify-center text-xs font-bold text-white" style={{ background: bg }}>{l}</div>
+        <div style={{ marginTop: 36, display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 24, fontSize: 13, color: '#94A3B8', fontFamily: POPPINS }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <div style={{ display: 'flex' }}>
+              {[BLUE, TEAL, '#059669', '#DC2626'].map((bg, i) => (
+                <div key={i} style={{ width: 30, height: 30, borderRadius: '50%', background: bg, border: '2px solid white', marginLeft: i > 0 ? -8 : 0, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 10, fontWeight: 700, color: 'white', fontFamily: POPPINS }}>
+                  {['M','V','C','A'][i]}
+                </div>
               ))}
             </div>
             <span>+200 emprendedores ya lo usan</span>
           </div>
-          <div className="flex items-center gap-1">
+          <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
             <span style={{ color: '#F59E0B' }}>★★★★★</span>
             <span>4.9 en reseñas</span>
           </div>
@@ -267,26 +296,26 @@ function Hero({ onLogin }) {
 
 function Problem() {
   return (
-    <section className="py-20 px-5" style={{ background: '#FAFAFA' }}>
-      <div className="max-w-4xl mx-auto">
-        <div className="text-center mb-12">
-          <Badge style={{ background: '#FFF1F2', color: '#DC4B56' }}>El problema</Badge>
-          <h2 className="mt-4 text-3xl md:text-4xl font-bold text-gray-900">¿Te pasa esto?</h2>
+    <section style={{ padding: '80px 24px', background: '#F8FAFC' }}>
+      <div style={{ maxWidth: 820, margin: '0 auto' }}>
+        <div style={{ textAlign: 'center', marginBottom: 48 }}>
+          <Chip style={{ background: '#FFF1F2', color: '#EF4444', border: '1px solid rgba(239,68,68,0.14)' }}>El problema</Chip>
+          <h2 style={{ marginTop: 16, fontSize: 'clamp(1.8rem, 3.5vw, 2.5rem)', fontWeight: 700, color: '#111827', fontFamily: POPPINS }}>¿Te pasa esto?</h2>
         </div>
-        <div className="grid sm:grid-cols-2 gap-4 mb-10">
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 14 }}>
           {problems.map(({ emoji, title, desc }) => (
-            <div key={title} className="bg-white rounded-2xl p-5 border-l-4 shadow-sm" style={{ borderLeftColor: '#DC4B56', boxShadow: '0 2px 12px rgba(0,0,0,0.04)' }}>
-              <div className="flex items-start gap-3">
-                <span className="text-2xl">{emoji}</span>
+            <div key={title} style={{ background: 'white', borderRadius: 16, padding: '18px 22px', borderLeft: '4px solid #FCA5A5', boxShadow: '0 2px 10px rgba(0,0,0,0.04)' }}>
+              <div style={{ display: 'flex', gap: 12, alignItems: 'flex-start' }}>
+                <span style={{ fontSize: 22 }}>{emoji}</span>
                 <div>
-                  <p className="font-semibold text-gray-800 mb-1">{title}</p>
-                  <p className="text-sm text-gray-500">{desc}</p>
+                  <p style={{ fontWeight: 600, color: '#111827', fontSize: 14, marginBottom: 4, fontFamily: POPPINS }}>{title}</p>
+                  <p style={{ fontSize: 12, color: '#94A3B8', fontFamily: POPPINS }}>{desc}</p>
                 </div>
               </div>
             </div>
           ))}
         </div>
-        <p className="text-center text-lg font-semibold text-gray-700">
+        <p style={{ textAlign: 'center', marginTop: 32, fontSize: 16, fontWeight: 600, color: '#334155', fontFamily: POPPINS }}>
           No eres el único. A muchos emprendedores les pasa lo mismo.
         </p>
       </div>
@@ -294,35 +323,28 @@ function Problem() {
   )
 }
 
-function Solution() {
+function CoreBenefits() {
   return (
-    <section className="py-20 px-5 bg-white">
-      <div className="max-w-4xl mx-auto text-center">
-        <Badge>La solución</Badge>
-        <h2 className="mt-4 text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-          Zimplex te ayuda a{' '}
-          <span style={{ background: `linear-gradient(135deg, ${VIOLET}, ${VIOLET_MED})`, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
-            ordenar tu negocio en minutos.
-          </span>
-        </h2>
-
-        <div className="mt-8 grid sm:grid-cols-2 gap-3 text-left max-w-2xl mx-auto mb-14">
-          {solutionBullets.map(text => (
-            <div key={text} className="flex items-center gap-3 p-4 rounded-2xl" style={{ background: '#F9FAFB' }}>
-              <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: VIOLET_SOFT }}>
-                <Check size={14} style={{ color: VIOLET }} strokeWidth={2.5} />
-              </div>
-              <span className="text-sm font-medium text-gray-700">{text}</span>
-            </div>
-          ))}
+    <section style={{ padding: '80px 24px', background: 'white' }}>
+      <div style={{ maxWidth: 1000, margin: '0 auto' }}>
+        <div style={{ textAlign: 'center', marginBottom: 48 }}>
+          <Chip>Por qué Zimplex</Chip>
+          <h2 style={{ marginTop: 16, fontSize: 'clamp(1.8rem, 3.5vw, 2.5rem)', fontWeight: 700, color: '#111827', fontFamily: POPPINS }}>
+            Todo lo que necesitas,<br />
+            <span style={{ background: GRAD, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>nada de lo que no.</span>
+          </h2>
+          <p style={{ marginTop: 12, fontSize: 15, color: '#94A3B8', maxWidth: 440, margin: '12px auto 0', fontFamily: POPPINS }}>
+            Zimplex te ayuda a ordenar tu negocio en minutos.
+          </p>
         </div>
-
-        {/* Stats */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-          {stats.map(({ value, label }) => (
-            <div key={label} className="text-center">
-              <p className="text-4xl font-black" style={{ color: VIOLET }}>{value}</p>
-              <p className="text-sm text-gray-500 mt-1">{label}</p>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(270px, 1fr))', gap: 20 }}>
+          {coreBenefits.map(({ icon: Icon, title, desc, color, bg }) => (
+            <div key={title} style={{ background: 'white', borderRadius: 20, padding: 28, border: '1.5px solid #F1F5F9', boxShadow: '0 2px 10px rgba(0,0,0,0.04)', transition: 'box-shadow 0.2s' }}>
+              <div style={{ width: 48, height: 48, borderRadius: 14, background: bg, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 16 }}>
+                <Icon size={22} style={{ color }} />
+              </div>
+              <h3 style={{ fontWeight: 700, color: '#111827', marginBottom: 8, fontSize: 15, fontFamily: POPPINS }}>{title}</h3>
+              <p style={{ fontSize: 13, color: '#94A3B8', lineHeight: 1.65, fontFamily: POPPINS }}>{desc}</p>
             </div>
           ))}
         </div>
@@ -333,32 +355,32 @@ function Solution() {
 
 function HowItWorks() {
   return (
-    <section className="py-20 px-5" style={{ background: 'linear-gradient(180deg, #FAF8FF 0%, white 100%)' }} id="como-funciona">
-      <div className="max-w-4xl mx-auto">
-        <div className="text-center mb-14">
-          <Badge>Cómo funciona</Badge>
-          <h2 className="mt-4 text-3xl md:text-4xl font-bold text-gray-900">Así de simple</h2>
-          <p className="mt-2 text-lg text-gray-500">Sin planillas. Sin enredos.</p>
+    <section style={{ padding: '80px 24px', background: 'linear-gradient(180deg, #EFF6FF 0%, white 100%)' }} id="como-funciona">
+      <div style={{ maxWidth: 700, margin: '0 auto' }}>
+        <div style={{ textAlign: 'center', marginBottom: 56 }}>
+          <Chip>Cómo funciona</Chip>
+          <h2 style={{ marginTop: 16, fontSize: 'clamp(1.8rem, 3.5vw, 2.5rem)', fontWeight: 700, color: '#111827', fontFamily: POPPINS }}>Así de simple</h2>
+          <p style={{ marginTop: 8, fontSize: 15, color: '#94A3B8', fontFamily: POPPINS }}>Sin planillas. Sin enredos.</p>
         </div>
 
-        <div className="space-y-8">
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 28 }}>
           {steps.map(({ num, title, desc }) => (
-            <div key={num} className="flex items-start gap-6">
-              <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 font-bold text-base text-white" style={{ background: VIOLET }}>
+            <div key={num} style={{ display: 'flex', gap: 20, alignItems: 'flex-start' }}>
+              <div style={{ width: 44, height: 44, borderRadius: 13, flexShrink: 0, background: GRAD, display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: 16, color: 'white', fontFamily: POPPINS, boxShadow: '0 8px 20px rgba(58,134,255,0.22)' }}>
                 {num}
               </div>
-              <div className="pt-1">
-                <h3 className="text-xl font-bold text-gray-900 mb-2">{title}</h3>
-                <p className="text-gray-500 leading-relaxed">{desc}</p>
+              <div style={{ paddingTop: 4 }}>
+                <h3 style={{ fontWeight: 700, color: '#111827', marginBottom: 6, fontSize: 16, fontFamily: POPPINS }}>{title}</h3>
+                <p style={{ color: '#94A3B8', lineHeight: 1.65, fontSize: 14, fontFamily: POPPINS }}>{desc}</p>
               </div>
             </div>
           ))}
         </div>
 
-        <div className="mt-12 p-6 rounded-3xl text-center" style={{ background: '#FAF8FF', border: `1.5px solid ${VIOLET_SOFT}` }}>
-          <p className="text-xl font-bold text-gray-900 mb-2">¿Cuánto demora en configurarse?</p>
-          <p className="text-gray-500 mb-5">
-            Menos de <strong style={{ color: VIOLET }}>5 minutos</strong> desde que abres la app hasta tu primera venta registrada.
+        <div style={{ marginTop: 48, padding: 24, borderRadius: 20, textAlign: 'center', background: 'white', border: '1.5px solid #DBEAFE' }}>
+          <p style={{ fontWeight: 700, fontSize: 16, color: '#111827', marginBottom: 8, fontFamily: POPPINS }}>¿Cuánto demora en configurarse?</p>
+          <p style={{ color: '#94A3B8', marginBottom: 20, fontSize: 14, fontFamily: POPPINS }}>
+            Menos de <strong style={{ color: BLUE }}>5 minutos</strong> desde que abres la app hasta tu primera venta registrada.
           </p>
           <BtnPrimary href={SIGNUP_URL}>Quiero empezar ahora</BtnPrimary>
         </div>
@@ -367,55 +389,31 @@ function HowItWorks() {
   )
 }
 
-function Features() {
+function EmotionalBenefits() {
   return (
-    <section className="py-20 px-5 bg-white">
-      <div className="max-w-5xl mx-auto">
-        <div className="text-center mb-14">
-          <Badge>Funcionalidades</Badge>
-          <h2 className="mt-4 text-3xl md:text-4xl font-bold text-gray-900">Todo en un solo lugar</h2>
-          <p className="mt-3 text-lg text-gray-500 max-w-md mx-auto">Cinco herramientas simples que te dan claridad total sobre tu negocio.</p>
+    <section style={{ padding: '80px 24px', background: '#F8FAFC' }} id="beneficios">
+      <div style={{ maxWidth: 820, margin: '0 auto' }}>
+        <div style={{ textAlign: 'center', marginBottom: 48 }}>
+          <Chip>Beneficios</Chip>
+          <h2 style={{ marginTop: 16, fontSize: 'clamp(1.8rem, 3.5vw, 2.5rem)', fontWeight: 700, color: '#111827', fontFamily: POPPINS }}>
+            Lo que cambia cuando empiezas a usarlo
+          </h2>
         </div>
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-          {features.map(({ icon: Icon, title, desc, bg, color }, i) => (
-            <div key={title} className="rounded-2xl p-7 border border-gray-100 transition-all hover:border-violet-200 hover:shadow-md"
-              style={i === features.length - 1 ? { background: 'linear-gradient(135deg, #EDE9FE, #F5F3FF)' } : { background: 'white' }}>
-              <div className="w-11 h-11 rounded-2xl flex items-center justify-center mb-4" style={{ background: bg }}>
-                <Icon size={22} style={{ color }} />
-              </div>
-              <h3 className="font-bold text-gray-900 mb-2">{title}</h3>
-              <p className="text-sm text-gray-500 leading-relaxed">{desc}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  )
-}
-
-function Benefits() {
-  return (
-    <section className="py-20 px-5" style={{ background: '#FAFAFA' }} id="beneficios">
-      <div className="max-w-4xl mx-auto">
-        <div className="text-center mb-14">
-          <Badge>Beneficios</Badge>
-          <h2 className="mt-4 text-3xl md:text-4xl font-bold text-gray-900">Lo que cambia cuando empiezas a usarlo</h2>
-        </div>
-        <div className="grid sm:grid-cols-2 gap-4 mb-10">
-          {benefits.map(({ icon: Icon, title, desc, bg, color }) => (
-            <div key={title} className="flex items-start gap-4 p-5 bg-white rounded-2xl border border-gray-100">
-              <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: bg }}>
-                <Icon size={20} style={{ color }} />
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 14 }}>
+          {emotionalBenefits.map(({ icon: Icon, title, desc, color, bg }) => (
+            <div key={title} style={{ display: 'flex', alignItems: 'flex-start', gap: 14, padding: 18, background: 'white', borderRadius: 16, border: '1.5px solid #F1F5F9' }}>
+              <div style={{ width: 38, height: 38, borderRadius: 10, background: bg, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                <Icon size={17} style={{ color }} />
               </div>
               <div>
-                <p className="font-semibold text-gray-800 mb-1">{title}</p>
-                <p className="text-sm text-gray-500">{desc}</p>
+                <p style={{ fontWeight: 600, color: '#111827', marginBottom: 3, fontSize: 14, fontFamily: POPPINS }}>{title}</p>
+                <p style={{ fontSize: 12, color: '#94A3B8', fontFamily: POPPINS }}>{desc}</p>
               </div>
             </div>
           ))}
         </div>
-        <div className="text-center">
-          <p className="text-xl font-bold text-gray-800 mb-6">Tu negocio deja de ser un caos.</p>
+        <div style={{ textAlign: 'center', marginTop: 40 }}>
+          <p style={{ fontSize: 19, fontWeight: 700, color: '#111827', marginBottom: 24, fontFamily: POPPINS }}>Tu negocio deja de ser un caos.</p>
           <BtnPrimary href={SIGNUP_URL} style={{ fontSize: 17, padding: '16px 32px' }}>
             Empezar gratis ahora <ArrowRight size={18} />
           </BtnPrimary>
@@ -427,27 +425,28 @@ function Benefits() {
 
 function Testimonials() {
   return (
-    <section className="py-20 px-5 bg-white">
-      <div className="max-w-5xl mx-auto">
-        <div className="text-center mb-14">
-          <Badge>Testimonios</Badge>
-          <h2 className="mt-4 text-3xl md:text-4xl font-bold text-gray-900">Lo que dicen quienes lo usan</h2>
+    <section style={{ padding: '80px 24px', background: 'white' }}>
+      <div style={{ maxWidth: 1000, margin: '0 auto' }}>
+        <div style={{ textAlign: 'center', marginBottom: 48 }}>
+          <Chip>Testimonios</Chip>
+          <h2 style={{ marginTop: 16, fontSize: 'clamp(1.8rem, 3.5vw, 2.5rem)', fontWeight: 700, color: '#111827', fontFamily: POPPINS }}>
+            Lo que dicen quienes lo usan
+          </h2>
         </div>
-        <div className="grid md:grid-cols-3 gap-5">
-          {testimonials.map(({ quote, name, role, initial, color }, i) => (
-            <div key={name} className="bg-white rounded-2xl p-6 border transition-all hover:shadow-md"
-              style={{ borderColor: i === 1 ? '#DDD6FE' : '#F3F4F6' }}>
-              <div className="flex gap-1 mb-3" style={{ color: '#F59E0B' }}>
-                {[...Array(5)].map((_, j) => <Star key={j} size={14} fill="#F59E0B" />)}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 18 }}>
+          {testimonials.map(({ quote, name, role, initial }, i) => (
+            <div key={name} style={{ background: 'white', borderRadius: 20, padding: 24, border: `1.5px solid ${i === 1 ? '#DBEAFE' : '#F1F5F9'}`, boxShadow: i === 1 ? '0 4px 20px rgba(58,134,255,0.08)' : '0 2px 8px rgba(0,0,0,0.03)' }}>
+              <div style={{ display: 'flex', gap: 2, marginBottom: 12 }}>
+                {[...Array(5)].map((_, j) => <Star key={j} size={13} fill="#F59E0B" color="#F59E0B" />)}
               </div>
-              <p className="text-gray-600 text-sm leading-relaxed mb-4">{quote}</p>
-              <div className="flex items-center gap-3">
-                <div className="w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold text-white" style={{ background: color }}>
+              <p style={{ color: '#334155', fontSize: 14, lineHeight: 1.65, marginBottom: 16, fontFamily: POPPINS }}>{quote}</p>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                <div style={{ width: 34, height: 34, borderRadius: '50%', background: GRAD, display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontSize: 12, fontWeight: 700, fontFamily: POPPINS }}>
                   {initial}
                 </div>
                 <div>
-                  <p className="text-sm font-semibold text-gray-800">{name}</p>
-                  <p className="text-xs text-gray-400">{role}</p>
+                  <p style={{ fontSize: 13, fontWeight: 600, color: '#111827', fontFamily: POPPINS }}>{name}</p>
+                  <p style={{ fontSize: 11, color: '#94A3B8', fontFamily: POPPINS }}>{role}</p>
                 </div>
               </div>
             </div>
@@ -460,72 +459,65 @@ function Testimonials() {
 
 function Pricing() {
   return (
-    <section className="py-20 px-5" style={{ background: '#FAFAFA' }} id="precios">
-      <div className="max-w-4xl mx-auto">
-        <div className="text-center mb-14">
-          <Badge>Precios</Badge>
-          <h2 className="mt-4 text-3xl md:text-4xl font-bold text-gray-900">Simple como la app</h2>
-          <p className="mt-3 text-lg text-gray-500">Empieza gratis. Actualiza solo si lo necesitas.</p>
+    <section style={{ padding: '80px 24px', background: '#F8FAFC' }} id="precios">
+      <div style={{ maxWidth: 760, margin: '0 auto' }}>
+        <div style={{ textAlign: 'center', marginBottom: 48 }}>
+          <Chip>Precios</Chip>
+          <h2 style={{ marginTop: 16, fontSize: 'clamp(1.8rem, 3.5vw, 2.5rem)', fontWeight: 700, color: '#111827', fontFamily: POPPINS }}>Simple como la app</h2>
+          <p style={{ marginTop: 8, fontSize: 15, color: '#94A3B8', fontFamily: POPPINS }}>Empieza gratis. Actualiza solo si lo necesitas.</p>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-5 max-w-2xl mx-auto">
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 20 }}>
           {/* Free */}
-          <div className="bg-white rounded-3xl p-7 border-2 border-gray-100">
-            <p className="text-sm font-semibold text-gray-500 mb-1">Gratis</p>
-            <div className="flex items-end gap-1 mb-2">
-              <span className="text-4xl font-extrabold text-gray-900">$0</span>
-            </div>
-            <p className="text-sm text-gray-400 mb-7">Para empezar</p>
-            <ul className="space-y-3 mb-7">
-              {freeFeatures.map(text => (
-                <li key={text} className="flex items-center gap-3 text-sm text-gray-700">
-                  <Check size={15} style={{ color: '#7CD09B' }} strokeWidth={2.5} className="shrink-0" />
-                  {text}
+          <div style={{ background: 'white', borderRadius: 24, padding: 28, border: '2px solid #F1F5F9' }}>
+            <p style={{ fontSize: 12, fontWeight: 600, color: '#94A3B8', marginBottom: 8, fontFamily: POPPINS, letterSpacing: '0.08em' }}>GRATIS</p>
+            <p style={{ fontSize: 40, fontWeight: 800, color: '#111827', fontFamily: POPPINS, lineHeight: 1 }}>$0</p>
+            <p style={{ fontSize: 13, color: '#94A3B8', margin: '6px 0 20px', fontFamily: POPPINS }}>Para empezar</p>
+            <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 20px', display: 'flex', flexDirection: 'column', gap: 9 }}>
+              {freeFeatures.map(t => (
+                <li key={t} style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, color: '#334155', fontFamily: POPPINS }}>
+                  <Check size={13} color={TEAL} strokeWidth={2.5} style={{ flexShrink: 0 }} />{t}
                 </li>
               ))}
-              {proExcluded.map(text => (
-                <li key={text} className="flex items-center gap-3 text-sm text-gray-300">
-                  <X size={15} className="shrink-0" strokeWidth={2} />
-                  {text}
+              {proExcluded.map(t => (
+                <li key={t} style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, color: '#CBD5E1', fontFamily: POPPINS }}>
+                  <X size={13} color="#CBD5E1" strokeWidth={2} style={{ flexShrink: 0 }} />{t}
                 </li>
               ))}
             </ul>
-            <p className="text-xs text-center text-gray-400 mb-4">Gratis para siempre</p>
-            <BtnSecondary href={SIGNUP_URL} style={{ width: '100%', justifyContent: 'center' }}>
-              Empezar gratis
-            </BtnSecondary>
+            <p style={{ textAlign: 'center', fontSize: 11, color: '#94A3B8', marginBottom: 14, fontFamily: POPPINS }}>Gratis para siempre</p>
+            <BtnSecondary href={SIGNUP_URL} style={{ width: '100%', justifyContent: 'center', fontSize: 14 }}>Empezar gratis</BtnSecondary>
           </div>
 
           {/* Pro */}
-          <div className="rounded-3xl p-7 border-2 relative" style={{ background: VIOLET, borderColor: VIOLET, boxShadow: `0 20px 60px rgba(124,58,237,0.3)` }}>
-            <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-              <span className="text-xs font-bold px-4 py-1.5 rounded-full" style={{ background: 'rgba(255,255,255,0.2)', color: 'white' }}>
+          <div style={{ background: GRAD, borderRadius: 24, padding: 28, position: 'relative', boxShadow: '0 20px 56px rgba(58,134,255,0.22)' }}>
+            <div style={{ position: 'absolute', top: -12, left: '50%', transform: 'translateX(-50%)', whiteSpace: 'nowrap' }}>
+              <span style={{ background: 'rgba(255,255,255,0.22)', backdropFilter: 'blur(8px)', color: 'white', fontSize: 11, fontWeight: 700, padding: '5px 14px', borderRadius: 999, fontFamily: POPPINS }}>
                 Más elegido
               </span>
             </div>
-            <p className="text-sm font-semibold mb-1" style={{ color: '#C4B5FD' }}>Pro</p>
-            <div className="flex items-end gap-1 mb-2">
-              <span className="text-4xl font-extrabold text-white">USD 5</span>
-              <span className="mb-1.5" style={{ color: '#C4B5FD' }}>/mes</span>
+            <p style={{ fontSize: 12, fontWeight: 600, color: 'rgba(255,255,255,0.7)', marginBottom: 8, fontFamily: POPPINS, letterSpacing: '0.08em' }}>PRO</p>
+            <div style={{ display: 'flex', alignItems: 'flex-end', gap: 6 }}>
+              <p style={{ fontSize: 40, fontWeight: 800, color: 'white', fontFamily: POPPINS, lineHeight: 1 }}>USD 5</p>
+              <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.65)', marginBottom: 4, fontFamily: POPPINS }}>/mes</p>
             </div>
-            <p className="text-sm mb-7" style={{ color: '#C4B5FD' }}>Para hacer crecer tu negocio</p>
-            <ul className="space-y-3 mb-7">
-              {proFeatures.map(text => (
-                <li key={text} className="flex items-center gap-3 text-sm text-white">
-                  <Check size={15} style={{ color: '#C4B5FD' }} strokeWidth={2.5} className="shrink-0" />
-                  {text}
+            <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.65)', margin: '6px 0 20px', fontFamily: POPPINS }}>Para hacer crecer tu negocio</p>
+            <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 20px', display: 'flex', flexDirection: 'column', gap: 9 }}>
+              {proFeatures.map(t => (
+                <li key={t} style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, color: 'white', fontFamily: POPPINS }}>
+                  <Check size={13} color="rgba(255,255,255,0.75)" strokeWidth={2.5} style={{ flexShrink: 0 }} />{t}
                 </li>
               ))}
             </ul>
-            <a href={UPGRADE_URL} target="_blank" rel="noreferrer"
-              className="flex items-center justify-center gap-2 w-full py-3.5 rounded-2xl bg-white font-semibold text-sm transition-all hover:bg-violet-50"
-              style={{ color: VIOLET }}>
-              Pasar a Pro <ChevronRight size={16} />
+            <a href={UPGRADE_URL} target="_blank" rel="noreferrer" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, width: '100%', padding: '14px 0', borderRadius: 14, background: 'white', color: BLUE, fontWeight: 600, fontSize: 14, textDecoration: 'none', fontFamily: POPPINS }}>
+              Pasar a Pro <ChevronRight size={15} />
             </a>
           </div>
         </div>
 
-        <p className="text-center text-sm text-gray-400 mt-6">Empieza gratis. No necesitas tarjeta.</p>
+        <p style={{ textAlign: 'center', fontSize: 13, color: '#94A3B8', marginTop: 18, fontFamily: POPPINS }}>
+          Empieza gratis. No necesitas tarjeta.
+        </p>
       </div>
     </section>
   )
@@ -533,27 +525,22 @@ function Pricing() {
 
 function FAQ() {
   return (
-    <section className="py-20 px-5 bg-white">
-      <div className="max-w-2xl mx-auto">
-        <div className="text-center mb-12">
-          <Badge>FAQ</Badge>
-          <h2 className="mt-4 text-3xl font-bold text-gray-900">Preguntas frecuentes</h2>
+    <section style={{ padding: '80px 24px', background: 'white' }} id="faq">
+      <div style={{ maxWidth: 600, margin: '0 auto' }}>
+        <div style={{ textAlign: 'center', marginBottom: 48 }}>
+          <Chip>FAQ</Chip>
+          <h2 style={{ marginTop: 16, fontSize: 'clamp(1.6rem, 3vw, 2.2rem)', fontWeight: 700, color: '#111827', fontFamily: POPPINS }}>Preguntas frecuentes</h2>
         </div>
-        <div className="divide-y divide-gray-100">
-          {faqs.map(({ q, a }) => {
-            const id = q.replace(/\s/g, '-')
-            return (
-              <details key={q} className="group py-5">
-                <summary className="flex justify-between items-center cursor-pointer font-semibold text-gray-800 list-none">
-                  {q}
-                  <span className="ml-4 shrink-0 transition-transform group-open:rotate-180 text-gray-400">
-                    <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path d="M19 9l-7 7-7-7" /></svg>
-                  </span>
-                </summary>
-                <p className="mt-3 text-sm text-gray-500 leading-relaxed">{a}</p>
-              </details>
-            )
-          })}
+        <div style={{ borderTop: '1px solid #F1F5F9' }}>
+          {faqs.map(({ q, a }) => (
+            <details key={q} className="group" style={{ borderBottom: '1px solid #F1F5F9' }}>
+              <summary className="flex justify-between items-center cursor-pointer py-5 list-none" style={{ fontWeight: 600, color: '#111827', fontSize: 14, fontFamily: POPPINS }}>
+                {q}
+                <ChevronRight size={17} className="text-slate-300 flex-shrink-0 transition-transform duration-200 group-open:rotate-90" />
+              </summary>
+              <p style={{ paddingBottom: 16, color: '#94A3B8', fontSize: 13, lineHeight: 1.7, fontFamily: POPPINS }}>{a}</p>
+            </details>
+          ))}
         </div>
       </div>
     </section>
@@ -562,24 +549,24 @@ function FAQ() {
 
 function FinalCTA({ onLogin }) {
   return (
-    <section className="py-24 px-5" style={{ background: '#0F172A' }}>
-      <div className="max-w-2xl mx-auto text-center">
-        <Badge style={{ background: 'rgba(124,58,237,0.2)', color: VIOLET_MED }}>Empieza hoy</Badge>
-        <h2 className="mt-5 text-3xl md:text-4xl font-black text-white leading-tight">
+    <section style={{ padding: '80px 24px', background: '#0F172A' }}>
+      <div style={{ maxWidth: 580, margin: '0 auto', textAlign: 'center' }}>
+        <Chip style={{ background: 'rgba(58,134,255,0.15)', color: '#93C5FD', border: '1px solid rgba(58,134,255,0.2)' }}>Empieza hoy</Chip>
+        <h2 style={{ marginTop: 20, fontSize: 'clamp(1.8rem, 4vw, 3rem)', fontWeight: 800, color: 'white', lineHeight: 1.2, fontFamily: POPPINS }}>
           Empieza hoy a ordenar<br />tu negocio.
         </h2>
-        <p className="mt-4 text-lg mb-10" style={{ color: '#94A3B8' }}>
+        <p style={{ marginTop: 14, fontSize: 15, color: '#94A3B8', marginBottom: 36, fontFamily: POPPINS }}>
           No necesitas ser experto. Solo necesitas empezar.
         </p>
-        <div className="flex flex-col sm:flex-row gap-3 justify-center mb-5">
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12, justifyContent: 'center', marginBottom: 16 }}>
           <BtnPrimary href={SIGNUP_URL} style={{ fontSize: 17, padding: '16px 36px' }}>
             Crear cuenta gratis <ArrowRight size={18} />
           </BtnPrimary>
-          <BtnSecondary onClick={onLogin} style={{ fontSize: 17, padding: '16px 36px' }}>
+          <BtnSecondary onClick={onLogin} style={{ fontSize: 17, padding: '16px 36px', borderColor: 'rgba(255,255,255,0.1)', color: '#94A3B8', background: 'transparent' }}>
             Ya tengo cuenta
           </BtnSecondary>
         </div>
-        <p className="text-sm" style={{ color: '#64748B' }}>Sin tarjeta de crédito · Sin contratos · Gratis para empezar</p>
+        <p style={{ fontSize: 12, color: '#475569', fontFamily: POPPINS }}>Sin tarjeta · Sin contratos · Gratis para empezar</p>
       </div>
     </section>
   )
@@ -587,39 +574,40 @@ function FinalCTA({ onLogin }) {
 
 function Footer() {
   return (
-    <footer className="bg-white border-t border-gray-100 py-12 px-5">
-      <div className="max-w-5xl mx-auto">
-        <div className="flex flex-col md:flex-row justify-between items-start gap-8">
+    <footer style={{ background: 'white', borderTop: '1px solid #F1F5F9', padding: '48px 24px' }}>
+      <div style={{ maxWidth: 1000, margin: '0 auto' }}>
+        <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', gap: 32, marginBottom: 36 }}>
           <div>
-            <div className="flex items-center gap-2 mb-3">
-              <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: VIOLET }}>
-                <ShoppingBag size={14} color="white" />
-              </div>
-              <span className="font-bold text-gray-900">Zimplex</span>
-            </div>
-            <p className="text-sm text-gray-400 max-w-xs">La forma más simple de llevar tu negocio. Hecho con ❤️ para microemprendedores.</p>
+            <a href="#" style={{ display: 'flex', alignItems: 'center', gap: 8, textDecoration: 'none', marginBottom: 10 }}>
+              <ZimplexLogo size={28} />
+              <span style={{ fontWeight: 700, color: '#111827', fontSize: 15, fontFamily: POPPINS }}>Zimplex</span>
+            </a>
+            <p style={{ fontSize: 13, color: '#94A3B8', maxWidth: 210, lineHeight: 1.6, fontFamily: POPPINS }}>
+              La forma más simple de llevar tu negocio. Hecho con ❤️ para microemprendedores.
+            </p>
           </div>
-          <div className="grid grid-cols-2 gap-8 text-sm">
+          <div style={{ display: 'flex', gap: 48, flexWrap: 'wrap' }}>
             <div>
-              <p className="font-semibold text-gray-700 mb-3">Producto</p>
-              <ul className="space-y-2 text-gray-400">
-                <li><a href="#como-funciona" className="hover:text-gray-600 transition-colors">Cómo funciona</a></li>
-                <li><a href="#precios" className="hover:text-gray-600 transition-colors">Precios</a></li>
-                <li><a href="#faq" className="hover:text-gray-600 transition-colors">Preguntas frecuentes</a></li>
+              <p style={{ fontWeight: 600, color: '#334155', fontSize: 12, marginBottom: 12, fontFamily: POPPINS, letterSpacing: '0.05em' }}>PRODUCTO</p>
+              <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: 8 }}>
+                {[['#como-funciona','Cómo funciona'], ['#precios','Precios'], ['#faq','FAQ']].map(([href, label]) => (
+                  <li key={label}><a href={href} style={{ fontSize: 13, color: '#94A3B8', textDecoration: 'none', fontFamily: POPPINS }}>{label}</a></li>
+                ))}
               </ul>
             </div>
             <div>
-              <p className="font-semibold text-gray-700 mb-3">Cuenta</p>
-              <ul className="space-y-2 text-gray-400">
-                <li><a href={SIGNUP_URL} className="hover:text-gray-600 transition-colors">Crear cuenta</a></li>
-                <li><a href={LOGIN_URL} className="hover:text-gray-600 transition-colors">Iniciar sesión</a></li>
+              <p style={{ fontWeight: 600, color: '#334155', fontSize: 12, marginBottom: 12, fontFamily: POPPINS, letterSpacing: '0.05em' }}>CUENTA</p>
+              <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: 8 }}>
+                {[[SIGNUP_URL,'Crear cuenta'], [LOGIN_URL,'Iniciar sesión']].map(([href, label]) => (
+                  <li key={label}><a href={href} style={{ fontSize: 13, color: '#94A3B8', textDecoration: 'none', fontFamily: POPPINS }}>{label}</a></li>
+                ))}
               </ul>
             </div>
           </div>
         </div>
-        <div className="border-t border-gray-100 mt-10 pt-6 flex flex-col sm:flex-row justify-between items-center gap-3">
-          <p className="text-sm text-gray-400">© {new Date().getFullYear()} Zimplex. Todos los derechos reservados.</p>
-          <p className="text-sm text-gray-400">Hecho en 🇨🇱 Chile</p>
+        <div style={{ borderTop: '1px solid #F1F5F9', paddingTop: 20, display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center', gap: 8 }}>
+          <p style={{ fontSize: 12, color: '#94A3B8', fontFamily: POPPINS }}>© {new Date().getFullYear()} Zimplex. Todos los derechos reservados.</p>
+          <p style={{ fontSize: 12, color: '#94A3B8', fontFamily: POPPINS }}>Hecho en 🇨🇱 Chile</p>
         </div>
       </div>
     </footer>
@@ -630,15 +618,14 @@ function Footer() {
 
 export default function Landing({ onLogin }) {
   return (
-    <div className="min-h-screen bg-white" style={{ paddingBottom: 72 }}>
+    <div style={{ minHeight: '100vh', background: 'white', paddingBottom: 72, fontFamily: POPPINS }}>
       <Header onLogin={onLogin} />
       <MobileCTABar onLogin={onLogin} />
       <Hero onLogin={onLogin} />
       <Problem />
-      <Solution />
+      <CoreBenefits />
       <HowItWorks />
-      <Features />
-      <Benefits />
+      <EmotionalBenefits />
       <Testimonials />
       <Pricing />
       <FAQ />
