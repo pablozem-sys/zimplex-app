@@ -3,7 +3,7 @@ import { supabase } from '../lib/supabase'
 import { User, Mail, Store, LogOut, Save, Loader2, Check, Zap } from 'lucide-react'
 import { useApp } from '../context/AppContext'
 
-const BASE_UPGRADE_URL = 'https://minegociosimple.lemonsqueezy.com/checkout/buy/ef3fd402-6b9a-4693-9c4b-5a4974929973'
+const BASE_UPGRADE_URL = 'https://zimplexapp.lemonsqueezy.com/checkout/buy/aa87c828-1e44-484a-948b-a55f2f129f81'
 
 function buildUpgradeUrl(userId, email) {
   const parts = []
