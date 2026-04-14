@@ -19,9 +19,10 @@ export default function AuthPage() {
 
     try {
       if (mode === 'register') {
-        const { error } = await supabase.auth.signUp({ email, password })
+        const { data, error } = await supabase.auth.signUp({ email, password })
         if (error) throw error
-        setRegistered(true)
+        // Si no hay sesión, Supabase requiere confirmar email
+        if (!data.session) setRegistered(true)
       } else {
         const { error } = await supabase.auth.signInWithPassword({ email, password })
         if (error) throw error
