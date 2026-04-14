@@ -15,7 +15,7 @@ function buildUpgradeUrl(userId, email) {
 const inputClass = 'w-full bg-gray-50 border border-gray-200 rounded-2xl px-4 py-3.5 text-sm focus:outline-none focus:ring-2 focus:border-transparent'
 
 export default function Profile() {
-  const { theme, setTheme, themes, isPro, userId } = useApp()
+  const { theme, setTheme, themes, isPro, userId, setBusinessName } = useApp()
   const [user, setUser] = useState(null)
   const [name, setName] = useState('')
   const [businessName, setBusinessName] = useState('')
@@ -36,6 +36,7 @@ export default function Profile() {
     await supabase.auth.updateUser({
       data: { name, business_name: businessName }
     })
+    setBusinessName(businessName)
     setLoading(false)
     setSuccess(true)
     setTimeout(() => setSuccess(false), 2000)

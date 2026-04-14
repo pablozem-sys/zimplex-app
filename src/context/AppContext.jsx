@@ -16,6 +16,7 @@ export function AppProvider({ children }) {
   const [loading, setLoading] = useState(true)
   const [userId, setUserId] = useState(null)
   const [plan, setPlan] = useState('free')
+  const [businessName, setBusinessName] = useState('')
   const [theme, setThemeState] = useState(() => {
     try {
       const saved = localStorage.getItem('app-theme')
@@ -36,8 +37,9 @@ export function AppProvider({ children }) {
 
   // ─── GET USER ─────────────────────────────────────────────────────────────
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setUserId(session?.user?.id ?? 'demo')
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      setUserId(user?.id ?? 'demo')
+      setBusinessName(user?.user_metadata?.business_name || '')
     })
   }, [])
 
@@ -242,7 +244,7 @@ export function AppProvider({ children }) {
       activeTab, setActiveTab,
       loading,
       theme, setTheme, themes: THEMES,
-      userId,
+      userId, businessName, setBusinessName,
       plan, isPro: plan === 'pro',
       monthlySalesCount, freeSalesLimit: 100,
       addSale, addProduct, updateProduct, deleteProduct,
