@@ -125,7 +125,7 @@ export function AppProvider({ children }) {
       name: product.name,
       price: product.price,
       stock: product.stock,
-      low_stock_threshold: product.lowStockThreshold || 10,
+      low_stock_threshold: product.lowStockThreshold ?? 0,
       description: product.description || null,
       unit: product.unit || 'unidades',
     }).select().single()

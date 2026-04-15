@@ -12,7 +12,14 @@ function ProductFormModal({ title, initial, onClose, onSave }) {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    onSave({ name: form.name, price: parseInt(form.price), stock: parseInt(form.stock), description: form.description, unit: form.unit || 'unidades' })
+    onSave({
+      name: form.name,
+      price: parseInt(form.price),
+      stock: parseInt(form.stock),
+      lowStockThreshold: form.lowStockThreshold === '' ? 0 : parseInt(form.lowStockThreshold),
+      description: form.description,
+      unit: form.unit || 'unidades',
+    })
     onClose()
   }
 
@@ -47,9 +54,20 @@ function ProductFormModal({ title, initial, onClose, onSave }) {
                 </div>
               </div>
               <div>
-                <label className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2 block">Stock</label>
+                <label className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2 block">Stock inicial</label>
                 <input required type="number" min="0" value={form.stock} onChange={e => setForm(f => ({ ...f, stock: e.target.value }))}
                   placeholder="0" className={inputClass} />
+              </div>
+            </div>
+            <div>
+              <label className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2 block">
+                Alerta de stock bajo <span className="text-gray-300 normal-case font-normal">(avisarme cuando queden menos de...)</span>
+              </label>
+              <div className="relative">
+                <input type="number" min="0" value={form.lowStockThreshold}
+                  onChange={e => setForm(f => ({ ...f, lowStockThreshold: e.target.value }))}
+                  placeholder="Ej: 5 — dejar en 0 para no alertar"
+                  className={inputClass} />
               </div>
             </div>
             <div>
@@ -184,12 +202,12 @@ export default function Products() {
 
       {showAdd && (
         <ProductFormModal title="Agregar producto"
-          initial={{ name: '', price: '', stock: '', description: '', unit: 'unidades' }}
+          initial={{ name: '', price: '', stock: '', lowStockThreshold: '', description: '', unit: 'unidades' }}
           onClose={() => setShowAdd(false)} onSave={addProduct} />
       )}
       {editingProduct && (
         <ProductFormModal title="Editar producto"
-          initial={{ name: editingProduct.name, price: editingProduct.price, stock: editingProduct.stock, description: editingProduct.description || '', unit: editingProduct.unit || 'unidades' }}
+          initial={{ name: editingProduct.name, price: editingProduct.price, stock: editingProduct.stock, lowStockThreshold: editingProduct.lowStockThreshold ?? '', description: editingProduct.description || '', unit: editingProduct.unit || 'unidades' }}
           onClose={() => setEditingProduct(null)} onSave={(data) => updateProduct(editingProduct.id, data)} />
       )}
       {deletingProduct && (
