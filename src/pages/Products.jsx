@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useApp } from '../context/AppContext'
 import { Plus, AlertTriangle, Package, X, Trash2, Pencil } from 'lucide-react'
+import UpgradeModal from '../components/UpgradeModal'
 
 const fmt = (n) => new Intl.NumberFormat('es-CL', { style: 'currency', currency: 'CLP', maximumFractionDigits: 0 }).format(n)
 const inputClass = 'w-full bg-gray-50 border border-gray-200 rounded-2xl px-4 py-3.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#7C3AED] focus:border-transparent'
@@ -132,27 +133,57 @@ function DeleteConfirmModal({ product, onClose, onConfirm }) {
 }
 
 export default function Products() {
-  const { products, addProduct, updateProduct, deleteProduct } = useApp()
+  const { products, isPro, planLimits, addProduct, updateProduct, deleteProduct } = useApp()
   const [showAdd, setShowAdd] = useState(false)
+  const [showUpgrade, setShowUpgrade] = useState(false)
   const [editingProduct, setEditingProduct] = useState(null)
   const [deletingProduct, setDeletingProduct] = useState(null)
+
+  const atLimit = !isPro && products.length >= planLimits.maxProducts
+
+  const handleAddClick = () => {
+    if (atLimit) {
+      setShowUpgrade(true)
+    } else {
+      setShowAdd(true)
+    }
+  }
 
   const lowStock = products.filter(p => p.stock <= p.lowStockThreshold)
   const okStock = products.filter(p => p.stock > p.lowStockThreshold)
 
   return (
     <div className="page-content">
-      <div className="flex items-center justify-between pt-2 mb-6">
+      <div className="flex items-center justify-between pt-2 mb-4">
         <div>
           <h1 className="text-xl font-bold text-gray-900">Productos</h1>
           <p className="text-sm text-gray-400 mt-0.5">{products.length} productos en stock</p>
         </div>
-        <button onClick={() => setShowAdd(true)}
+        <button onClick={handleAddClick}
           className="flex items-center gap-1.5 bg-[#7C3AED] text-white text-sm font-semibold px-4 py-2.5 rounded-2xl active:scale-95 transition-all shadow-md shadow-violet-200">
           <Plus size={16} />
           Agregar
         </button>
       </div>
+
+      {/* Contador de uso plan gratis */}
+      {!isPro && (
+        <div className="mb-5">
+          <div className="flex items-center justify-between text-xs mb-1.5">
+            <span className="text-gray-400">{products.length} de {planLimits.maxProducts} productos usados</span>
+            {atLimit && <span className="text-[#DC4B56] font-semibold">Límite alcanzado</span>}
+          </div>
+          <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden">
+            <div
+              className="h-1.5 rounded-full transition-all"
+              style={{
+                width: `${Math.min(100, (products.length / planLimits.maxProducts) * 100)}%`,
+                backgroundColor: atLimit ? '#DC4B56' : '#7C3AED',
+              }}
+            />
+          </div>
+        </div>
+      )}
 
       {lowStock.length > 0 && (
         <div className="bg-red-50 border border-red-100 rounded-2xl p-4 mb-5 flex items-center gap-3">
@@ -214,6 +245,7 @@ export default function Products() {
         <DeleteConfirmModal product={deletingProduct}
           onClose={() => setDeletingProduct(null)} onConfirm={deleteProduct} />
       )}
+      {showUpgrade && <UpgradeModal variant="products" onClose={() => setShowUpgrade(false)} />}
     </div>
   )
 }

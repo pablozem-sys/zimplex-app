@@ -1,6 +1,7 @@
 import { useApp } from '../context/AppContext'
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
-import { TrendingUp, ShoppingBag, AlertCircle, Package, Plus, ArrowRight } from 'lucide-react'
+import { TrendingUp, ShoppingBag, AlertCircle, Package, Plus, ArrowRight, Zap } from 'lucide-react'
+import { UPGRADE_URL_BASE } from '../lib/plans'
 
 const fmt = (n) => new Intl.NumberFormat('es-CL', { style: 'currency', currency: 'CLP', maximumFractionDigits: 0 }).format(n)
 
@@ -23,7 +24,15 @@ const CustomTooltip = ({ active, payload }) => {
 }
 
 export default function Dashboard() {
-  const { todayTotal, monthTotal, pendingOrders, lowStockProducts, last7Days, todaySalesCount, sales, setActiveTab } = useApp()
+  const {
+    todayTotal, monthTotal, pendingOrders, lowStockProducts,
+    last7Days, todaySalesCount, sales, setActiveTab,
+    products, monthlySalesCount, isPro, planLimits, userId,
+  } = useApp()
+
+  const upgradeUrl = userId
+    ? `${UPGRADE_URL_BASE}?checkout[custom][user_id]=${userId}`
+    : UPGRADE_URL_BASE
 
   const recentSales = sales.slice(0, 5)
 
@@ -63,6 +72,11 @@ export default function Dashboard() {
       tab: 'productos',
     },
   ]
+
+  const productPct = Math.min(100, (products.length / planLimits.maxProducts) * 100)
+  const salesPct = Math.min(100, (monthlySalesCount / planLimits.maxMonthlySales) * 100)
+  const productAtLimit = products.length >= planLimits.maxProducts
+  const salesAtLimit = monthlySalesCount >= planLimits.maxMonthlySales
 
   return (
     <div className="page-content">
@@ -108,6 +122,62 @@ export default function Dashboard() {
         <Plus size={20} />
         Registrar venta
       </button>
+
+      {/* Plan usage — solo plan gratis */}
+      {!isPro && (
+        <div className="bg-white rounded-[20px] p-4 border border-gray-100 shadow-sm mb-5">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-sm font-semibold text-gray-900">Uso del plan gratis</h2>
+            <a
+              href={upgradeUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="flex items-center gap-1 text-xs text-[#7C3AED] font-semibold"
+            >
+              <Zap size={11} />
+              Pasar a Pro
+            </a>
+          </div>
+
+          {/* Productos */}
+          <div className="mb-3">
+            <div className="flex items-center justify-between text-xs mb-1.5">
+              <span className="text-gray-400">Productos</span>
+              <span className={productAtLimit ? 'text-[#DC4B56] font-semibold' : 'text-gray-500 font-medium'}>
+                {products.length} de {planLimits.maxProducts}
+              </span>
+            </div>
+            <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden">
+              <div
+                className="h-1.5 rounded-full transition-all"
+                style={{
+                  width: `${productPct}%`,
+                  backgroundColor: productAtLimit ? '#DC4B56' : '#7C3AED',
+                }}
+              />
+            </div>
+          </div>
+
+          {/* Ventas mensuales */}
+          <div>
+            <div className="flex items-center justify-between text-xs mb-1.5">
+              <span className="text-gray-400">Ventas este mes</span>
+              <span className={salesAtLimit ? 'text-[#DC4B56] font-semibold' : 'text-gray-500 font-medium'}>
+                {monthlySalesCount} de {planLimits.maxMonthlySales}
+              </span>
+            </div>
+            <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden">
+              <div
+                className="h-1.5 rounded-full transition-all"
+                style={{
+                  width: `${salesPct}%`,
+                  backgroundColor: salesAtLimit ? '#DC4B56' : salesPct >= 75 ? '#F59E0B' : '#7C3AED',
+                }}
+              />
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Chart */}
       <div className="bg-white rounded-[20px] p-4 border border-gray-100 shadow-sm mb-5">

@@ -1,6 +1,7 @@
 import { createContext, useContext, useState, useEffect } from 'react'
 import { supabase } from '../lib/supabase'
 import { THEMES, DEFAULT_THEME, applyTheme } from '../lib/themes'
+import { getPlanLimits } from '../lib/plans'
 
 const AppContext = createContext(null)
 
@@ -118,8 +119,15 @@ export function AppProvider({ children }) {
     date: r.date,
   })
 
+  // ─── PLANS ────────────────────────────────────────────────────────────────
+  const isPro = plan === 'pro'
+  const planLimits = getPlanLimits(plan)
+
   // ─── PRODUCTS ─────────────────────────────────────────────────────────────
   const addProduct = async (product) => {
+    if (!isPro && products.length >= planLimits.maxProducts) {
+      return { error: { message: 'LIMIT_REACHED' } }
+    }
     const { data, error } = await supabase.from('products').insert({
       user_id: userId,
       name: product.name,
@@ -130,6 +138,7 @@ export function AppProvider({ children }) {
       unit: product.unit || 'unidades',
     }).select().single()
     if (!error && data) setProducts(prev => [dbToProduct(data), ...prev])
+    return { error: error || null }
   }
 
   const updateProduct = async (id, changes) => {
@@ -150,13 +159,11 @@ export function AppProvider({ children }) {
   }
 
   // ─── SALES ────────────────────────────────────────────────────────────────
-  const FREE_SALES_LIMIT = 100
-
   const addSale = async (sale) => {
-    if (plan !== 'pro') {
+    if (!isPro) {
       const currentMonth = fmt(new Date()).slice(0, 7)
       const count = sales.filter(s => s.date?.startsWith(currentMonth)).length
-      if (count >= FREE_SALES_LIMIT) {
+      if (count >= planLimits.maxMonthlySales) {
         return { error: { message: 'LIMIT_REACHED' } }
       }
     }
@@ -258,8 +265,8 @@ export function AppProvider({ children }) {
       theme, setTheme, themes: THEMES,
       userId, businessName, setBusinessName,
       transferDetails, setTransferDetails,
-      plan, isPro: plan === 'pro',
-      monthlySalesCount, freeSalesLimit: 100,
+      plan, isPro, planLimits,
+      monthlySalesCount,
       addSale, addProduct, updateProduct, deleteProduct,
       addOrder, updateOrderStatus,
       addGoal, updateGoalProgress, deleteGoal,

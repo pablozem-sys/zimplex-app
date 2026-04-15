@@ -1,8 +1,7 @@
 import { useState } from 'react'
 import { useApp } from '../context/AppContext'
 import { CheckCircle, ChevronDown, Clock, TrendingUp, Zap, Lock } from 'lucide-react'
-
-const BASE_UPGRADE_URL = 'https://minegociosimple.lemonsqueezy.com/checkout/buy/ef3fd402-6b9a-4693-9c4b-5a4974929973'
+import { UPGRADE_URL_BASE } from '../lib/plans'
 
 const fmt = (n) => new Intl.NumberFormat('es-CL', { style: 'currency', currency: 'CLP', maximumFractionDigits: 0 }).format(n)
 
@@ -22,10 +21,10 @@ const paymentLabels = { efectivo: 'Efectivo', transferencia: 'Transferencia', ta
 const inputClass = 'w-full bg-white border border-gray-200 rounded-2xl px-4 py-3.5 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#7C3AED] focus:border-transparent shadow-sm'
 
 export default function RegisterSale() {
-  const { products, sales, addSale, isPro, monthlySalesCount, freeSalesLimit, userId } = useApp()
+  const { products, sales, addSale, isPro, monthlySalesCount, planLimits, userId } = useApp()
   const upgradeUrl = userId
-    ? `${BASE_UPGRADE_URL}?checkout[custom][user_id]=${userId}`
-    : BASE_UPGRADE_URL
+    ? `${UPGRADE_URL_BASE}?checkout[custom][user_id]=${userId}`
+    : UPGRADE_URL_BASE
   const [tab, setTab] = useState('registrar')
   const [form, setForm] = useState({
     productId: '',
@@ -84,6 +83,9 @@ export default function RegisterSale() {
     )
   }
 
+  const atSalesLimit = !isPro && monthlySalesCount >= planLimits.maxMonthlySales
+  const nearLimit = !isPro && monthlySalesCount >= planLimits.maxMonthlySales - 5
+
   return (
     <div className="page-content">
       <div className="pt-2 mb-5">
@@ -107,151 +109,171 @@ export default function RegisterSale() {
       </div>
 
       {tab === 'registrar' ? (
-        !isPro && monthlySalesCount >= freeSalesLimit ? (
-          <UpgradeWall count={monthlySalesCount} limit={freeSalesLimit} />
-        ) :
-        <form onSubmit={handleSubmit} className="space-y-4">
-          {!isPro && monthlySalesCount < freeSalesLimit - 10 && (
-            <div className="flex items-center justify-between bg-gray-50 rounded-2xl px-4 py-2.5">
-              <span className="text-xs text-gray-400">Ventas este mes</span>
-              <span className="text-xs font-semibold text-gray-500">{monthlySalesCount}/{freeSalesLimit}</span>
-            </div>
-          )}
-          {!isPro && monthlySalesCount >= freeSalesLimit - 10 && (
-            <div className="bg-amber-50 border border-amber-200 rounded-2xl px-4 py-3 flex items-start gap-3">
-              <span className="text-lg leading-none mt-0.5">⚠️</span>
+        atSalesLimit ? (
+          <UpgradeWall count={monthlySalesCount} limit={planLimits.maxMonthlySales} upgradeUrl={upgradeUrl} />
+        ) : (
+          <form onSubmit={handleSubmit} className="space-y-4">
+            {/* Contador de uso */}
+            {!isPro && (
               <div>
-                <p className="text-sm font-semibold text-amber-800">
-                  Te quedan {freeSalesLimit - monthlySalesCount} ventas este mes
-                </p>
-                <p className="text-xs text-amber-600 mt-0.5">
-                  El plan gratis incluye {freeSalesLimit} ventas/mes.{' '}
-                  <a href={upgradeUrl} target="_blank" rel="noreferrer" className="font-semibold underline">
-                    Pasa a Pro
-                  </a>{' '}
-                  para ventas ilimitadas.
-                </p>
+                <div className="flex items-center justify-between text-xs mb-1.5">
+                  <span className="text-gray-400">{monthlySalesCount} de {planLimits.maxMonthlySales} ventas este mes</span>
+                  {nearLimit && (
+                    <span className="text-amber-500 font-semibold">
+                      Quedan {planLimits.maxMonthlySales - monthlySalesCount}
+                    </span>
+                  )}
+                </div>
+                <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                  <div
+                    className="h-1.5 rounded-full transition-all"
+                    style={{
+                      width: `${Math.min(100, (monthlySalesCount / planLimits.maxMonthlySales) * 100)}%`,
+                      backgroundColor: nearLimit ? '#F59E0B' : '#7C3AED',
+                    }}
+                  />
+                </div>
+              </div>
+            )}
+
+            {/* Aviso cuando está cerca del límite */}
+            {nearLimit && (
+              <div className="bg-amber-50 border border-amber-200 rounded-2xl px-4 py-3 flex items-start gap-3">
+                <span className="text-lg leading-none mt-0.5">⚠️</span>
+                <div>
+                  <p className="text-sm font-semibold text-amber-800">
+                    Te quedan {planLimits.maxMonthlySales - monthlySalesCount} ventas este mes
+                  </p>
+                  <p className="text-xs text-amber-600 mt-0.5">
+                    El plan gratis incluye {planLimits.maxMonthlySales} ventas/mes.{' '}
+                    <a href={upgradeUrl} target="_blank" rel="noreferrer" className="font-semibold underline">
+                      Pasa a Pro
+                    </a>{' '}
+                    para ventas ilimitadas.
+                  </p>
+                </div>
+              </div>
+            )}
+
+            {/* Product */}
+            <div>
+              <label className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2 block">Producto</label>
+              <div className="relative">
+                <select
+                  value={form.productId}
+                  onChange={handleProductChange}
+                  required
+                  className={`${inputClass} appearance-none`}
+                >
+                  <option value="">Selecciona un producto</option>
+                  {products.map(p => (
+                    <option key={p.id} value={p.id}>
+                      {p.name} — Stock: {p.stock} {p.unit || 'und'} — {fmt(p.price)}/{p.unit || 'und'}
+                    </option>
+                  ))}
+                </select>
+                <ChevronDown size={16} className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+              </div>
+              {selectedProduct && selectedProduct.stock <= selectedProduct.lowStockThreshold && (
+                <p className="text-xs text-[#DC4B56] mt-1.5">⚠️ Stock bajo: solo quedan {selectedProduct.stock} unidades</p>
+              )}
+            </div>
+
+            {/* Quantity */}
+            <div>
+              <label className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2 block">
+                Cantidad {selectedProduct?.unit ? <span className="normal-case font-normal text-gray-300">({selectedProduct.unit})</span> : ''}
+              </label>
+              <div className="flex items-center gap-3">
+                <button type="button" onClick={() => setForm(f => ({ ...f, quantity: Math.max(1, f.quantity - 1) }))}
+                  className="w-12 h-12 rounded-2xl bg-white border border-gray-200 shadow-sm text-gray-600 font-bold text-xl flex items-center justify-center active:scale-95">
+                  −
+                </button>
+                <input
+                  type="number"
+                  min="1"
+                  value={form.quantity}
+                  onChange={(e) => setForm(f => ({ ...f, quantity: parseInt(e.target.value) || 1 }))}
+                  className="flex-1 bg-white border border-gray-200 rounded-2xl px-4 py-3.5 text-sm text-gray-900 text-center font-bold shadow-sm focus:outline-none focus:ring-2 focus:ring-[#7C3AED] focus:border-transparent"
+                />
+                <button type="button" onClick={() => setForm(f => ({ ...f, quantity: f.quantity + 1 }))}
+                  className="w-12 h-12 rounded-2xl bg-[#7C3AED] text-white font-bold text-xl flex items-center justify-center active:scale-95 shadow-md shadow-violet-200">
+                  +
+                </button>
               </div>
             </div>
-          )}
-          {/* Product */}
-          <div>
-            <label className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2 block">Producto</label>
-            <div className="relative">
-              <select
-                value={form.productId}
-                onChange={handleProductChange}
-                required
-                className={`${inputClass} appearance-none`}
-              >
-                <option value="">Selecciona un producto</option>
-                {products.map(p => (
-                  <option key={p.id} value={p.id}>
-                    {p.name} — Stock: {p.stock} {p.unit || 'und'} — {fmt(p.price)}/{p.unit || 'und'}
-                  </option>
+
+            {/* Unit price */}
+            <div>
+              <label className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2 block">Precio unitario</label>
+              <div className="relative">
+                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm font-medium">$</span>
+                <input
+                  type="number"
+                  value={form.unitPrice}
+                  onChange={(e) => setForm(f => ({ ...f, unitPrice: parseInt(e.target.value) || '' }))}
+                  placeholder="0"
+                  required
+                  className={`${inputClass} pl-8`}
+                />
+              </div>
+            </div>
+
+            {/* Customer */}
+            <div>
+              <label className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2 block">
+                Cliente <span className="text-gray-300 normal-case font-normal">(opcional)</span>
+              </label>
+              <input
+                type="text"
+                value={form.customer}
+                onChange={(e) => setForm(f => ({ ...f, customer: e.target.value }))}
+                placeholder="Nombre del cliente"
+                className={inputClass}
+              />
+            </div>
+
+            {/* Payment method */}
+            <div>
+              <label className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2 block">Método de pago</label>
+              <div className="grid grid-cols-3 gap-2">
+                {paymentMethods.map(pm => (
+                  <button
+                    key={pm.id}
+                    type="button"
+                    onClick={() => setForm(f => ({ ...f, paymentMethod: pm.id }))}
+                    className={`py-3.5 rounded-2xl border text-sm font-medium flex flex-col items-center gap-1 transition-all shadow-sm ${
+                      form.paymentMethod === pm.id
+                        ? 'border-[#7C3AED] bg-violet-50 text-[#7C3AED] shadow-blue-100'
+                        : 'border-gray-200 bg-white text-gray-400'
+                    }`}
+                  >
+                    <span className="text-xl">{pm.emoji}</span>
+                    <span className="text-xs">{pm.label}</span>
+                  </button>
                 ))}
-              </select>
-              <ChevronDown size={16} className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+              </div>
             </div>
-            {selectedProduct && selectedProduct.stock <= selectedProduct.lowStockThreshold && (
-              <p className="text-xs text-[#DC4B56] mt-1.5">⚠️ Stock bajo: solo quedan {selectedProduct.stock} unidades</p>
+
+            {/* Total */}
+            <div className="bg-gradient-to-r from-[#7C3AED] to-[#A78BFA] rounded-2xl p-4 flex items-center justify-between shadow-lg shadow-violet-200">
+              <span className="text-sm font-medium text-blue-100">Total</span>
+              <span className="text-2xl font-bold text-white">{fmt(total)}</span>
+            </div>
+
+            {error && (
+              <p className="text-sm text-[#DC4B56] bg-red-50 px-4 py-3 rounded-2xl">{error}</p>
             )}
-          </div>
 
-          {/* Quantity */}
-          <div>
-            <label className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2 block">
-            Cantidad {selectedProduct?.unit ? <span className="normal-case font-normal text-gray-300">({selectedProduct.unit})</span> : ''}
-          </label>
-            <div className="flex items-center gap-3">
-              <button type="button" onClick={() => setForm(f => ({ ...f, quantity: Math.max(1, f.quantity - 1) }))}
-                className="w-12 h-12 rounded-2xl bg-white border border-gray-200 shadow-sm text-gray-600 font-bold text-xl flex items-center justify-center active:scale-95">
-                −
-              </button>
-              <input
-                type="number"
-                min="1"
-                value={form.quantity}
-                onChange={(e) => setForm(f => ({ ...f, quantity: parseInt(e.target.value) || 1 }))}
-                className="flex-1 bg-white border border-gray-200 rounded-2xl px-4 py-3.5 text-sm text-gray-900 text-center font-bold shadow-sm focus:outline-none focus:ring-2 focus:ring-[#7C3AED] focus:border-transparent"
-              />
-              <button type="button" onClick={() => setForm(f => ({ ...f, quantity: f.quantity + 1 }))}
-                className="w-12 h-12 rounded-2xl bg-[#7C3AED] text-white font-bold text-xl flex items-center justify-center active:scale-95 shadow-md shadow-violet-200">
-                +
-              </button>
-            </div>
-          </div>
-
-          {/* Unit price */}
-          <div>
-            <label className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2 block">Precio unitario</label>
-            <div className="relative">
-              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm font-medium">$</span>
-              <input
-                type="number"
-                value={form.unitPrice}
-                onChange={(e) => setForm(f => ({ ...f, unitPrice: parseInt(e.target.value) || '' }))}
-                placeholder="0"
-                required
-                className={`${inputClass} pl-8`}
-              />
-            </div>
-          </div>
-
-          {/* Customer */}
-          <div>
-            <label className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2 block">
-              Cliente <span className="text-gray-300 normal-case font-normal">(opcional)</span>
-            </label>
-            <input
-              type="text"
-              value={form.customer}
-              onChange={(e) => setForm(f => ({ ...f, customer: e.target.value }))}
-              placeholder="Nombre del cliente"
-              className={inputClass}
-            />
-          </div>
-
-          {/* Payment method */}
-          <div>
-            <label className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2 block">Método de pago</label>
-            <div className="grid grid-cols-3 gap-2">
-              {paymentMethods.map(pm => (
-                <button
-                  key={pm.id}
-                  type="button"
-                  onClick={() => setForm(f => ({ ...f, paymentMethod: pm.id }))}
-                  className={`py-3.5 rounded-2xl border text-sm font-medium flex flex-col items-center gap-1 transition-all shadow-sm ${
-                    form.paymentMethod === pm.id
-                      ? 'border-[#7C3AED] bg-violet-50 text-[#7C3AED] shadow-blue-100'
-                      : 'border-gray-200 bg-white text-gray-400'
-                  }`}
-                >
-                  <span className="text-xl">{pm.emoji}</span>
-                  <span className="text-xs">{pm.label}</span>
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Total */}
-          <div className="bg-gradient-to-r from-[#7C3AED] to-[#A78BFA] rounded-2xl p-4 flex items-center justify-between shadow-lg shadow-violet-200">
-            <span className="text-sm font-medium text-blue-100">Total</span>
-            <span className="text-2xl font-bold text-white">{fmt(total)}</span>
-          </div>
-
-          {error && (
-            <p className="text-sm text-[#DC4B56] bg-red-50 px-4 py-3 rounded-2xl">{error}</p>
-          )}
-
-          {/* Submit */}
-          <button
-            type="submit"
-            className="w-full bg-[#7C3AED] active:scale-[0.98] text-white font-semibold py-4 rounded-2xl transition-all duration-200 shadow-lg shadow-violet-200 text-base"
-          >
-            Registrar venta
-          </button>
-        </form>
+            {/* Submit */}
+            <button
+              type="submit"
+              className="w-full bg-[#7C3AED] active:scale-[0.98] text-white font-semibold py-4 rounded-2xl transition-all duration-200 shadow-lg shadow-violet-200 text-base"
+            >
+              Registrar venta
+            </button>
+          </form>
+        )
       ) : (
         <SaleHistory sales={sales} />
       )}
@@ -259,21 +281,20 @@ export default function RegisterSale() {
   )
 }
 
-function UpgradeWall({ count, limit }) {
+function UpgradeWall({ count, limit, upgradeUrl }) {
   return (
     <div className="flex flex-col items-center justify-center py-10 px-2 text-center">
       <div className="w-16 h-16 rounded-2xl bg-violet-50 flex items-center justify-center mb-4">
         <Lock size={28} className="text-[#7C3AED]" />
       </div>
-      <h2 className="text-lg font-bold text-gray-900 mb-1">Límite alcanzado</h2>
+      <h2 className="text-lg font-bold text-gray-900 mb-1">Llegaste al límite de ventas mensuales</h2>
       <p className="text-sm text-gray-400 mb-1">
-        Usaste las {limit} ventas gratuitas de este mes.
+        Tu plan gratis incluye hasta {limit} ventas al mes. Pásate a Pro para seguir registrando ventas sin límites.
       </p>
       <p className="text-xs text-gray-300 mb-6">El contador se reinicia el 1 del próximo mes.</p>
 
-      {/* Usage bar */}
       <div className="w-full bg-gray-100 rounded-full h-2 mb-6">
-        <div className="bg-[#7C3AED] h-2 rounded-full w-full" />
+        <div className="bg-[#DC4B56] h-2 rounded-full w-full" />
       </div>
 
       <a
@@ -283,9 +304,9 @@ function UpgradeWall({ count, limit }) {
         className="w-full bg-[#7C3AED] text-white font-semibold py-4 rounded-2xl flex items-center justify-center gap-2 shadow-lg shadow-violet-200 active:scale-[0.98] transition-all"
       >
         <Zap size={18} />
-        Pasa a Pro — USD 5/mes
+        Pasar a Pro — USD 5/mes
       </a>
-      <p className="text-xs text-gray-300 mt-3">Ventas ilimitadas + historial avanzado</p>
+      <p className="text-xs text-gray-300 mt-3">Ventas ilimitadas + historial completo</p>
     </div>
   )
 }
