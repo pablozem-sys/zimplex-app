@@ -62,6 +62,19 @@ export function AppProvider({ children }) {
     loadAll()
   }, [userId])
 
+  // ─── REFRESH PLAN al volver a la app (ej: después de pagar en MP) ─────────
+  useEffect(() => {
+    if (!userId) return
+    const handleVisibility = async () => {
+      if (document.visibilityState === 'visible') {
+        const { data } = await supabase.from('profiles').select('plan').eq('id', userId).single()
+        if (data?.plan) setPlan(data.plan)
+      }
+    }
+    document.addEventListener('visibilitychange', handleVisibility)
+    return () => document.removeEventListener('visibilitychange', handleVisibility)
+  }, [userId])
+
   async function loadAll() {
     setLoading(true)
     try {
