@@ -271,27 +271,27 @@ export default function RegisterSale() {
                 <p className="text-xs text-[#DC4B56]">⚠️ Stock bajo: {currentProduct.stock} unidades disponibles</p>
               )}
 
-              {/* Cantidad + precio en fila */}
-              <div className="grid grid-cols-2 gap-3">
+              {/* Cantidad + precio apilados */}
+              <div className="space-y-3">
                 <div>
                   <label className="text-xs font-medium text-gray-400 mb-1.5 block">Cantidad</label>
                   <div className="flex items-center gap-2">
                     <button type="button" onClick={() => setCurrent(c => ({ ...c, quantity: Math.max(1, c.quantity - 1) }))}
-                      className="w-10 h-10 rounded-xl bg-white border border-gray-200 text-gray-600 font-bold text-lg flex items-center justify-center active:scale-95 shadow-sm">−</button>
+                      className="w-11 h-11 rounded-xl bg-white border border-gray-200 text-gray-600 font-bold text-lg flex items-center justify-center active:scale-95 shadow-sm flex-shrink-0">−</button>
                     <input type="number" min="1" value={current.quantity}
                       onChange={e => setCurrent(c => ({ ...c, quantity: parseInt(e.target.value) || 1 }))}
-                      className="flex-1 bg-white border border-gray-200 rounded-xl px-2 py-2.5 text-sm text-center font-bold shadow-sm focus:outline-none focus:ring-2 focus:ring-[#7C3AED]" />
+                      className="flex-1 bg-white border border-gray-200 rounded-xl px-3 py-2.5 text-sm text-center font-bold shadow-sm focus:outline-none focus:ring-2 focus:ring-[#7C3AED]" />
                     <button type="button" onClick={() => setCurrent(c => ({ ...c, quantity: c.quantity + 1 }))}
-                      className="w-10 h-10 rounded-xl bg-[#7C3AED] text-white font-bold text-lg flex items-center justify-center active:scale-95 shadow-md shadow-violet-200">+</button>
+                      className="w-11 h-11 rounded-xl bg-[#7C3AED] text-white font-bold text-lg flex items-center justify-center active:scale-95 shadow-md shadow-violet-200 flex-shrink-0">+</button>
                   </div>
                 </div>
                 <div>
-                  <label className="text-xs font-medium text-gray-400 mb-1.5 block">Precio unit.</label>
+                  <label className="text-xs font-medium text-gray-400 mb-1.5 block">Precio unitario</label>
                   <div className="relative">
-                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm">$</span>
+                    <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm">$</span>
                     <input type="number" value={current.unitPrice}
                       onChange={e => setCurrent(c => ({ ...c, unitPrice: parseInt(e.target.value) || '' }))}
-                      placeholder="0" className={`${inputClass} pl-7`} />
+                      placeholder="0" className={`${inputClass} pl-8`} />
                   </div>
                 </div>
               </div>
