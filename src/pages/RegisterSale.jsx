@@ -38,11 +38,17 @@ export default function RegisterSale() {
 
   const handleUpgrade = async () => {
     setUpgradeLoading(true)
+    const newWindow = window.open('', '_blank')
     try {
       const url = await getUpgradeUrl()
-      if (url) window.open(url, '_blank')
-    } catch (err) { console.error(err) }
-    finally { setUpgradeLoading(false) }
+      if (url && newWindow) newWindow.location.href = url
+      else newWindow?.close()
+    } catch (err) {
+      console.error(err)
+      newWindow?.close()
+    } finally {
+      setUpgradeLoading(false)
+    }
   }
   const [tab, setTab] = useState('registrar')
   const [form, setForm] = useState({

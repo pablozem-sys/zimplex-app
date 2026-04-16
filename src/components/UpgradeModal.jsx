@@ -29,6 +29,8 @@ export default function UpgradeModal({ variant = 'feature', onClose }) {
 
   const handleUpgrade = async () => {
     setLoading(true)
+    // Abrir ventana inmediatamente (dentro del evento click) para evitar popup blocker
+    const newWindow = window.open('', '_blank')
     try {
       const { data: { session } } = await supabase.auth.getSession()
       const res = await fetch(`${SUPABASE_URL}/functions/v1/mp-create-subscription`, {
@@ -39,11 +41,14 @@ export default function UpgradeModal({ variant = 'feature', onClose }) {
         },
       })
       const data = await res.json()
-      if (data.init_point) {
-        window.open(data.init_point, '_blank')
+      if (data.init_point && newWindow) {
+        newWindow.location.href = data.init_point
+      } else {
+        newWindow?.close()
       }
     } catch (err) {
       console.error('Error creando suscripción:', err)
+      newWindow?.close()
     } finally {
       setLoading(false)
     }
