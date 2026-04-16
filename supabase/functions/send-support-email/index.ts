@@ -15,9 +15,26 @@ serve(async (req) => {
   }
 
   try {
-    const { nombre, email, tipo, asunto, mensaje, origen, user_id, negocio, pagina } = await req.json()
+    const raw = await req.json()
 
-    if (!nombre?.trim() || !email?.trim() || !mensaje?.trim()) {
+    const esc = (s) => String(s ?? '')
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;')
+
+    const nombre  = esc(raw.nombre)
+    const email   = String(raw.email ?? '').trim()
+    const tipo    = esc(raw.tipo)
+    const asunto  = esc(raw.asunto)
+    const mensaje = esc(raw.mensaje)
+    const origen  = esc(raw.origen)
+    const user_id = esc(raw.user_id)
+    const negocio = esc(raw.negocio)
+    const pagina  = esc(raw.pagina)
+
+    if (!raw.nombre?.trim() || !raw.email?.trim() || !raw.mensaje?.trim()) {
       return new Response(JSON.stringify({ error: 'Campos requeridos faltantes' }), {
         status: 400, headers: { 'Content-Type': 'application/json', ...CORS },
       })

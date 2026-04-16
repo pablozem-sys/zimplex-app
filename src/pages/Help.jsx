@@ -22,7 +22,6 @@ const TIPOS_APP = [
 export default function Help() {
   const { userId, businessName, activeTab } = useApp()
 
-  const [user, setUser] = useState(null)
   const [nombre, setNombre] = useState('')
   const [email, setEmail] = useState('')
   const [tipo, setTipo] = useState('')
@@ -36,7 +35,6 @@ export default function Help() {
   useEffect(() => {
     supabase.auth.getUser().then(({ data: { user } }) => {
       if (!user) return
-      setUser(user)
       setNombre(user.user_metadata?.name || '')
       setEmail(user.email || '')
     })
@@ -77,7 +75,6 @@ export default function Help() {
           origen: 'app',
           user_id: userId,
           negocio: businessName || '—',
-          pagina: activeTab,
         }),
       })
 
