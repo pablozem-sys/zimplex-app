@@ -269,6 +269,45 @@ export function AppProvider({ children }) {
     setOrders(prev => prev.map(o => o.id === id ? { ...o, status } : o))
   }
 
+  const updateOrder = async (id, updates) => {
+    const dbUpdates = { updated_at: new Date().toISOString() }
+    if (updates.customer   !== undefined) dbUpdates.customer       = updates.customer
+    if (updates.customerPhone !== undefined) dbUpdates.customer_phone = updates.customerPhone
+    if (updates.note       !== undefined) dbUpdates.note           = updates.note
+
+    if (updates.items?.length > 0) {
+      const items      = updates.items
+      const grandTotal = items.reduce((s, i) => s + i.subtotal, 0)
+      const totalQty   = items.reduce((s, i) => s + i.quantity, 0)
+      dbUpdates.product_id   = items.length === 1 ? (items[0].productId || null) : null
+      dbUpdates.product_name = items.map(i => i.productName).join(', ')
+      dbUpdates.quantity     = totalQty
+      dbUpdates.total        = grandTotal
+
+      await supabase.from('order_items').delete().eq('order_id', id)
+      for (const item of items) {
+        if (item.productId) {
+          await supabase.from('order_items').insert({
+            order_id: id, product_id: item.productId, product_name: item.productName,
+            quantity: item.quantity, unit_price: item.unitPrice, subtotal: item.subtotal,
+          })
+        }
+      }
+    }
+
+    await supabase.from('orders').update(dbUpdates).eq('id', id)
+    setOrders(prev => prev.map(o => {
+      if (o.id !== id) return o
+      const updated = { ...o, ...updates }
+      if (updates.items?.length > 0) {
+        updated.productName = updates.items.map(i => i.productName).join(', ')
+        updated.quantity    = updates.items.reduce((s, i) => s + i.quantity, 0)
+        updated.total       = updates.items.reduce((s, i) => s + i.subtotal, 0)
+      }
+      return updated
+    }))
+  }
+
   const deleteOrder = async (id) => {
     await supabase.from('orders').delete().eq('id', id)
     setOrders(prev => prev.filter(o => o.id !== id))
@@ -330,7 +369,7 @@ export function AppProvider({ children }) {
       plan, isPro, planLimits,
       monthlySalesCount,
       addSale, addProduct, updateProduct, deleteProduct,
-      addOrder, updateOrderStatus, deleteOrder,
+      addOrder, updateOrderStatus, updateOrder, deleteOrder,
       addGoal, updateGoalProgress, deleteGoal,
       todayTotal, monthTotal, pendingOrders, lowStockProducts,
       todaySalesCount: todaySales.length,

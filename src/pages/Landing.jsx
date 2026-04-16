@@ -10,7 +10,7 @@ import { GradientBackground } from '@/components/ui/gradient-background'
 const BLUE     = '#3A86FF'
 const TEAL     = '#2EC4B6'
 const GRAD     = 'linear-gradient(135deg, #3A86FF 0%, #2EC4B6 100%)'
-const POPPINS  = "'Poppins', sans-serif"
+const POPPINS  = "'Nunito', sans-serif"
 
 const HERO_GRADIENTS = [
   'linear-gradient(135deg, #1e3a8a 0%, #0d9488 100%)',
