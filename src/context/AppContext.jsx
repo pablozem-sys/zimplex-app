@@ -124,18 +124,27 @@ export function AppProvider({ children }) {
     customer: r.customer_name,
     paymentMethod: r.payment_method,
     date: r.sale_date,
+    createdAt: r.created_at,
   })
 
   const dbToOrder = (r) => ({
     id: r.id,
     customer: r.customer,
+    customerPhone: r.customer_phone,
     productId: r.product_id,
     productName: r.product_name,
     quantity: r.quantity,
     total: r.total,
     status: r.status,
+    paymentStatus: r.payment_status,
     note: r.note,
     date: r.date,
+    paymentLink: r.payment_link,
+    mpPreferenceId: r.mercadopago_preference_id,
+    mpPaymentId: r.mercadopago_payment_id,
+    externalReference: r.external_reference,
+    whatsappSentAt: r.whatsapp_sent_at,
+    paymentLinkGeneratedAt: r.payment_link_generated_at,
   })
 
   // ─── PLANS ────────────────────────────────────────────────────────────────
@@ -213,24 +222,58 @@ export function AppProvider({ children }) {
 
   // ─── ORDERS ───────────────────────────────────────────────────────────────
   const addOrder = async (order) => {
+    const items = order.items?.length > 0
+      ? order.items
+      : [{ productId: order.productId, productName: order.productName, quantity: order.quantity, unitPrice: order.unitPrice ?? Math.round(order.total / order.quantity), subtotal: order.total }]
+
+    const grandTotal     = items.reduce((s, i) => s + i.subtotal, 0)
+    const totalQty       = items.reduce((s, i) => s + i.quantity, 0)
+    const productDisplay = items.map(i => i.productName).join(', ')
+
     const { data, error } = await supabase.from('orders').insert({
       user_id: userId,
       customer: order.customer,
-      product_id: order.productId || null,
-      product_name: order.productName,
-      quantity: order.quantity,
-      total: order.total,
+      customer_phone: order.customerPhone || null,
+      product_id: items.length === 1 ? (items[0].productId || null) : null,
+      product_name: productDisplay,
+      quantity: totalQty,
+      total: grandTotal,
       status: 'pendiente',
       note: order.note || null,
       date: fmt(new Date()),
+      updated_at: new Date().toISOString(),
     }).select().single()
-    if (!error && data) setOrders(prev => [dbToOrder(data), ...prev])
+
+    if (error) return { data: null, error }
+
+    for (const item of items) {
+      if (item.productId) {
+        await supabase.from('order_items').insert({
+          order_id: data.id,
+          product_id: item.productId,
+          product_name: item.productName,
+          quantity: item.quantity,
+          unit_price: item.unitPrice,
+          subtotal: item.subtotal,
+        })
+      }
+    }
+
+    const mapped = dbToOrder(data)
+    setOrders(prev => [mapped, ...prev])
+    return { data: mapped, error: null }
   }
 
   const updateOrderStatus = async (id, status) => {
-    await supabase.from('orders').update({ status }).eq('id', id)
+    await supabase.from('orders').update({ status, updated_at: new Date().toISOString() }).eq('id', id)
     setOrders(prev => prev.map(o => o.id === id ? { ...o, status } : o))
   }
+
+  const deleteOrder = async (id) => {
+    await supabase.from('orders').delete().eq('id', id)
+    setOrders(prev => prev.filter(o => o.id !== id))
+  }
+
 
   // ─── GOALS ────────────────────────────────────────────────────────────────
   const addGoal = async (goal) => {
@@ -287,7 +330,7 @@ export function AppProvider({ children }) {
       plan, isPro, planLimits,
       monthlySalesCount,
       addSale, addProduct, updateProduct, deleteProduct,
-      addOrder, updateOrderStatus,
+      addOrder, updateOrderStatus, deleteOrder,
       addGoal, updateGoalProgress, deleteGoal,
       todayTotal, monthTotal, pendingOrders, lowStockProducts,
       todaySalesCount: todaySales.length,
