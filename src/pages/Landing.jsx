@@ -77,9 +77,9 @@ const testimonials = [
   { quote: '"Lo del WhatsApp automático me cambió la vida. Antes escribía el mismo mensaje 20 veces al día. Ahora es un toque."',      name: 'Valentina Rojas', role: 'Ropa por encargo, Concepción',   initial: 'V' },
 ]
 
-const freeFeatures = ['Registro de ventas', 'Control básico de stock', 'Visualización simple', 'Hasta 100 ventas al mes']
-const proExcluded  = ['Control de stock avanzado', 'Reportes completos', 'Pedidos por WhatsApp', 'Soporte prioritario']
-const proFeatures  = ['Ventas ilimitadas', 'Control de stock avanzado', 'Reportes completos', 'Pedidos por WhatsApp', 'Insights automáticos', 'Prioridad en soporte']
+const freeFeatures = ['Hasta 3 productos', 'Hasta 20 ventas al mes', 'Dashboard básico', 'Control de stock']
+const proExcluded  = ['Ventas ilimitadas', 'Productos ilimitados', 'Pedidos por WhatsApp', 'Soporte prioritario']
+const proFeatures  = ['Productos ilimitados', 'Ventas ilimitadas', 'Control de stock avanzado', 'Pedidos por WhatsApp', 'Reportes completos', 'Prioridad en soporte']
 
 const faqs = [
   { q: '¿Necesito descargar una app?',         a: 'No. Zimplex funciona directo en el navegador de tu celular. Sin descargar nada. Puedes guardarla en tu pantalla de inicio y se comporta como una app nativa.' },
