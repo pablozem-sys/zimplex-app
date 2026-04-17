@@ -7,17 +7,18 @@ import {
 import { GradientBackground } from '@/components/ui/gradient-background'
 
 // ─── BRAND ───────────────────────────────────────────────────────────────────
-const BLUE     = '#3A86FF'
-const TEAL     = '#2EC4B6'
-const GRAD     = 'linear-gradient(135deg, #3A86FF 0%, #2EC4B6 100%)'
+const BLUE     = '#3B82F6'
+const TEAL     = '#4ADE80'
+const INDIGO   = '#6366F1'
+const GRAD     = 'linear-gradient(135deg, #4ADE80 0%, #3B82F6 50%, #6366F1 100%)'
 const POPPINS  = "'Nunito', sans-serif"
 
 const HERO_GRADIENTS = [
-  'linear-gradient(135deg, #1e3a8a 0%, #0d9488 100%)',
-  'linear-gradient(135deg, #3A86FF 0%, #2EC4B6 100%)',
-  'linear-gradient(135deg, #1d4ed8 0%, #059669 100%)',
-  'linear-gradient(135deg, #2563eb 0%, #2EC4B6 100%)',
-  'linear-gradient(135deg, #1e3a8a 0%, #0d9488 100%)',
+  'linear-gradient(135deg, #064e3b 0%, #1e40af 50%, #3730a3 100%)',
+  'linear-gradient(135deg, #4ADE80 0%, #3B82F6 50%, #6366F1 100%)',
+  'linear-gradient(135deg, #065f46 0%, #1d4ed8 50%, #4338ca 100%)',
+  'linear-gradient(135deg, #4ADE80 0%, #6366F1 100%)',
+  'linear-gradient(135deg, #064e3b 0%, #1e40af 50%, #3730a3 100%)',
 ]
 
 const SIGNUP_URL  = 'https://zimplex.app/signup'

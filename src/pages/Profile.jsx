@@ -240,7 +240,7 @@ export default function Profile() {
       {!isPro && (
         <button onClick={handleUpgrade} disabled={upgradeLoading}
           className="w-full mb-3 py-4 rounded-2xl flex items-center justify-center gap-2 font-semibold text-white active:scale-[0.98] transition-all disabled:opacity-60"
-          style={{ background: 'linear-gradient(135deg, #7C3AED, #A78BFA)', boxShadow: '0 8px 20px rgba(124,58,237,0.25)' }}>
+          style={{ background: 'linear-gradient(135deg, #6366F1, #818CF8)', boxShadow: '0 8px 20px rgba(124,58,237,0.25)' }}>
           {upgradeLoading ? <Loader2 size={18} className="animate-spin" /> : <Zap size={18} />}
           {upgradeLoading ? 'Preparando...' : upgradeError ? 'Error — intenta de nuevo' : 'Pasar a Pro — $4.990/mes'}
         </button>

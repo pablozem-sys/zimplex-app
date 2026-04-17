@@ -1,5 +1,13 @@
 export const THEMES = [
   {
+    id: 'zimplex',
+    name: 'Zimplex',
+    primary: '#6366F1',
+    primaryLight: '#EEF2FF',
+    primaryShadow: 'rgba(99, 102, 241, 0.25)',
+    gradient: 'linear-gradient(135deg, #4ADE80, #3B82F6, #6366F1)',
+  },
+  {
     id: 'violet',
     name: 'Violeta',
     primary: '#7C3AED',

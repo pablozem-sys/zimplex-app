@@ -7,8 +7,9 @@ const svg = readFileSync('./public/favicon.svg')
 const svgLarge = `<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
   <defs>
     <linearGradient id="zgrad" x1="0" y1="0" x2="512" y2="512" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#7C3AED"/>
-      <stop offset="1" stop-color="#A78BFA"/>
+      <stop offset="0%" stop-color="#4ADE80"/>
+      <stop offset="50%" stop-color="#3B82F6"/>
+      <stop offset="100%" stop-color="#6366F1"/>
     </linearGradient>
   </defs>
   <rect width="512" height="512" rx="120" fill="url(#zgrad)"/>

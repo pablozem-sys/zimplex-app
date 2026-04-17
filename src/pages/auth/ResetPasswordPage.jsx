@@ -39,8 +39,8 @@ export default function ResetPasswordPage() {
       <div className="w-full max-w-sm">
         <div className="bg-white rounded-3xl p-8 shadow-sm border border-gray-100">
           <div className="w-16 h-16 rounded-2xl mx-auto mb-6 flex items-center justify-center"
-            style={{ background: 'linear-gradient(135deg, #F5F3FF, #EDE9FE)' }}>
-            <Lock size={30} style={{ color: '#7C3AED' }} />
+            style={{ background: 'linear-gradient(135deg, #F5F3FF, #EEF2FF)' }}>
+            <Lock size={30} style={{ color: '#6366F1' }} />
           </div>
           <h2 className="text-xl font-bold text-gray-900 text-center mb-2">Nueva contraseña</h2>
           <p className="text-sm text-gray-400 text-center mb-6">Elige una contraseña segura para tu cuenta.</p>
@@ -52,7 +52,7 @@ export default function ResetPasswordPage() {
                 <Lock size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" />
                 <input type="password" value={password} onChange={e => setPassword(e.target.value)}
                   placeholder="Mínimo 6 caracteres" required minLength={6}
-                  className="w-full pl-10 pr-4 py-3 border-2 border-gray-200 rounded-2xl text-sm outline-none focus:border-violet-400" />
+                  className="w-full pl-10 pr-4 py-3 border-2 border-gray-200 rounded-2xl text-sm outline-none focus:border-indigo-400" />
               </div>
             </div>
             <div>
@@ -61,13 +61,13 @@ export default function ResetPasswordPage() {
                 <Lock size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" />
                 <input type="password" value={confirm} onChange={e => setConfirm(e.target.value)}
                   placeholder="Repite la contraseña" required minLength={6}
-                  className="w-full pl-10 pr-4 py-3 border-2 border-gray-200 rounded-2xl text-sm outline-none focus:border-violet-400" />
+                  className="w-full pl-10 pr-4 py-3 border-2 border-gray-200 rounded-2xl text-sm outline-none focus:border-indigo-400" />
               </div>
             </div>
             {error && <p className="text-sm text-red-500 bg-red-50 px-4 py-3 rounded-2xl">{error}</p>}
             <button type="submit" disabled={loading}
               className="w-full py-3.5 rounded-2xl text-white font-semibold text-sm flex items-center justify-center gap-2 disabled:opacity-60"
-              style={{ background: 'linear-gradient(135deg, #7C3AED, #A78BFA)' }}>
+              style={{ background: 'linear-gradient(135deg, #6366F1, #818CF8)' }}>
               {loading ? <Loader2 size={18} className="animate-spin" /> : 'Guardar contraseña'}
             </button>
           </form>

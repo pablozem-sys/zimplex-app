@@ -5,11 +5,11 @@ import { Plus, X, ChevronDown, MessageCircle, Lock, Loader2, Trash2, Pencil } fr
 import UpgradeModal from '../components/UpgradeModal'
 
 const fmt = (n) => new Intl.NumberFormat('es-CL', { style: 'currency', currency: 'CLP', maximumFractionDigits: 0 }).format(n)
-const inputClass = 'w-full bg-gray-50 border border-gray-200 rounded-2xl px-4 py-3.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#7C3AED] focus:border-transparent'
+const inputClass = 'w-full bg-gray-50 border border-gray-200 rounded-2xl px-4 py-3.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#6366F1] focus:border-transparent'
 
 const statusConfig = {
   pendiente: { label: 'Pendiente', color: 'text-amber-600', bg: 'bg-amber-50', dot: 'bg-amber-400' },
-  pagado:    { label: 'Pagado',    color: 'text-[#7C3AED]', bg: 'bg-violet-50', dot: 'bg-[#7C3AED]' },
+  pagado:    { label: 'Pagado',    color: 'text-[#6366F1]', bg: 'bg-indigo-50', dot: 'bg-[#6366F1]' },
   entregado: { label: 'Entregado', color: 'text-[#7CD09B]', bg: 'bg-green-50',  dot: 'bg-[#7CD09B]' },
 }
 
@@ -174,7 +174,7 @@ function CreateOrderModal({ onClose, onAdd, products, transfer }) {
                     <p className="text-xs text-gray-400 mt-0.5">{item.quantity} und. × {fmt(item.unitPrice)}</p>
                   </div>
                   <div className="flex items-center gap-3">
-                    <p className="text-sm font-bold text-[#7C3AED]">{fmt(item.subtotal)}</p>
+                    <p className="text-sm font-bold text-[#6366F1]">{fmt(item.subtotal)}</p>
                     <button type="button" onClick={() => handleRemoveItem(idx)}
                       className="w-8 h-8 rounded-xl bg-red-50 flex items-center justify-center active:scale-95">
                       <Trash2 size={14} className="text-red-400" />
@@ -208,9 +208,9 @@ function CreateOrderModal({ onClose, onAdd, products, transfer }) {
                     className="w-11 h-11 rounded-xl bg-white border border-gray-200 text-gray-600 font-bold text-lg flex items-center justify-center active:scale-95 shadow-sm flex-shrink-0">−</button>
                   <input type="number" min="1" value={current.quantity}
                     onChange={e => setCurrent(c => ({ ...c, quantity: parseInt(e.target.value) || 1 }))}
-                    className="flex-1 bg-white border border-gray-200 rounded-xl px-3 py-2.5 text-sm text-center font-bold shadow-sm focus:outline-none focus:ring-2 focus:ring-[#7C3AED]" />
+                    className="flex-1 bg-white border border-gray-200 rounded-xl px-3 py-2.5 text-sm text-center font-bold shadow-sm focus:outline-none focus:ring-2 focus:ring-[#6366F1]" />
                   <button type="button" onClick={() => setCurrent(c => ({ ...c, quantity: c.quantity + 1 }))}
-                    className="w-11 h-11 rounded-xl bg-[#7C3AED] text-white font-bold text-lg flex items-center justify-center active:scale-95 shadow-md shadow-violet-200 flex-shrink-0">+</button>
+                    className="w-11 h-11 rounded-xl bg-[#6366F1] text-white font-bold text-lg flex items-center justify-center active:scale-95 shadow-md shadow-indigo-200 flex-shrink-0">+</button>
                 </div>
               </div>
               <div>
@@ -230,7 +230,7 @@ function CreateOrderModal({ onClose, onAdd, products, transfer }) {
             {itemError && <p className="text-xs text-red-500">{itemError}</p>}
 
             <button type="button" onClick={handleAddItem}
-              className="w-full flex items-center justify-center gap-2 py-3 rounded-2xl border-2 border-dashed border-[#7C3AED]/30 text-[#7C3AED] text-sm font-semibold active:scale-[0.98] transition-all hover:bg-violet-50">
+              className="w-full flex items-center justify-center gap-2 py-3 rounded-2xl border-2 border-dashed border-[#6366F1]/30 text-[#6366F1] text-sm font-semibold active:scale-[0.98] transition-all hover:bg-indigo-50">
               <Plus size={16} /> Agregar producto
             </button>
           </div>
@@ -246,7 +246,7 @@ function CreateOrderModal({ onClose, onAdd, products, transfer }) {
 
           {/* Total */}
           {grandTotal > 0 && (
-            <div className="bg-gradient-to-r from-[#7C3AED] to-[#A78BFA] rounded-2xl p-4 flex items-center justify-between shadow-lg shadow-violet-200">
+            <div className="bg-gradient-to-r from-[#6366F1] to-[#818CF8] rounded-2xl p-4 flex items-center justify-between shadow-lg shadow-indigo-200">
               <div>
                 <p className="text-blue-100 text-xs">{items.length} producto{items.length !== 1 ? 's' : ''}</p>
                 <span className="text-sm text-blue-100">Total</span>
@@ -258,7 +258,7 @@ function CreateOrderModal({ onClose, onAdd, products, transfer }) {
           {error && <p className="text-sm text-red-500 bg-red-50 px-4 py-3 rounded-2xl">{error}</p>}
 
           <button type="submit" disabled={busy}
-            className="w-full bg-[#7C3AED] text-white font-semibold py-4 rounded-2xl active:scale-[0.98] transition-all shadow-lg shadow-violet-200 flex items-center justify-center gap-2 disabled:opacity-60">
+            className="w-full bg-[#6366F1] text-white font-semibold py-4 rounded-2xl active:scale-[0.98] transition-all shadow-lg shadow-indigo-200 flex items-center justify-center gap-2 disabled:opacity-60">
             {loading ? <><Loader2 size={18} className="animate-spin" />Creando...</> : 'Crear pedido'}
           </button>
 
@@ -360,7 +360,7 @@ function EditOrderModal({ order, onClose, onSave, products }) {
 
         {loadingItems ? (
           <div className="flex items-center justify-center py-12">
-            <Loader2 size={24} className="animate-spin text-[#7C3AED]" />
+            <Loader2 size={24} className="animate-spin text-[#6366F1]" />
           </div>
         ) : null}
 
@@ -391,7 +391,7 @@ function EditOrderModal({ order, onClose, onSave, products }) {
                     <p className="text-xs text-gray-400 mt-0.5">{item.quantity} und. × {fmt(item.unitPrice)}</p>
                   </div>
                   <div className="flex items-center gap-3">
-                    <p className="text-sm font-bold text-[#7C3AED]">{fmt(item.subtotal)}</p>
+                    <p className="text-sm font-bold text-[#6366F1]">{fmt(item.subtotal)}</p>
                     <button type="button" onClick={() => setItems(prev => prev.filter((_, i) => i !== idx))}
                       className="w-8 h-8 rounded-xl bg-red-50 flex items-center justify-center active:scale-95">
                       <Trash2 size={14} className="text-red-400" />
@@ -421,9 +421,9 @@ function EditOrderModal({ order, onClose, onSave, products }) {
                     className="w-11 h-11 rounded-xl bg-white border border-gray-200 text-gray-600 font-bold text-lg flex items-center justify-center active:scale-95 shadow-sm flex-shrink-0">−</button>
                   <input type="number" min="1" value={current.quantity}
                     onChange={e => setCurrent(c => ({ ...c, quantity: parseInt(e.target.value) || 1 }))}
-                    className="flex-1 bg-white border border-gray-200 rounded-xl px-3 py-2.5 text-sm text-center font-bold shadow-sm focus:outline-none focus:ring-2 focus:ring-[#7C3AED]" />
+                    className="flex-1 bg-white border border-gray-200 rounded-xl px-3 py-2.5 text-sm text-center font-bold shadow-sm focus:outline-none focus:ring-2 focus:ring-[#6366F1]" />
                   <button type="button" onClick={() => setCurrent(c => ({ ...c, quantity: c.quantity + 1 }))}
-                    className="w-11 h-11 rounded-xl bg-[#7C3AED] text-white font-bold text-lg flex items-center justify-center active:scale-95 shadow-md shadow-violet-200 flex-shrink-0">+</button>
+                    className="w-11 h-11 rounded-xl bg-[#6366F1] text-white font-bold text-lg flex items-center justify-center active:scale-95 shadow-md shadow-indigo-200 flex-shrink-0">+</button>
                 </div>
               </div>
               <div>
@@ -439,7 +439,7 @@ function EditOrderModal({ order, onClose, onSave, products }) {
             {currentSubtotal > 0 && <p className="text-xs text-gray-400 text-right">Subtotal: <span className="font-semibold text-gray-700">{fmt(currentSubtotal)}</span></p>}
             {itemError && <p className="text-xs text-red-500">{itemError}</p>}
             <button type="button" onClick={handleAddItem}
-              className="w-full flex items-center justify-center gap-2 py-3 rounded-2xl border-2 border-dashed border-[#7C3AED]/30 text-[#7C3AED] text-sm font-semibold active:scale-[0.98] transition-all hover:bg-violet-50">
+              className="w-full flex items-center justify-center gap-2 py-3 rounded-2xl border-2 border-dashed border-[#6366F1]/30 text-[#6366F1] text-sm font-semibold active:scale-[0.98] transition-all hover:bg-indigo-50">
               <Plus size={16} /> Agregar producto
             </button>
           </div>
@@ -452,7 +452,7 @@ function EditOrderModal({ order, onClose, onSave, products }) {
           </div>
 
           {grandTotal > 0 && (
-            <div className="bg-gradient-to-r from-[#7C3AED] to-[#A78BFA] rounded-2xl p-4 flex items-center justify-between shadow-lg shadow-violet-200">
+            <div className="bg-gradient-to-r from-[#6366F1] to-[#818CF8] rounded-2xl p-4 flex items-center justify-between shadow-lg shadow-indigo-200">
               <div>
                 <p className="text-blue-100 text-xs">{items.length} producto{items.length !== 1 ? 's' : ''}</p>
                 <span className="text-sm text-blue-100">Total</span>
@@ -464,7 +464,7 @@ function EditOrderModal({ order, onClose, onSave, products }) {
           {error && <p className="text-sm text-red-500 bg-red-50 px-4 py-3 rounded-2xl">{error}</p>}
 
           <button type="submit" disabled={loading}
-            className="w-full bg-[#7C3AED] text-white font-semibold py-4 rounded-2xl active:scale-[0.98] transition-all shadow-lg shadow-violet-200 flex items-center justify-center gap-2 disabled:opacity-60">
+            className="w-full bg-[#6366F1] text-white font-semibold py-4 rounded-2xl active:scale-[0.98] transition-all shadow-lg shadow-indigo-200 flex items-center justify-center gap-2 disabled:opacity-60">
             {loading ? <><Loader2 size={18} className="animate-spin" />Guardando...</> : 'Guardar cambios'}
           </button>
         </form>
@@ -490,7 +490,7 @@ export default function Orders() {
           <p className="text-sm text-gray-400 mt-0.5">{orders.length} pedidos registrados</p>
         </div>
         <button onClick={() => setShowCreate(true)}
-          className="flex items-center gap-1.5 bg-[#7C3AED] text-white text-sm font-semibold px-4 py-2.5 rounded-2xl active:scale-95 transition-all shadow-md shadow-violet-200">
+          className="flex items-center gap-1.5 bg-[#6366F1] text-white text-sm font-semibold px-4 py-2.5 rounded-2xl active:scale-95 transition-all shadow-md shadow-indigo-200">
           <Plus size={16} />
           Crear
         </button>
@@ -500,7 +500,7 @@ export default function Orders() {
         {['todos', 'pendiente', 'pagado', 'entregado'].map(f => (
           <button key={f} onClick={() => setFilter(f)}
             className={`px-4 py-2 rounded-2xl text-xs font-semibold whitespace-nowrap transition-all ${
-              filter === f ? 'bg-[#7C3AED] text-white shadow-md shadow-violet-200' : 'bg-white text-gray-500 border border-gray-200'
+              filter === f ? 'bg-[#6366F1] text-white shadow-md shadow-indigo-200' : 'bg-white text-gray-500 border border-gray-200'
             }`}>
             {filterLabels[f]}
           </button>
@@ -600,7 +600,7 @@ function OrderCard({ order, onStatusChange, onUpdate, onDelete, transfer, produc
         <div className="flex gap-2 mt-2">
           {order.status !== 'entregado' && (
             <button onClick={nextStatus}
-              className="flex-1 bg-[#7C3AED] text-white text-xs font-semibold py-3 rounded-2xl active:scale-95 transition-all shadow-md shadow-blue-100">
+              className="flex-1 bg-[#6366F1] text-white text-xs font-semibold py-3 rounded-2xl active:scale-95 transition-all shadow-md shadow-blue-100">
               {order.status === 'pendiente' ? 'Marcar como pagado' : 'Marcar como entregado'}
             </button>
           )}

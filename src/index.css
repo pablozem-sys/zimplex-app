@@ -2,10 +2,10 @@
 @import "tailwindcss";
 
 :root {
-  --color-primary: #7C3AED;
-  --color-primary-light: #EDE9FE;
-  --color-primary-shadow: rgba(124, 58, 237, 0.25);
-  --color-gradient: linear-gradient(135deg, #7C3AED, #A78BFA);
+  --color-primary: #6366F1;
+  --color-primary-light: #EEF2FF;
+  --color-primary-shadow: rgba(99, 102, 241, 0.25);
+  --color-gradient: linear-gradient(135deg, #4ADE80, #3B82F6, #6366F1);
 }
 
 * {

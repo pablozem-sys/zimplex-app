@@ -65,15 +65,15 @@ export default function UpgradeModal({ variant = 'feature', onClose }) {
         <button onClick={onClose} className="absolute top-6 right-6 w-9 h-9 rounded-full bg-gray-100 flex items-center justify-center">
           <X size={16} className="text-gray-500" />
         </button>
-        <div className="w-14 h-14 rounded-2xl bg-violet-50 flex items-center justify-center mx-auto mb-4">
-          <Zap size={26} className="text-[#7C3AED]" />
+        <div className="w-14 h-14 rounded-2xl bg-indigo-50 flex items-center justify-center mx-auto mb-4">
+          <Zap size={26} className="text-[#6366F1]" />
         </div>
         <h2 className="text-lg font-bold text-gray-900 text-center mb-2">{title}</h2>
         <p className="text-sm text-gray-400 text-center leading-relaxed mb-6">{text}</p>
         <button
           onClick={handleUpgrade}
           disabled={loading}
-          className="w-full bg-[#7C3AED] text-white font-semibold py-4 rounded-2xl flex items-center justify-center gap-2 shadow-lg shadow-violet-200 active:scale-[0.98] transition-all disabled:opacity-60"
+          className="w-full bg-[#6366F1] text-white font-semibold py-4 rounded-2xl flex items-center justify-center gap-2 shadow-lg shadow-indigo-200 active:scale-[0.98] transition-all disabled:opacity-60"
         >
           {loading ? <Loader2 size={18} className="animate-spin" /> : <Zap size={18} />}
           {loading ? 'Preparando...' : 'Pasar a Pro — $4.990/mes'}

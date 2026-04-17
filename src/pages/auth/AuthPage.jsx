@@ -71,14 +71,14 @@ export default function AuthPage() {
         <div className="w-full max-w-sm">
           <div className="bg-white rounded-3xl p-8 shadow-sm border border-gray-100 text-center">
             <div className="w-20 h-20 rounded-2xl mx-auto mb-6 flex items-center justify-center"
-              style={{ background: 'linear-gradient(135deg, #F5F3FF, #EDE9FE)' }}>
-              <Lock size={36} style={{ color: '#7C3AED' }} />
+              style={{ background: 'linear-gradient(135deg, #F5F3FF, #EEF2FF)' }}>
+              <Lock size={36} style={{ color: '#6366F1' }} />
             </div>
             {resetSent ? (
               <>
                 <h2 className="text-xl font-bold text-gray-900 mb-2">Revisa tu correo</h2>
                 <p className="text-sm text-gray-400 mb-1">Enviamos un link de recuperación a</p>
-                <p className="text-sm font-semibold mb-6" style={{ color: '#7C3AED' }}>{email}</p>
+                <p className="text-sm font-semibold mb-6" style={{ color: '#6366F1' }}>{email}</p>
                 <p className="text-sm text-gray-500 leading-relaxed">Haz clic en el enlace del correo para crear una nueva contraseña.</p>
               </>
             ) : (
@@ -90,12 +90,12 @@ export default function AuthPage() {
                     <Mail size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" />
                     <input type="email" value={email} onChange={e => setEmail(e.target.value)}
                       placeholder="tu@email.com" required
-                      className="w-full pl-10 pr-4 py-3 border-2 border-gray-200 rounded-2xl text-sm outline-none focus:border-violet-400" />
+                      className="w-full pl-10 pr-4 py-3 border-2 border-gray-200 rounded-2xl text-sm outline-none focus:border-indigo-400" />
                   </div>
                   {error && <p className="text-sm text-red-500 bg-red-50 px-4 py-3 rounded-2xl">{error}</p>}
                   <button type="submit" disabled={resetLoading}
                     className="w-full py-3.5 rounded-2xl text-white font-semibold text-sm flex items-center justify-center gap-2 disabled:opacity-60"
-                    style={{ background: 'linear-gradient(135deg, #7C3AED, #A78BFA)' }}>
+                    style={{ background: 'linear-gradient(135deg, #6366F1, #818CF8)' }}>
                     {resetLoading ? <Loader2 size={18} className="animate-spin" /> : 'Enviar link de recuperación'}
                   </button>
                 </form>
@@ -122,15 +122,15 @@ export default function AuthPage() {
 
             {/* Icono */}
             <div className="w-20 h-20 rounded-2xl mx-auto mb-6 flex items-center justify-center"
-              style={{ background: 'linear-gradient(135deg, #F5F3FF, #EDE9FE)' }}>
-              <Mail size={36} style={{ color: '#7C3AED' }} />
+              style={{ background: 'linear-gradient(135deg, #F5F3FF, #EEF2FF)' }}>
+              <Mail size={36} style={{ color: '#6366F1' }} />
             </div>
 
             <h2 className="text-xl font-bold text-gray-900 mb-2">Revisa tu correo</h2>
             <p className="text-sm text-gray-400 mb-1 leading-relaxed">
               Enviamos un link de confirmación a
             </p>
-            <p className="text-sm font-semibold mb-6" style={{ color: '#7C3AED' }}>{email}</p>
+            <p className="text-sm font-semibold mb-6" style={{ color: '#6366F1' }}>{email}</p>
 
             <p className="text-sm text-gray-500 leading-relaxed mb-6">
               Haz clic en el botón del correo para activar tu cuenta y entrar a Zimplex.
@@ -176,8 +176,8 @@ export default function AuthPage() {
     <div className="min-h-screen flex flex-col items-center justify-center px-6 py-12" style={{ background: '#FAF8FF' }}>
       {/* Logo */}
       <div className="mb-8 text-center">
-        <div className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg shadow-violet-200"
-          style={{ background: 'linear-gradient(135deg, #7C3AED, #A78BFA)' }}>
+        <div className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg shadow-indigo-200"
+          style={{ background: 'linear-gradient(135deg, #6366F1, #818CF8)' }}>
           <ShoppingBag size={28} color="white" />
         </div>
         <h1 className="text-2xl font-bold text-gray-900">Zimplex</h1>
@@ -214,7 +214,7 @@ export default function AuthPage() {
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="tu@email.com"
                 required
-                className="w-full pl-10 pr-4 py-3 border-2 border-gray-200 rounded-2xl text-sm outline-none transition-all focus:border-violet-400 focus:shadow-sm focus:shadow-violet-100"
+                className="w-full pl-10 pr-4 py-3 border-2 border-gray-200 rounded-2xl text-sm outline-none transition-all focus:border-indigo-400 focus:shadow-sm focus:shadow-violet-100"
               />
             </div>
           </div>
@@ -231,7 +231,7 @@ export default function AuthPage() {
                 placeholder="Mínimo 6 caracteres"
                 required
                 minLength={6}
-                className="w-full pl-10 pr-4 py-3 border-2 border-gray-200 rounded-2xl text-sm outline-none transition-all focus:border-violet-400 focus:shadow-sm focus:shadow-violet-100"
+                className="w-full pl-10 pr-4 py-3 border-2 border-gray-200 rounded-2xl text-sm outline-none transition-all focus:border-indigo-400 focus:shadow-sm focus:shadow-violet-100"
               />
             </div>
           </div>
@@ -246,7 +246,7 @@ export default function AuthPage() {
             type="submit"
             disabled={loading}
             className="w-full py-3.5 rounded-2xl text-white font-semibold text-sm flex items-center justify-center gap-2 transition-all active:scale-[0.98] disabled:opacity-60"
-            style={{ background: 'linear-gradient(135deg, #7C3AED, #A78BFA)' }}
+            style={{ background: 'linear-gradient(135deg, #6366F1, #818CF8)' }}
           >
             {loading ? (
               <Loader2 size={18} className="animate-spin" />
@@ -260,7 +260,7 @@ export default function AuthPage() {
 
           {mode === 'login' && (
             <button type="button" onClick={() => { setResetMode(true); setError('') }}
-              className="w-full text-center text-xs text-gray-400 pt-1 hover:text-[#7C3AED] transition-colors">
+              className="w-full text-center text-xs text-gray-400 pt-1 hover:text-[#6366F1] transition-colors">
               ¿Olvidaste tu contraseña?
             </button>
           )}

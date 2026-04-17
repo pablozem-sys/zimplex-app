@@ -25,12 +25,12 @@ const paymentMethods = [
 
 const paymentColors = {
   efectivo:      'text-emerald-600 bg-emerald-50',
-  transferencia: 'text-[#7C3AED] bg-violet-50',
+  transferencia: 'text-[#6366F1] bg-indigo-50',
   tarjeta:       'text-purple-600 bg-purple-50',
 }
 const paymentLabels = { efectivo: 'Efectivo', transferencia: 'Transferencia', tarjeta: 'Tarjeta' }
 
-const inputClass = 'w-full bg-white border border-gray-200 rounded-2xl px-4 py-3.5 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#7C3AED] focus:border-transparent shadow-sm'
+const inputClass = 'w-full bg-white border border-gray-200 rounded-2xl px-4 py-3.5 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#6366F1] focus:border-transparent shadow-sm'
 
 const EMPTY_ITEM = { productId: '', quantity: 1, unitPrice: '' }
 
@@ -167,7 +167,7 @@ export default function RegisterSale() {
         </div>
         <h2 className="text-xl font-bold text-gray-900 mb-1">¡Venta registrada!</h2>
         <p className="text-gray-400 text-sm text-center">El stock se actualizó automáticamente</p>
-        <p className="text-3xl font-bold text-[#7C3AED] mt-4">{fmt(lastTotal)}</p>
+        <p className="text-3xl font-bold text-[#6366F1] mt-4">{fmt(lastTotal)}</p>
       </div>
     )
   }
@@ -184,11 +184,11 @@ export default function RegisterSale() {
       {/* Tabs */}
       <div className="flex bg-gray-100 rounded-2xl p-1 mb-5">
         <button onClick={() => setTab('registrar')}
-          className={`flex-1 py-2.5 rounded-xl text-sm font-semibold transition-all ${tab === 'registrar' ? 'bg-white text-[#7C3AED] shadow-sm' : 'text-gray-400'}`}>
+          className={`flex-1 py-2.5 rounded-xl text-sm font-semibold transition-all ${tab === 'registrar' ? 'bg-white text-[#6366F1] shadow-sm' : 'text-gray-400'}`}>
           Registrar
         </button>
         <button onClick={() => setTab('historial')}
-          className={`flex-1 py-2.5 rounded-xl text-sm font-semibold transition-all ${tab === 'historial' ? 'bg-white text-[#7C3AED] shadow-sm' : 'text-gray-400'}`}>
+          className={`flex-1 py-2.5 rounded-xl text-sm font-semibold transition-all ${tab === 'historial' ? 'bg-white text-[#6366F1] shadow-sm' : 'text-gray-400'}`}>
           Historial
         </button>
       </div>
@@ -208,7 +208,7 @@ export default function RegisterSale() {
                 </div>
                 <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden">
                   <div className="h-1.5 rounded-full transition-all"
-                    style={{ width: `${Math.min(100, (monthlySalesCount / planLimits.maxMonthlySales) * 100)}%`, backgroundColor: nearLimit ? '#F59E0B' : '#7C3AED' }} />
+                    style={{ width: `${Math.min(100, (monthlySalesCount / planLimits.maxMonthlySales) * 100)}%`, backgroundColor: nearLimit ? '#F59E0B' : '#6366F1' }} />
                 </div>
               </div>
             )}
@@ -236,7 +236,7 @@ export default function RegisterSale() {
                       <p className="text-xs text-gray-400 mt-0.5">{item.quantity} {item.unit} × {fmt(item.unitPrice)}</p>
                     </div>
                     <div className="flex items-center gap-3">
-                      <p className="text-sm font-bold text-[#7C3AED]">{fmt(item.subtotal)}</p>
+                      <p className="text-sm font-bold text-[#6366F1]">{fmt(item.subtotal)}</p>
                       <button type="button" onClick={() => handleRemoveItem(idx)}
                         className="w-8 h-8 rounded-xl bg-red-50 flex items-center justify-center active:scale-95">
                         <Trash2 size={14} className="text-red-400" />
@@ -280,9 +280,9 @@ export default function RegisterSale() {
                       className="w-11 h-11 rounded-xl bg-white border border-gray-200 text-gray-600 font-bold text-lg flex items-center justify-center active:scale-95 shadow-sm flex-shrink-0">−</button>
                     <input type="number" min="1" value={current.quantity}
                       onChange={e => setCurrent(c => ({ ...c, quantity: parseInt(e.target.value) || 1 }))}
-                      className="flex-1 bg-white border border-gray-200 rounded-xl px-3 py-2.5 text-sm text-center font-bold shadow-sm focus:outline-none focus:ring-2 focus:ring-[#7C3AED]" />
+                      className="flex-1 bg-white border border-gray-200 rounded-xl px-3 py-2.5 text-sm text-center font-bold shadow-sm focus:outline-none focus:ring-2 focus:ring-[#6366F1]" />
                     <button type="button" onClick={() => setCurrent(c => ({ ...c, quantity: c.quantity + 1 }))}
-                      className="w-11 h-11 rounded-xl bg-[#7C3AED] text-white font-bold text-lg flex items-center justify-center active:scale-95 shadow-md shadow-violet-200 flex-shrink-0">+</button>
+                      className="w-11 h-11 rounded-xl bg-[#6366F1] text-white font-bold text-lg flex items-center justify-center active:scale-95 shadow-md shadow-indigo-200 flex-shrink-0">+</button>
                   </div>
                 </div>
                 <div>
@@ -303,7 +303,7 @@ export default function RegisterSale() {
               {itemError && <p className="text-xs text-red-500">{itemError}</p>}
 
               <button type="button" onClick={handleAddItem}
-                className="w-full flex items-center justify-center gap-2 py-3 rounded-2xl border-2 border-dashed border-[#7C3AED]/30 text-[#7C3AED] text-sm font-semibold active:scale-[0.98] transition-all hover:bg-violet-50">
+                className="w-full flex items-center justify-center gap-2 py-3 rounded-2xl border-2 border-dashed border-[#6366F1]/30 text-[#6366F1] text-sm font-semibold active:scale-[0.98] transition-all hover:bg-indigo-50">
                 <Plus size={16} />
                 Agregar producto
               </button>
@@ -327,7 +327,7 @@ export default function RegisterSale() {
                   <button key={pm.id} type="button" onClick={() => setPaymentMethod(pm.id)}
                     className={`py-3.5 rounded-2xl border text-sm font-medium flex flex-col items-center gap-1 transition-all shadow-sm ${
                       paymentMethod === pm.id
-                        ? 'border-[#7C3AED] bg-violet-50 text-[#7C3AED] shadow-blue-100'
+                        ? 'border-[#6366F1] bg-indigo-50 text-[#6366F1] shadow-blue-100'
                         : 'border-gray-200 bg-white text-gray-400'
                     }`}>
                     <span className="text-xl">{pm.emoji}</span>
@@ -339,7 +339,7 @@ export default function RegisterSale() {
 
             {/* ── TOTAL ── */}
             {grandTotal > 0 && (
-              <div className="bg-gradient-to-r from-[#7C3AED] to-[#A78BFA] rounded-2xl p-4 flex items-center justify-between shadow-lg shadow-violet-200">
+              <div className="bg-gradient-to-r from-[#6366F1] to-[#818CF8] rounded-2xl p-4 flex items-center justify-between shadow-lg shadow-indigo-200">
                 <div>
                   <p className="text-blue-100 text-xs font-medium">
                     {items.length} producto{items.length !== 1 ? 's' : ''}
@@ -353,7 +353,7 @@ export default function RegisterSale() {
             {error && <p className="text-sm text-[#DC4B56] bg-red-50 px-4 py-3 rounded-2xl">{error}</p>}
 
             <button type="submit" disabled={submitting || items.length === 0}
-              className="w-full bg-[#7C3AED] active:scale-[0.98] text-white font-semibold py-4 rounded-2xl transition-all shadow-lg shadow-violet-200 text-base disabled:opacity-60 flex items-center justify-center gap-2">
+              className="w-full bg-[#6366F1] active:scale-[0.98] text-white font-semibold py-4 rounded-2xl transition-all shadow-lg shadow-indigo-200 text-base disabled:opacity-60 flex items-center justify-center gap-2">
               {submitting ? <><Loader2 size={18} className="animate-spin" /> Registrando...</> : 'Registrar venta'}
             </button>
 
@@ -369,8 +369,8 @@ export default function RegisterSale() {
 function UpgradeWall({ count, limit, onUpgrade, upgradeLoading }) {
   return (
     <div className="flex flex-col items-center justify-center py-10 px-2 text-center">
-      <div className="w-16 h-16 rounded-2xl bg-violet-50 flex items-center justify-center mb-4">
-        <Lock size={28} className="text-[#7C3AED]" />
+      <div className="w-16 h-16 rounded-2xl bg-indigo-50 flex items-center justify-center mb-4">
+        <Lock size={28} className="text-[#6366F1]" />
       </div>
       <h2 className="text-lg font-bold text-gray-900 mb-1">Llegaste al límite de ventas mensuales</h2>
       <p className="text-sm text-gray-400 mb-1">
@@ -381,7 +381,7 @@ function UpgradeWall({ count, limit, onUpgrade, upgradeLoading }) {
         <div className="bg-[#DC4B56] h-2 rounded-full w-full" />
       </div>
       <button onClick={onUpgrade} disabled={upgradeLoading}
-        className="w-full bg-[#7C3AED] text-white font-semibold py-4 rounded-2xl flex items-center justify-center gap-2 shadow-lg shadow-violet-200 active:scale-[0.98] transition-all disabled:opacity-60">
+        className="w-full bg-[#6366F1] text-white font-semibold py-4 rounded-2xl flex items-center justify-center gap-2 shadow-lg shadow-indigo-200 active:scale-[0.98] transition-all disabled:opacity-60">
         {upgradeLoading ? <Loader2 size={18} className="animate-spin" /> : <Zap size={18} />}
         {upgradeLoading ? 'Preparando...' : 'Pasar a Pro — $4.990/mes'}
       </button>
@@ -429,7 +429,7 @@ function SaleHistory({ sales }) {
   return (
     <div className="space-y-5">
       {todaySales.length > 0 && (
-        <div className="bg-gradient-to-r from-[#7C3AED] to-[#A78BFA] rounded-2xl p-4 flex items-center justify-between shadow-lg shadow-violet-200">
+        <div className="bg-gradient-to-r from-[#6366F1] to-[#818CF8] rounded-2xl p-4 flex items-center justify-between shadow-lg shadow-indigo-200">
           <div>
             <p className="text-blue-100 text-xs font-medium">Total hoy</p>
             <p className="text-white text-xl font-bold">{fmt(todayTotal)}</p>
@@ -453,8 +453,8 @@ function SaleHistory({ sales }) {
             <div className="space-y-2">
               {daySales.map(sale => (
                 <div key={sale.id} className="bg-white border border-gray-100 rounded-2xl px-4 py-3.5 flex items-center gap-3 shadow-sm">
-                  <div className="w-9 h-9 rounded-2xl bg-violet-50 flex items-center justify-center flex-shrink-0">
-                    <TrendingUp size={15} className="text-[#7C3AED]" />
+                  <div className="w-9 h-9 rounded-2xl bg-indigo-50 flex items-center justify-center flex-shrink-0">
+                    <TrendingUp size={15} className="text-[#6366F1]" />
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-semibold text-gray-900">{sale.productName} <span className="text-gray-400 font-normal">×{sale.quantity}</span></p>

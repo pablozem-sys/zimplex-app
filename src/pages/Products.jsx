@@ -4,7 +4,7 @@ import { Plus, AlertTriangle, Package, X, Trash2, Pencil } from 'lucide-react'
 import UpgradeModal from '../components/UpgradeModal'
 
 const fmt = (n) => new Intl.NumberFormat('es-CL', { style: 'currency', currency: 'CLP', maximumFractionDigits: 0 }).format(n)
-const inputClass = 'w-full bg-gray-50 border border-gray-200 rounded-2xl px-4 py-3.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#7C3AED] focus:border-transparent'
+const inputClass = 'w-full bg-gray-50 border border-gray-200 rounded-2xl px-4 py-3.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#6366F1] focus:border-transparent'
 
 const UNITS = ['unidades', 'kg', 'gramos', 'litros', 'ml', 'metros', 'cajas', 'docenas', 'bolsas', 'porciones']
 
@@ -79,7 +79,7 @@ function ProductFormModal({ title, initial, onClose, onSave }) {
                     onClick={() => setForm(f => ({ ...f, unit: u }))}
                     className={`px-3 py-1.5 rounded-xl text-xs font-semibold border transition-all ${
                       (form.unit || 'unidades') === u
-                        ? 'bg-violet-50 border-[#7C3AED] text-[#7C3AED]'
+                        ? 'bg-indigo-50 border-[#6366F1] text-[#6366F1]'
                         : 'bg-gray-50 border-gray-200 text-gray-500'
                     }`}>
                     {u}
@@ -95,7 +95,7 @@ function ProductFormModal({ title, initial, onClose, onSave }) {
                 placeholder="Descripción breve" className={inputClass} />
             </div>
             <button type="submit"
-              className="w-full bg-[#7C3AED] text-white font-semibold py-4 rounded-2xl mt-2 active:scale-[0.98] transition-all shadow-lg shadow-violet-200">
+              className="w-full bg-[#6366F1] text-white font-semibold py-4 rounded-2xl mt-2 active:scale-[0.98] transition-all shadow-lg shadow-indigo-200">
               Guardar
             </button>
           </form>
@@ -160,7 +160,7 @@ export default function Products() {
           <p className="text-sm text-gray-400 mt-0.5">{products.length} productos en stock</p>
         </div>
         <button onClick={handleAddClick}
-          className="flex items-center gap-1.5 bg-[#7C3AED] text-white text-sm font-semibold px-4 py-2.5 rounded-2xl active:scale-95 transition-all shadow-md shadow-violet-200">
+          className="flex items-center gap-1.5 bg-[#6366F1] text-white text-sm font-semibold px-4 py-2.5 rounded-2xl active:scale-95 transition-all shadow-md shadow-indigo-200">
           <Plus size={16} />
           Agregar
         </button>
@@ -178,7 +178,7 @@ export default function Products() {
               className="h-1.5 rounded-full transition-all"
               style={{
                 width: `${Math.min(100, (products.length / planLimits.maxProducts) * 100)}%`,
-                backgroundColor: atLimit ? '#DC4B56' : '#7C3AED',
+                backgroundColor: atLimit ? '#DC4B56' : '#6366F1',
               }}
             />
           </div>
@@ -255,8 +255,8 @@ function ProductCard({ product, onEdit, onDelete }) {
 
   return (
     <div className="bg-white border border-gray-100 rounded-2xl p-4 flex items-center gap-3 shadow-sm">
-      <div className={`w-11 h-11 rounded-2xl flex items-center justify-center flex-shrink-0 ${isLow ? 'bg-red-50' : 'bg-violet-50'}`}>
-        <Package size={18} className={isLow ? 'text-[#DC4B56]' : 'text-[#7C3AED]'} />
+      <div className={`w-11 h-11 rounded-2xl flex items-center justify-center flex-shrink-0 ${isLow ? 'bg-red-50' : 'bg-indigo-50'}`}>
+        <Package size={18} className={isLow ? 'text-[#DC4B56]' : 'text-[#6366F1]'} />
       </div>
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2">
