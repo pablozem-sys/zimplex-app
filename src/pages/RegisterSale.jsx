@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useApp } from '../context/AppContext'
 import { useLocale } from '../context/LocaleContext'
-import { CheckCircle, ChevronDown, Clock, TrendingUp, Zap, Lock, Loader2, Plus, Trash2 } from 'lucide-react'
+import { CheckCircle, ChevronDown, Clock, TrendingUp, Zap, Lock, Loader2, Plus, Trash2, Download } from 'lucide-react'
 import { supabase } from '../lib/supabase'
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL
@@ -391,6 +391,57 @@ function UpgradeWall({ count, limit, onUpgrade, upgradeLoading }) {
   )
 }
 
+function downloadDayReport(todaySales, today, country) {
+  const fmtTime = (isoString) => {
+    if (!isoString) return ''
+    return new Date(isoString).toLocaleTimeString(country.locale, { timeZone: country.timezone, hour: '2-digit', minute: '2-digit' })
+  }
+  const methodLabel = { efectivo: 'Efectivo', transferencia: 'Transferencia', tarjeta: 'Tarjeta' }
+
+  const headers = ['Producto', 'Cantidad', 'Precio Unitario', 'Total', 'Método de Pago', 'Cliente', 'Hora']
+  const rows = todaySales.map(s => [
+    s.productName,
+    s.quantity,
+    s.unitPrice ?? '',
+    s.total,
+    methodLabel[s.paymentMethod] || s.paymentMethod,
+    s.customer || 'Sin cliente',
+    fmtTime(s.createdAt),
+  ])
+
+  const totalDia = todaySales.reduce((sum, s) => sum + s.total, 0)
+  const porMetodo = todaySales.reduce((acc, s) => {
+    const label = methodLabel[s.paymentMethod] || s.paymentMethod
+    acc[label] = (acc[label] || 0) + s.total
+    return acc
+  }, {})
+
+  const summaryRows = [
+    [],
+    ['RESUMEN'],
+    ['Total transacciones', todaySales.length, '', '', '', '', ''],
+    ['Total del día', '', '', totalDia, '', '', ''],
+    ...Object.entries(porMetodo).map(([m, v]) => [`Total ${m}`, '', '', v, '', '', '']),
+  ]
+
+  const escape = (v) => `"${String(v ?? '').replace(/"/g, '""')}"`
+  const csv = [
+    [`Reporte de ventas — ${today}`, '', '', '', '', '', ''],
+    [],
+    headers,
+    ...rows,
+    ...summaryRows,
+  ].map(r => r.map(escape).join(',')).join('\n')
+
+  const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' })
+  const url = URL.createObjectURL(blob)
+  const a = document.createElement('a')
+  a.href = url
+  a.download = `ventas-${today}.csv`
+  a.click()
+  URL.revokeObjectURL(url)
+}
+
 function SaleHistory({ sales }) {
   const { country, formatCurrency: fmt, t } = useLocale()
   const fmtTime = (isoString) => {
@@ -430,15 +481,24 @@ function SaleHistory({ sales }) {
   return (
     <div className="space-y-5">
       {todaySales.length > 0 && (
-        <div className="bg-gradient-to-r from-[#6366F1] to-[#818CF8] rounded-2xl p-4 flex items-center justify-between shadow-lg shadow-indigo-200">
-          <div>
-            <p className="text-blue-100 text-xs font-medium">Total hoy</p>
-            <p className="text-white text-xl font-bold">{fmt(todayTotal)}</p>
+        <div className="bg-gradient-to-r from-[#6366F1] to-[#818CF8] rounded-2xl p-4 shadow-lg shadow-indigo-200">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-blue-100 text-xs font-medium">Total hoy</p>
+              <p className="text-white text-xl font-bold">{fmt(todayTotal)}</p>
+            </div>
+            <div className="text-right">
+              <p className="text-blue-100 text-xs">{todaySales.length} ventas</p>
+              <Clock size={20} className="text-blue-200 mt-1 ml-auto" />
+            </div>
           </div>
-          <div className="text-right">
-            <p className="text-blue-100 text-xs">{todaySales.length} ventas</p>
-            <Clock size={20} className="text-blue-200 mt-1 ml-auto" />
-          </div>
+          <button
+            onClick={() => downloadDayReport(todaySales, today, country)}
+            className="mt-3 w-full flex items-center justify-center gap-2 py-2.5 rounded-xl bg-white/20 hover:bg-white/30 active:scale-[0.98] transition-all text-white text-sm font-semibold"
+          >
+            <Download size={15} />
+            Descargar reporte del día
+          </button>
         </div>
       )}
 
