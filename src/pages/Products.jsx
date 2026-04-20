@@ -133,7 +133,6 @@ function DeleteConfirmModal({ product, onClose, onConfirm }) {
 
 export default function Products() {
   const { products, isPro, planLimits, addProduct, updateProduct, deleteProduct } = useApp()
-  const { formatCurrency: fmt } = useLocale()
   const [showAdd, setShowAdd] = useState(false)
   const [showUpgrade, setShowUpgrade] = useState(false)
   const [editingProduct, setEditingProduct] = useState(null)
@@ -251,6 +250,7 @@ export default function Products() {
 }
 
 function ProductCard({ product, onEdit, onDelete }) {
+  const { formatCurrency: fmt } = useLocale()
   const isLow = product.stock <= product.lowStockThreshold
 
   return (

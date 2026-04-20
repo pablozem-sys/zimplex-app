@@ -53,6 +53,7 @@ function CreateGoalModal({ onClose, onAdd }) {
 }
 
 function AddFundsModal({ goal, onClose, onAdd }) {
+  const { formatCurrency: fmt } = useLocale()
   const [amount, setAmount] = useState('')
   const suggestions = [5000, 10000, 20000, 50000]
 
@@ -156,6 +157,7 @@ export default function Goals() {
 }
 
 function GoalCard({ goal, onAdd, onDelete }) {
+  const { formatCurrency: fmt } = useLocale()
   const progress = Math.min(100, (goal.current / goal.target) * 100)
   const remaining = goal.target - goal.current
   const daysLeft = Math.ceil((new Date(goal.deadline) - new Date()) / (1000 * 60 * 60 * 24))

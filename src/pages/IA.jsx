@@ -28,7 +28,7 @@ async function callClaude(system, userContent) {
     return JSON.parse(d.content[0].text.match(/\{[\s\S]*\}/)[0])
   }
   const fnName = system.includes('ventas') ? 'ia-ventas' : system.includes('inventario') ? 'ia-stock' : 'ia-marketing'
-  const { data, error } = await supabase.functions.invoke(fnName, { body: JSON.parse(userContent) })
+  const { data, error } = await supabase.functions.invoke(fnName, { body: { content: userContent } })
   if (error) throw error
   return data
 }

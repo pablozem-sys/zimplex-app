@@ -77,7 +77,7 @@ const testimonials = [
   { quote: '"Lo del WhatsApp automático me cambió la vida. Antes escribía el mismo mensaje 20 veces al día. Ahora es un toque."',      name: 'Valentina Rojas', role: 'Ropa por encargo, Concepción',   initial: 'V' },
 ]
 
-const freeFeatures = ['Hasta 3 productos', 'Hasta 20 ventas al mes', 'Dashboard básico', 'Control de stock']
+const freeFeatures = ['Hasta 10 productos', 'Hasta 50 ventas al mes', 'Dashboard básico', 'Control de stock']
 const proExcluded  = ['Ventas ilimitadas', 'Productos ilimitados', 'Pedidos por WhatsApp', 'Soporte prioritario']
 const proFeatures  = ['Productos ilimitados', 'Ventas ilimitadas', 'Control de stock avanzado', 'Pedidos por WhatsApp', 'Reportes completos', 'Prioridad en soporte']
 
@@ -357,24 +357,28 @@ function Hero({ onLogin }) {
           </Chip>
 
           <h1 style={{ marginTop: 24, fontSize: 'clamp(2.2rem, 5vw, 3.8rem)', fontWeight: 800, lineHeight: 1.15, letterSpacing: '-0.03em', color: 'white', fontFamily: POPPINS }}>
-            Ordena tu negocio<br />en minutos, sin Excel.
+            Vendes por WhatsApp.<br />Ahora organiza todo desde ahí.
           </h1>
 
           <p style={{ marginTop: 20, fontSize: 17, color: 'rgba(255,255,255,0.78)', lineHeight: 1.7, maxWidth: 520, margin: '20px auto 0', fontFamily: POPPINS }}>
-            Registra tus ventas, controla tu stock y entiende cuánto ganas realmente.
+            Crea pedidos, mándalos directo al cliente por WhatsApp y lleva el control de tu stock — todo sin salir del celular.
           </p>
 
           <div style={{ marginTop: 32, display: 'flex', flexWrap: 'wrap', gap: 12, justifyContent: 'center' }}>
-            <a href={SIGNUP_URL} style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '16px 32px', borderRadius: 14, background: 'white', color: BLUE, fontWeight: 700, fontSize: 17, textDecoration: 'none', fontFamily: POPPINS, boxShadow: '0 4px 24px rgba(0,0,0,0.18)' }}>
+            <a href={SIGNUP_URL} style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '16px 32px', borderRadius: 14, background: 'white', color: INDIGO, fontWeight: 700, fontSize: 17, textDecoration: 'none', fontFamily: POPPINS, boxShadow: '0 4px 24px rgba(0,0,0,0.18)' }}>
               Empezar gratis <ArrowRight size={18} />
             </a>
             <button onClick={onLogin} style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '16px 32px', borderRadius: 14, background: 'rgba(255,255,255,0.15)', color: 'white', fontWeight: 600, fontSize: 17, border: '1.5px solid rgba(255,255,255,0.35)', cursor: 'pointer', fontFamily: POPPINS, backdropFilter: 'blur(8px)' }}>
-              Ya tengo cuenta
+              Ver cómo funciona
             </button>
           </div>
 
-          <div style={{ marginTop: 24, display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 20 }}>
-            {['Sin tarjeta de crédito', 'Gratis para empezar', 'Listo en 2 minutos'].map(t => (
+          <p style={{ marginTop: 16, fontSize: 13, color: 'rgba(255,255,255,0.6)', fontFamily: POPPINS }}>
+            Sin tarjeta de crédito · Sin instalación · Listo en 2 minutos
+          </p>
+
+          <div style={{ marginTop: 8, display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 20 }}>
+            {[].map(t => (
               <span key={t} style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 13, color: 'rgba(255,255,255,0.7)', fontFamily: POPPINS }}>
                 <Check size={13} color="rgba(255,255,255,0.9)" strokeWidth={2.5} />{t}
               </span>
@@ -703,7 +707,7 @@ function Pricing() {
           <div style={{ background: 'white', borderRadius: 24, padding: 28, border: '2px solid #F1F5F9', display: 'flex', flexDirection: 'column' }}>
             <p style={{ fontSize: 12, fontWeight: 600, color: '#94A3B8', marginBottom: 8, fontFamily: POPPINS, letterSpacing: '0.08em' }}>GRATIS</p>
             <p style={{ fontSize: 40, fontWeight: 800, color: '#111827', fontFamily: POPPINS, lineHeight: 1 }}>$0</p>
-            <p style={{ fontSize: 13, color: '#94A3B8', margin: '6px 0 20px', fontFamily: POPPINS }}>Para empezar</p>
+            <p style={{ fontSize: 13, color: '#94A3B8', margin: '6px 0 20px', fontFamily: POPPINS }}>$0 — para siempre</p>
             <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 20px', display: 'flex', flexDirection: 'column', gap: 9 }}>
               {freeFeatures.map(t => (
                 <li key={t} style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, color: '#334155', fontFamily: POPPINS }}>
@@ -716,7 +720,7 @@ function Pricing() {
                 </li>
               ))}
             </ul>
-            <p style={{ textAlign: 'center', fontSize: 11, color: '#94A3B8', marginBottom: 14, marginTop: 'auto', paddingTop: 20, fontFamily: POPPINS }}>Gratis para siempre</p>
+            <p style={{ textAlign: 'center', fontSize: 11, color: '#94A3B8', marginBottom: 14, marginTop: 'auto', paddingTop: 20, fontFamily: POPPINS }}>$0 — para siempre</p>
             <BtnSecondary href={SIGNUP_URL} style={{ width: '100%', justifyContent: 'center', fontSize: 14 }}>Empezar gratis</BtnSecondary>
           </div>
 
@@ -743,6 +747,7 @@ function Pricing() {
             <a href={UPGRADE_URL} target="_blank" rel="noreferrer" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, width: '100%', padding: '14px 0', borderRadius: 14, background: 'white', color: BLUE, fontWeight: 600, fontSize: 14, textDecoration: 'none', fontFamily: POPPINS, marginTop: 'auto' }}>
               Pasar a Pro <ChevronRight size={15} />
             </a>
+            <p style={{ textAlign: 'center', fontSize: 11, color: 'rgba(255,255,255,0.55)', marginTop: 10, fontFamily: POPPINS }}>Cancela cuando quieras. Sin contratos.</p>
           </div>
         </div>
 

@@ -538,6 +538,7 @@ export default function Orders() {
 // ─── ORDER CARD ───────────────────────────────────────────────────────────────
 function OrderCard({ order, onStatusChange, onUpdate, onDelete, transfer, products }) {
   const { isPro } = useApp()
+  const { formatCurrency: fmt } = useLocale()
   const [showUpgrade, setShowUpgrade] = useState(false)
   const [confirmDelete, setConfirmDelete] = useState(false)
   const [showEdit, setShowEdit] = useState(false)

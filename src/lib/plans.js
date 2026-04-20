@@ -1,7 +1,7 @@
 export const PLANS = {
   free: {
-    maxProducts: 3,
-    maxMonthlySales: 20,
+    maxProducts: 10,
+    maxMonthlySales: 50,
     features: {
       whatsappOrders: false,
     },
