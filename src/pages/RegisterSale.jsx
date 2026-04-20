@@ -392,47 +392,67 @@ function UpgradeWall({ count, limit, onUpgrade, upgradeLoading }) {
 }
 
 function downloadDayReport(todaySales, today, country) {
-  const fmtTime = (isoString) => {
-    if (!isoString) return ''
-    return new Date(isoString).toLocaleTimeString(country.locale, { timeZone: country.timezone, hour: '2-digit', minute: '2-digit' })
-  }
+  const fmtMoney = (n) => new Intl.NumberFormat(country.locale, {
+    style: 'currency', currency: country.currency, maximumFractionDigits: 0,
+  }).format(n)
+  const fmtTime = (iso) => iso
+    ? new Date(iso).toLocaleTimeString(country.locale, { timeZone: country.timezone, hour: '2-digit', minute: '2-digit' })
+    : ''
+  const fmtDate = new Date(today + 'T12:00:00').toLocaleDateString(country.locale, { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })
   const methodLabel = { efectivo: 'Efectivo', transferencia: 'Transferencia', tarjeta: 'Tarjeta' }
-
-  const headers = ['Producto', 'Cantidad', 'Precio Unitario', 'Total', 'Método de Pago', 'Cliente', 'Hora']
-  const rows = todaySales.map(s => [
-    s.productName,
-    s.quantity,
-    s.unitPrice ?? '',
-    s.total,
-    methodLabel[s.paymentMethod] || s.paymentMethod,
-    s.customer || 'Sin cliente',
-    fmtTime(s.createdAt),
-  ])
+  const e = (v) => `"${String(v ?? '').replace(/"/g, '""')}"`
+  const row = (...cols) => cols.map(e).join(',')
+  const sep = () => row('', '', '', '', '', '', '')
+  const title = (t) => row(t, '', '', '', '', '', '')
 
   const totalDia = todaySales.reduce((sum, s) => sum + s.total, 0)
+
   const porMetodo = todaySales.reduce((acc, s) => {
-    const label = methodLabel[s.paymentMethod] || s.paymentMethod
-    acc[label] = (acc[label] || 0) + s.total
+    const k = methodLabel[s.paymentMethod] || s.paymentMethod
+    if (!acc[k]) acc[k] = { total: 0, count: 0 }
+    acc[k].total += s.total
+    acc[k].count += 1
     return acc
   }, {})
 
-  const summaryRows = [
-    [],
-    ['RESUMEN'],
-    ['Total transacciones', todaySales.length, '', '', '', '', ''],
-    ['Total del día', '', '', totalDia, '', '', ''],
-    ...Object.entries(porMetodo).map(([m, v]) => [`Total ${m}`, '', '', v, '', '', '']),
+  const porProducto = Object.values(
+    todaySales.reduce((acc, s) => {
+      if (!acc[s.productName]) acc[s.productName] = { name: s.productName, qty: 0, total: 0 }
+      acc[s.productName].qty += s.quantity
+      acc[s.productName].total += s.total
+      return acc
+    }, {})
+  ).sort((a, b) => b.total - a.total)
+
+  const lines = [
+    // ── Encabezado ──
+    title('REPORTE DE VENTAS — ZIMPLEX'),
+    row('Fecha', fmtDate, '', '', '', '', ''),
+    row('Total de transacciones', todaySales.length, '', '', '', '', ''),
+    row('Total del día', fmtMoney(totalDia), '', '', '', '', ''),
+    sep(),
+
+    // ── Transacciones ──
+    title('DETALLE DE TRANSACCIONES'),
+    row('#', 'Hora', 'Producto', 'Cant.', 'Precio unit.', 'Total', 'Método de pago', 'Cliente'),
+    ...todaySales.map((s, i) =>
+      row(i + 1, fmtTime(s.createdAt), s.productName, s.quantity, fmtMoney(s.unitPrice ?? 0), fmtMoney(s.total), methodLabel[s.paymentMethod] || s.paymentMethod, s.customer || 'Sin cliente')
+    ),
+    sep(),
+
+    // ── Resumen por método de pago ──
+    title('RESUMEN POR MÉTODO DE PAGO'),
+    row('Método', 'Ventas', 'Total', '', '', '', ''),
+    ...Object.entries(porMetodo).map(([m, v]) => row(m, v.count, fmtMoney(v.total), '', '', '', '')),
+    sep(),
+
+    // ── Resumen por producto ──
+    title('RESUMEN POR PRODUCTO'),
+    row('Producto', 'Unidades vendidas', 'Total', '', '', '', ''),
+    ...porProducto.map(p => row(p.name, p.qty, fmtMoney(p.total), '', '', '', '')),
   ]
 
-  const escape = (v) => `"${String(v ?? '').replace(/"/g, '""')}"`
-  const csv = [
-    [`Reporte de ventas — ${today}`, '', '', '', '', '', ''],
-    [],
-    headers,
-    ...rows,
-    ...summaryRows,
-  ].map(r => r.map(escape).join(',')).join('\n')
-
+  const csv = lines.join('\n')
   const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' })
   const url = URL.createObjectURL(blob)
   const a = document.createElement('a')
