@@ -12,7 +12,25 @@ Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') return new Response('ok', { headers: CORS })
 
   try {
-    const { content } = await req.json()
+    const body = await req.json()
+    console.log('Body recibido:', JSON.stringify(body))
+
+    const content = typeof body.content === 'string' ? body.content : JSON.stringify(body.content ?? body)
+    console.log('Content a enviar:', content?.slice(0, 100))
+
+    if (!content) {
+      return new Response(JSON.stringify({ error: 'Contenido vacío' }), {
+        status: 400, headers: { 'Content-Type': 'application/json', ...CORS },
+      })
+    }
+
+    const requestBody = {
+      model: 'claude-haiku-4-5-20251001',
+      max_tokens: 512,
+      system: SYSTEM_PROMPT,
+      messages: [{ role: 'user', content }],
+    }
+    console.log('Request a Anthropic:', JSON.stringify(requestBody).slice(0, 200))
 
     const res = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
@@ -21,12 +39,7 @@ Deno.serve(async (req) => {
         'anthropic-version': '2023-06-01',
         'content-type': 'application/json',
       },
-      body: JSON.stringify({
-        model: 'claude-haiku-4-5-20251001',
-        max_tokens: 512,
-        system: SYSTEM_PROMPT,
-        messages: [{ role: 'user', content }],
-      }),
+      body: JSON.stringify(requestBody),
     })
 
     if (!res.ok) {
