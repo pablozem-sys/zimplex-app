@@ -29,8 +29,14 @@ async function callClaude(system, userContent) {
   }
   const fnName = system.includes('ventas') ? 'ia-ventas' : system.includes('inventario') ? 'ia-stock' : 'ia-marketing'
   const { data, error } = await supabase.functions.invoke(fnName, { body: { content: userContent } })
-  if (error) throw new Error(error.message || 'No se pudo conectar con el asistente IA')
-  if (data?.error) throw new Error(data.error)
+  if (error) {
+    console.error('[IA] supabase error:', error)
+    throw new Error(error.message || 'No se pudo conectar con el asistente IA')
+  }
+  if (data?.error) {
+    console.error('[IA] function error:', data.error)
+    throw new Error(data.error)
+  }
   return data
 }
 
