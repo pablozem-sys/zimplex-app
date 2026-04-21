@@ -169,8 +169,15 @@ export default function Profile() {
           <div className="grid grid-cols-2 gap-3">
             <div className="col-span-2">
               <label className="text-xs font-medium text-gray-500 mb-1.5 block">{t('banco')}</label>
-              <input value={transfer.bank} onChange={setT('bank')}
-                placeholder="Ej: Banco Estado" className={inputClass} />
+              {country.banks ? (
+                <select value={transfer.bank} onChange={setT('bank')} className={`${inputClass} appearance-none`}>
+                  <option value="">Selecciona tu banco</option>
+                  {country.banks.map(b => <option key={b} value={b}>{b}</option>)}
+                </select>
+              ) : (
+                <input value={transfer.bank} onChange={setT('bank')}
+                  placeholder="Ej: Banco Estado" className={inputClass} />
+              )}
             </div>
 
             <div className="col-span-2">
