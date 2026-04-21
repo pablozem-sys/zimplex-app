@@ -13,6 +13,7 @@
     "preview:qa": "vite preview --mode qa"
   },
   "dependencies": {
+    "@sentry/react": "^10.49.0",
     "@supabase/supabase-js": "^2.101.0",
     "framer-motion": "^12.38.0",
     "lucide-react": "^1.0.1",

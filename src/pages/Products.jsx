@@ -1,8 +1,9 @@
 import { useState } from 'react'
 import { useApp } from '../context/AppContext'
 import { useLocale } from '../context/LocaleContext'
-import { Plus, AlertTriangle, Package, X, Trash2, Pencil } from 'lucide-react'
+import { Plus, AlertTriangle, Package, X, Trash2, Pencil, Bell } from 'lucide-react'
 import UpgradeModal from '../components/UpgradeModal'
+import { requestNotificationPermission } from '../lib/notifications'
 const inputClass = 'w-full bg-gray-50 border border-gray-200 rounded-2xl px-4 py-3.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#6366F1] focus:border-transparent'
 
 const UNITS = ['unidades', 'kg', 'gramos', 'litros', 'ml', 'metros', 'cajas', 'docenas', 'bolsas', 'porciones']
@@ -137,8 +138,16 @@ export default function Products() {
   const [showUpgrade, setShowUpgrade] = useState(false)
   const [editingProduct, setEditingProduct] = useState(null)
   const [deletingProduct, setDeletingProduct] = useState(null)
+  const [notifDismissed, setNotifDismissed] = useState(
+    () => !('Notification' in window) || Notification.permission !== 'default'
+  )
 
   const atLimit = !isPro && products.length >= planLimits.maxProducts
+
+  const handleActivateNotifications = async () => {
+    const result = await requestNotificationPermission()
+    if (result === 'granted' || result === 'denied') setNotifDismissed(true)
+  }
 
   const handleAddClick = () => {
     if (atLimit) {
@@ -181,6 +190,21 @@ export default function Products() {
               }}
             />
           </div>
+        </div>
+      )}
+
+      {/* Banner notificaciones de stock bajo */}
+      {!notifDismissed && (
+        <div className="bg-indigo-50 border border-indigo-100 rounded-2xl p-3.5 mb-4 flex items-center gap-3">
+          <Bell size={16} className="text-[#6366F1] flex-shrink-0" />
+          <p className="flex-1 text-xs text-indigo-700">¿Quieres que te avisemos cuando el stock esté bajo?</p>
+          <button onClick={handleActivateNotifications}
+            className="text-xs font-semibold text-[#6366F1] bg-white border border-indigo-200 px-3 py-1.5 rounded-xl whitespace-nowrap active:scale-95 transition-all">
+            Activar alertas
+          </button>
+          <button onClick={() => setNotifDismissed(true)} className="text-gray-400 active:scale-95">
+            <X size={14} />
+          </button>
         </div>
       )}
 

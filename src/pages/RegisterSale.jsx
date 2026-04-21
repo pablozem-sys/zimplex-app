@@ -195,9 +195,21 @@ export default function RegisterSale() {
       </div>
 
       {tab === 'registrar' ? (
-        atSalesLimit ? (
-          <UpgradeWall count={monthlySalesCount} limit={planLimits.maxMonthlySales} onUpgrade={handleUpgrade} upgradeLoading={upgradeLoading} />
-        ) : (
+        <>
+          {/* Banner paywall progresivo — no bloquea lectura, solo creación */}
+          {atSalesLimit && (
+            <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4 mb-4 flex items-center gap-3">
+              <Lock size={16} className="text-amber-500 flex-shrink-0" />
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-semibold text-amber-800">Llegaste al límite de tu plan gratis. Tus datos están seguros.</p>
+              </div>
+              <button onClick={handleUpgrade} disabled={upgradeLoading}
+                className="flex-shrink-0 flex items-center gap-1.5 bg-[#6366F1] text-white text-xs font-semibold px-3 py-2 rounded-xl active:scale-95 transition-all disabled:opacity-60 whitespace-nowrap">
+                {upgradeLoading ? <Loader2 size={13} className="animate-spin" /> : <Zap size={13} />}
+                Pasar a Pro →
+              </button>
+            </div>
+          )}
           <form onSubmit={handleSubmit} className="space-y-4">
 
             {/* Contador de uso */}
@@ -353,13 +365,14 @@ export default function RegisterSale() {
 
             {error && <p className="text-sm text-[#DC4B56] bg-red-50 px-4 py-3 rounded-2xl">{error}</p>}
 
-            <button type="submit" disabled={submitting || items.length === 0}
+            <button type="submit" disabled={submitting || items.length === 0 || atSalesLimit}
+              title={atSalesLimit ? 'Disponible en Pro' : undefined}
               className="w-full bg-[#6366F1] active:scale-[0.98] text-white font-semibold py-4 rounded-2xl transition-all shadow-lg shadow-indigo-200 text-base disabled:opacity-60 flex items-center justify-center gap-2">
-              {submitting ? <><Loader2 size={18} className="animate-spin" /> Registrando...</> : 'Registrar venta'}
+              {submitting ? <><Loader2 size={18} className="animate-spin" /> Registrando...</> : atSalesLimit ? <><Lock size={16} /> Disponible en Pro</> : 'Registrar venta'}
             </button>
 
           </form>
-        )
+        </>
       ) : (
         <SaleHistory sales={sales} />
       )}

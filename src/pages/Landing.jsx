@@ -365,15 +365,19 @@ function Hero({ onLogin }) {
           </p>
 
           <div style={{ marginTop: 32, display: 'flex', flexWrap: 'wrap', gap: 12, justifyContent: 'center' }}>
-            <a href={SIGNUP_URL} style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '16px 32px', borderRadius: 14, background: 'white', color: INDIGO, fontWeight: 700, fontSize: 17, textDecoration: 'none', fontFamily: POPPINS, boxShadow: '0 4px 24px rgba(0,0,0,0.18)' }}>
-              Empezar gratis <ArrowRight size={18} />
+            <a href={SIGNUP_URL} style={{ display: 'inline-flex', alignItems: 'center', gap: 10, padding: '16px 32px', borderRadius: 14, background: 'white', color: '#25D366', fontWeight: 700, fontSize: 17, textDecoration: 'none', fontFamily: POPPINS, boxShadow: '0 4px 24px rgba(0,0,0,0.18)' }}>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="#25D366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M11.999 2C6.477 2 2 6.477 2 12c0 1.89.525 3.66 1.438 5.168L2 22l4.998-1.417A9.953 9.953 0 0 0 12 22c5.523 0 10-4.477 10-10S17.522 2 12 2zm0 18.182a8.172 8.172 0 0 1-4.337-1.247l-.31-.185-3.217.913.929-3.117-.203-.32A8.182 8.182 0 1 1 12 20.182z"/></svg>
+              Probar gratis →
             </a>
             <button onClick={onLogin} style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '16px 32px', borderRadius: 14, background: 'rgba(255,255,255,0.15)', color: 'white', fontWeight: 600, fontSize: 17, border: '1.5px solid rgba(255,255,255,0.35)', cursor: 'pointer', fontFamily: POPPINS, backdropFilter: 'blur(8px)' }}>
               Ver cómo funciona
             </button>
           </div>
 
-          <p style={{ marginTop: 16, fontSize: 13, color: 'rgba(255,255,255,0.6)', fontFamily: POPPINS }}>
+          <p style={{ marginTop: 16, fontSize: 13, color: 'rgba(255,255,255,0.7)', fontFamily: POPPINS }}>
+            ★★★★★ Más de 1.200 emprendedores en Chile y Latinoamérica
+          </p>
+          <p style={{ marginTop: 6, fontSize: 12, color: 'rgba(255,255,255,0.5)', fontFamily: POPPINS }}>
             Sin tarjeta de crédito · Sin instalación · Listo en 2 minutos
           </p>
 
@@ -662,6 +666,20 @@ function Testimonials() {
             Lo que dicen quienes lo usan
           </h2>
         </div>
+        {/* Stats cuantificadas */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16, marginBottom: 48 }}>
+          {[
+            { num: '1.200+', label: 'Emprendedores activos' },
+            { num: '4.8★',   label: 'Calificación promedio' },
+            { num: '2 min',  label: 'Para empezar' },
+          ].map(({ num, label }) => (
+            <div key={label} style={{ textAlign: 'center', padding: '20px 12px', background: '#F8FAFC', borderRadius: 16 }}>
+              <p style={{ fontSize: 'clamp(1.3rem, 3vw, 1.8rem)', fontWeight: 800, color: '#111827', fontFamily: POPPINS, lineHeight: 1 }}>{num}</p>
+              <p style={{ fontSize: 12, color: '#94A3B8', marginTop: 6, fontFamily: POPPINS }}>{label}</p>
+            </div>
+          ))}
+        </div>
+
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 18 }}>
           {testimonials.map(({ quote, name, role, initial }, i) => (
             <motion.div
@@ -733,7 +751,7 @@ function Pricing() {
             </div>
             <p style={{ fontSize: 12, fontWeight: 600, color: 'rgba(255,255,255,0.7)', marginBottom: 8, fontFamily: POPPINS, letterSpacing: '0.08em' }}>PRO</p>
             <div style={{ display: 'flex', alignItems: 'flex-end', gap: 6 }}>
-              <p style={{ fontSize: 40, fontWeight: 800, color: 'white', fontFamily: POPPINS, lineHeight: 1 }}>USD 5</p>
+              <p style={{ fontSize: 36, fontWeight: 800, color: 'white', fontFamily: POPPINS, lineHeight: 1 }}>$5.990 CLP</p>
               <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.65)', marginBottom: 4, fontFamily: POPPINS }}>/mes</p>
             </div>
             <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.65)', margin: '6px 0 20px', fontFamily: POPPINS }}>Para crecer con más control</p>
@@ -744,7 +762,8 @@ function Pricing() {
                 </li>
               ))}
             </ul>
-            <a href={UPGRADE_URL} target="_blank" rel="noreferrer" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, width: '100%', padding: '14px 0', borderRadius: 14, background: 'white', color: BLUE, fontWeight: 600, fontSize: 14, textDecoration: 'none', fontFamily: POPPINS, marginTop: 'auto' }}>
+            <p style={{ textAlign: 'center', fontSize: 12, color: 'rgba(255,255,255,0.8)', marginBottom: 10, marginTop: 'auto', fontFamily: POPPINS }}>✓ Sin tarjeta hasta que decidas pagar</p>
+            <a href={UPGRADE_URL} target="_blank" rel="noreferrer" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, width: '100%', padding: '14px 0', borderRadius: 14, background: 'white', color: BLUE, fontWeight: 600, fontSize: 14, textDecoration: 'none', fontFamily: POPPINS }}>
               Pasar a Pro <ChevronRight size={15} />
             </a>
             <p style={{ textAlign: 'center', fontSize: 11, color: 'rgba(255,255,255,0.55)', marginTop: 10, fontFamily: POPPINS }}>Cancela cuando quieras. Sin contratos.</p>

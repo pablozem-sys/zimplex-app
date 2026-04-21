@@ -3,6 +3,7 @@ import { supabase } from '../lib/supabase'
 import { THEMES, DEFAULT_THEME, applyTheme } from '../lib/themes'
 import { getPlanLimits } from '../lib/plans'
 import { useLocale } from './LocaleContext'
+import { sendStockAlert } from '../lib/notifications'
 
 const AppContext = createContext(null)
 
@@ -117,11 +118,25 @@ export function AppProvider({ children }) {
         supabase.from('goals').select('*').order('created_at', { ascending: false }),
         supabase.from('profiles').select('plan').eq('id', userId).single(),
       ])
-      setProducts((p.data || []).map(dbToProduct))
+      const mappedProducts = (p.data || []).map(dbToProduct)
+      setProducts(mappedProducts)
       setSales((s.data || []).map(dbToSale))
       setOrders((o.data || []).map(dbToOrder))
       setGoals(g.data || [])
       setPlan(profile.data?.plan || 'free')
+
+      // Notificaciones de stock bajo (una vez por sesión por producto)
+      if ('Notification' in window && Notification.permission === 'granted') {
+        mappedProducts
+          .filter(prod => prod.stock <= prod.lowStockThreshold)
+          .forEach(prod => {
+            const key = `stock_alert_${prod.id}`
+            if (!sessionStorage.getItem(key)) {
+              sendStockAlert(prod.name, prod.stock)
+              sessionStorage.setItem(key, '1')
+            }
+          })
+      }
     } catch (err) {
       console.error('Error loading data:', err)
     } finally {
