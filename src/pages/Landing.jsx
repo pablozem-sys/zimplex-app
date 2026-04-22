@@ -5,7 +5,7 @@ import {
   X, ChevronRight, Heart, ShoppingBag, AlertTriangle, Send, Loader2
 } from 'lucide-react'
 import { GradientBackground } from '@/components/ui/gradient-background'
-import { TypewriterEffectSmooth } from '@/components/ui/typewriter-effect'
+import { TypewriterEffect } from '@/components/ui/typewriter-effect'
 
 // ─── BRAND ───────────────────────────────────────────────────────────────────
 const BLUE     = '#3B82F6'
@@ -358,16 +358,16 @@ function Hero({ onLogin }) {
           </Chip>
 
           <div style={{ marginTop: 24 }}>
-            <TypewriterEffectSmooth
+            <TypewriterEffect
               words={[
-                { text: 'Vendes' },
-                { text: 'por' },
+                { text: 'Vendes',    className: 'text-white' },
+                { text: 'por',       className: 'text-white' },
                 { text: 'WhatsApp.', className: 'text-[#25D366]' },
-                { text: 'Ahora' },
-                { text: 'organiza' },
-                { text: 'todo' },
-                { text: 'desde' },
-                { text: 'ahí.' },
+                { text: 'Ahora',     className: 'text-white' },
+                { text: 'organiza',  className: 'text-white' },
+                { text: 'todo',      className: 'text-white' },
+                { text: 'desde',     className: 'text-white' },
+                { text: 'ahí.',      className: 'text-white' },
               ]}
               className="text-[clamp(2rem,4.5vw,3.5rem)] font-extrabold leading-tight tracking-tight"
               cursorClassName="bg-[#25D366]"
