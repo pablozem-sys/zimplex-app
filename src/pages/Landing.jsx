@@ -389,7 +389,7 @@ function Hero({ onLogin }) {
           </div>
 
           <p style={{ marginTop: 16, fontSize: 13, color: 'rgba(255,255,255,0.7)', fontFamily: POPPINS }}>
-            ★★★★★ Más de 1.200 emprendedores en Chile y Latinoamérica
+            ★★★★★ Cada vez más emprendedores eligen Zimplex en lugar de las planillas
           </p>
           <p style={{ marginTop: 6, fontSize: 12, color: 'rgba(255,255,255,0.5)', fontFamily: POPPINS }}>
             Sin tarjeta de crédito · Sin instalación · Listo en 2 minutos
@@ -416,7 +416,7 @@ function Hero({ onLogin }) {
                   </div>
                 ))}
               </div>
-              <span>+200 emprendedores ya lo usan</span>
+              <span>Muchos emprendedores ya lo prefieren</span>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
               <span style={{ color: '#FCD34D' }}>★★★★★</span>
@@ -683,7 +683,7 @@ function Testimonials() {
         {/* Stats cuantificadas */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16, marginBottom: 48 }}>
           {[
-            { num: '1.200+', label: 'Emprendedores activos' },
+            { num: 'Miles', label: 'de emprendedores' },
             { num: '4.8★',   label: 'Calificación promedio' },
             { num: '2 min',  label: 'Para empezar' },
           ].map(({ num, label }) => (

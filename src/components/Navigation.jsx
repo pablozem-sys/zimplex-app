@@ -1,5 +1,6 @@
 import { useApp } from '../context/AppContext'
-import { LayoutDashboard, ShoppingCart, Package, ClipboardList, Target, UserCircle, HelpCircle, Sparkles } from 'lucide-react'
+import { LayoutDashboard, ShoppingCart, Package, ClipboardList, Target, UserCircle, HelpCircle, Sparkles, LogOut } from 'lucide-react'
+import { supabase } from '../lib/supabase'
 
 const tabs = [
   { id: 'dashboard', label: 'Inicio',   icon: LayoutDashboard },
@@ -14,6 +15,7 @@ const tabs = [
 
 export default function Navigation() {
   const { activeTab, setActiveTab, businessName } = useApp()
+  const handleLogout = async () => { await supabase.auth.signOut() }
 
   return (
     <>
@@ -48,6 +50,13 @@ export default function Navigation() {
             )
           })}
         </nav>
+        <button
+          onClick={handleLogout}
+          className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-gray-400 hover:text-red-500 hover:bg-red-50 transition-all duration-150 w-full"
+        >
+          <LogOut size={18} strokeWidth={1.8} />
+          <span>Cerrar sesión</span>
+        </button>
       </aside>
 
       {/* Bottom nav mobile */}

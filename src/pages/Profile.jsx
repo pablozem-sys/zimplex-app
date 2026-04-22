@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabase'
-import { User, Mail, Store, LogOut, Save, Loader2, Check, Zap, CreditCard } from 'lucide-react'
+import { User, Mail, Store, Save, Loader2, Check, Zap, CreditCard } from 'lucide-react'
 import { useApp } from '../context/AppContext'
 import { useLocale } from '../context/LocaleContext'
 import { COUNTRIES } from '../lib/countries'
@@ -66,8 +66,6 @@ export default function Profile() {
     setSuccess(true)
     setTimeout(() => setSuccess(false), 2500)
   }
-
-  const handleLogout = async () => { await supabase.auth.signOut() }
 
   const handleUpgrade = async () => {
     setUpgradeLoading(true)
@@ -273,12 +271,6 @@ export default function Profile() {
         </div>
       )}
 
-      {/* Logout */}
-      <button onClick={handleLogout}
-        className="w-full bg-white border border-gray-200 text-gray-600 font-semibold py-4 rounded-2xl flex items-center justify-center gap-2 active:scale-[0.98] transition-all">
-        <LogOut size={18} />
-        {t('cerrar_sesion')}
-      </button>
     </div>
   )
 }
