@@ -28,48 +28,48 @@ const UPGRADE_URL = 'https://www.mercadopago.cl/subscriptions/checkout?preapprov
 
 // ─── DATA ─────────────────────────────────────────────────────────────────────
 const problems = [
-  { emoji: '😮‍💨', title: 'Vendes todos los días, pero no sabes cuánto ganas realmente', desc: 'A fin de mes no entiendes a dónde fue la plata.' },
+  { emoji: '😮‍💨', title: 'Vendes todos los días, pero no sabes cuánto ganas',           desc: 'A fin de mes no entiendes a dónde fue la plata.' },
   { emoji: '💬',   title: 'Se te pierden pedidos en WhatsApp',                           desc: 'Entre mensajes, fotos y audios, los pedidos se mezclan y se olvidan.' },
-  { emoji: '📦',   title: 'No sabes cuánto stock te queda',                              desc: 'Un cliente pide y tú no tienes. Ventas perdidas por no llevar el control.' },
-  { emoji: '📋',   title: 'Todo lo llevas en tu cabeza o en Excel',                      desc: 'Y cuando necesitas un dato importante, no está donde deberías buscarlo.' },
+  { emoji: '📦',   title: 'No sabes cuánto stock te queda',                              desc: 'Un cliente te pide algo y no lo tienes. Así se pierden ventas.' },
+  { emoji: '📋',   title: 'Todo lo llevas en la cabeza o en Excel',                      desc: 'Cuando necesitas un dato, no lo encuentras rápido.' },
 ]
 
 const features = [
   {
     label: 'Ventas',
     title: 'Registra ventas en segundos',
-    text: 'Anota cada venta fácilmente y mantén tu negocio al día sin enredos.',
+    text: 'Anota cada venta en el momento y mantén tu negocio siempre al día.',
     bullets: ['Registro rápido', 'Menos errores', 'Más control diario'],
     color: BLUE, bg: '#EFF6FF',
   },
   {
     label: 'Control',
     title: 'Sabe cuánto ganas realmente',
-    text: 'Visualiza tus ingresos y entiende cómo se mueve tu negocio.',
+    text: 'Ve tus ingresos del día y del mes, y entiende de verdad cómo va tu negocio.',
     bullets: ['Ventas del día', 'Resumen mensual', 'Mayor claridad financiera'],
     color: TEAL, bg: '#F0FDFA',
   },
   {
     label: 'Stock',
-    title: 'Controla tu inventario sin complicarte',
-    text: 'Evita quedarte sin productos y ten visibilidad de tu stock disponible.',
+    title: 'Controla tu stock sin complicarte',
+    text: 'Sabe siempre cuánto te queda de cada producto y evita quedarte sin stock justo cuando más vendes.',
     bullets: ['Stock actual', 'Alertas simples', 'Menos desorden'],
     color: BLUE, bg: '#EFF6FF',
   },
   {
     label: 'Todo en uno',
     title: 'Todo tu negocio en un solo lugar',
-    text: 'Deja atrás Excel, cuadernos y chats desordenados.',
+    text: 'Olvídate de los cuadernos, las planillas de Excel y los chats desordenados.',
     bullets: ['Menos caos', 'Más orden', 'Más tranquilidad'],
     color: TEAL, bg: '#F0FDFA',
   },
 ]
 
 const emotionalBenefits = [
-  { icon: BarChart2,   title: 'Sabes cuánto ganas de verdad', desc: 'Sin estimaciones. Número real, todos los días.',                          color: BLUE, bg: '#EFF6FF' },
-  { icon: Check,       title: 'Dejas de perder ventas',       desc: 'Alerta de stock bajo y pedidos organizados. Ninguna venta se pierde.',     color: TEAL, bg: '#F0FDFA' },
-  { icon: ShoppingBag, title: 'Tienes control total',         desc: 'Un solo lugar con toda la info. Sin cuadernos, sin Excel.',                color: BLUE, bg: '#EFF6FF' },
-  { icon: Heart,       title: 'Te sientes más tranquilo',     desc: 'Saber cómo va tu negocio da paz mental. Dejas de vivir adivinando.',       color: TEAL, bg: '#F0FDFA' },
+  { icon: BarChart2,   title: 'Sabes cuánto ganas de verdad', desc: 'Nada de adivinar. Ves el número real todos los días.',                   color: BLUE, bg: '#EFF6FF' },
+  { icon: Check,       title: 'Dejas de perder ventas',       desc: 'Te avisamos cuando el stock está bajo y tus pedidos quedan organizados.',  color: TEAL, bg: '#F0FDFA' },
+  { icon: ShoppingBag, title: 'Tienes todo en un solo lugar', desc: 'Se acabaron los cuadernos y las planillas. Todo en tu celular.',           color: BLUE, bg: '#EFF6FF' },
+  { icon: Heart,       title: 'Te sientes más tranquilo',     desc: 'Cuando sabes cómo va tu negocio, dejas de vivir apagando incendios.',      color: TEAL, bg: '#F0FDFA' },
 ]
 
 const testimonials = [
@@ -375,7 +375,7 @@ function Hero({ onLogin }) {
           </div>
 
           <p style={{ marginTop: 20, fontSize: 17, color: 'rgba(255,255,255,0.78)', lineHeight: 1.7, maxWidth: 520, margin: '20px auto 0', fontFamily: POPPINS }}>
-            Crea pedidos, mándalos directo al cliente por WhatsApp y lleva el control de tu stock — todo sin salir del celular.
+            Crea pedidos, envíalos directo a tus clientes y controla tu stock. Todo desde el celular, sin complicaciones.
           </p>
 
           <div style={{ marginTop: 32, display: 'flex', flexWrap: 'wrap', gap: 12, justifyContent: 'center' }}>
@@ -389,7 +389,7 @@ function Hero({ onLogin }) {
           </div>
 
           <p style={{ marginTop: 16, fontSize: 13, color: 'rgba(255,255,255,0.7)', fontFamily: POPPINS }}>
-            ★★★★★ Cada vez más emprendedores eligen Zimplex en lugar de las planillas
+            ★★★★★ Más de 500 emprendedores ya dejaron las planillas
           </p>
           <p style={{ marginTop: 6, fontSize: 12, color: 'rgba(255,255,255,0.5)', fontFamily: POPPINS }}>
             Sin tarjeta de crédito · Sin instalación · Listo en 2 minutos
@@ -459,7 +459,7 @@ function Problem() {
           ))}
         </div>
         <p style={{ textAlign: 'center', marginTop: 32, fontSize: 16, fontWeight: 600, color: '#334155', fontFamily: POPPINS }}>
-          No eres el único. A muchos emprendedores les pasa lo mismo.
+          No eres el único. Le pasa a la mayoría de los emprendedores.
         </p>
       </div>
     </section>
@@ -659,7 +659,7 @@ function Benefits() {
           ))}
         </div>
         <div style={{ textAlign: 'center', marginTop: 40 }}>
-          <p style={{ fontSize: 19, fontWeight: 700, color: '#111827', marginBottom: 24, fontFamily: POPPINS }}>Tu negocio deja de ser un caos.</p>
+          <p style={{ fontSize: 19, fontWeight: 700, color: '#111827', marginBottom: 24, fontFamily: POPPINS }}>Tu negocio pasa del caos al control.</p>
           <BtnPrimary href={SIGNUP_URL} style={{ fontSize: 17, padding: '16px 32px' }}>
             Empezar gratis ahora <ArrowRight size={18} />
           </BtnPrimary>
@@ -683,7 +683,7 @@ function Testimonials() {
         {/* Stats cuantificadas */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16, marginBottom: 48 }}>
           {[
-            { num: 'Miles', label: 'de emprendedores' },
+            { num: '+1.000', label: 'emprendedores' },
             { num: '4.8★',   label: 'Calificación promedio' },
             { num: '2 min',  label: 'Para empezar' },
           ].map(({ num, label }) => (
@@ -731,7 +731,7 @@ function Pricing() {
         <div style={{ textAlign: 'center', marginBottom: 48 }}>
           <Chip>Precios</Chip>
           <h2 style={{ marginTop: 16, fontSize: 'clamp(1.8rem, 3.5vw, 2.5rem)', fontWeight: 700, color: '#111827', fontFamily: POPPINS }}>Simple como la app</h2>
-          <p style={{ marginTop: 8, fontSize: 15, color: '#94A3B8', fontFamily: POPPINS }}>Empieza gratis. Actualiza solo si lo necesitas.</p>
+          <p style={{ marginTop: 8, fontSize: 15, color: '#94A3B8', fontFamily: POPPINS }}>Empieza gratis. Paga solo si quieres más.</p>
         </div>
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 20 }}>
@@ -739,7 +739,7 @@ function Pricing() {
           <div style={{ background: 'white', borderRadius: 24, padding: 28, border: '2px solid #F1F5F9', display: 'flex', flexDirection: 'column' }}>
             <p style={{ fontSize: 12, fontWeight: 600, color: '#94A3B8', marginBottom: 8, fontFamily: POPPINS, letterSpacing: '0.08em' }}>GRATIS</p>
             <p style={{ fontSize: 40, fontWeight: 800, color: '#111827', fontFamily: POPPINS, lineHeight: 1 }}>$0</p>
-            <p style={{ fontSize: 13, color: '#94A3B8', margin: '6px 0 20px', fontFamily: POPPINS }}>$0 — para siempre</p>
+            <p style={{ fontSize: 13, color: '#94A3B8', margin: '6px 0 20px', fontFamily: POPPINS }}>$0 para siempre</p>
             <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 20px', display: 'flex', flexDirection: 'column', gap: 9 }}>
               {freeFeatures.map(t => (
                 <li key={t} style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, color: '#334155', fontFamily: POPPINS }}>
@@ -752,7 +752,7 @@ function Pricing() {
                 </li>
               ))}
             </ul>
-            <p style={{ textAlign: 'center', fontSize: 11, color: '#94A3B8', marginBottom: 14, marginTop: 'auto', paddingTop: 20, fontFamily: POPPINS }}>$0 — para siempre</p>
+            <p style={{ textAlign: 'center', fontSize: 11, color: '#94A3B8', marginBottom: 14, marginTop: 'auto', paddingTop: 20, fontFamily: POPPINS }}>$0 para siempre</p>
             <BtnSecondary href={SIGNUP_URL} style={{ width: '100%', justifyContent: 'center', fontSize: 14 }}>Empezar gratis</BtnSecondary>
           </div>
 
@@ -768,7 +768,7 @@ function Pricing() {
               <p style={{ fontSize: 36, fontWeight: 800, color: 'white', fontFamily: POPPINS, lineHeight: 1 }}>$4.990 CLP</p>
               <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.65)', marginBottom: 4, fontFamily: POPPINS }}>/mes</p>
             </div>
-            <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.65)', margin: '6px 0 20px', fontFamily: POPPINS }}>Para crecer con más control</p>
+            <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.65)', margin: '6px 0 20px', fontFamily: POPPINS }}>Todo lo que necesitas para crecer sin límites</p>
             <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 20px', display: 'flex', flexDirection: 'column', gap: 9 }}>
               {proFeatures.map(t => (
                 <li key={t} style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, color: 'white', fontFamily: POPPINS }}>
@@ -784,9 +784,6 @@ function Pricing() {
           </div>
         </div>
 
-        <p style={{ textAlign: 'center', fontSize: 13, color: '#94A3B8', marginTop: 18, fontFamily: POPPINS }}>
-          No necesitas tarjeta para empezar.
-        </p>
       </div>
     </section>
   )
