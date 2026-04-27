@@ -757,7 +757,7 @@ function Testimonials() {
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 16, marginBottom: 48 }}>
           {[
-            { num: '+1.000', label: 'emprendedores' },
+            { num: 'Muchos',  label: 'ya nos están prefiriendo' },
             { num: '4.8★',   label: 'Calificación promedio' },
             { num: '2 min',  label: 'Para empezar' },
           ].map(({ num, label }) => (
