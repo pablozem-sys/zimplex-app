@@ -1,7 +1,7 @@
 import { useApp } from '../context/AppContext'
 import { useLocale } from '../context/LocaleContext'
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
-import { TrendingUp, ShoppingBag, AlertCircle, Package, Plus, ArrowRight, Zap } from 'lucide-react'
+import { TrendingUp, ShoppingBag, AlertCircle, Package, Plus, ArrowRight, Zap, X } from 'lucide-react'
 import { useState } from 'react'
 import { supabase } from '../lib/supabase'
 import OnboardingChecklist from '../components/OnboardingChecklist'
@@ -36,6 +36,14 @@ export default function Dashboard() {
 
   const [upgradeLoading, setUpgradeLoading] = useState(false)
   const [upgradeError, setUpgradeError] = useState(false)
+  const [limitAlertDismissed, setLimitAlertDismissed] = useState(
+    () => !!sessionStorage.getItem('limit_alert_dismissed')
+  )
+
+  const dismissLimitAlert = () => {
+    sessionStorage.setItem('limit_alert_dismissed', '1')
+    setLimitAlertDismissed(true)
+  }
 
   const handleUpgrade = async () => {
     setUpgradeLoading(true)
@@ -106,6 +114,9 @@ export default function Dashboard() {
   const salesPct = Math.min(100, (monthlySalesCount / planLimits.maxMonthlySales) * 100)
   const productAtLimit = products.length >= planLimits.maxProducts
   const salesAtLimit = monthlySalesCount >= planLimits.maxMonthlySales
+  const nearProductLimit = !productAtLimit && productPct >= 80
+  const nearSalesLimit = !salesAtLimit && salesPct >= 80
+  const showLimitAlert = !isPro && !limitAlertDismissed && (nearProductLimit || nearSalesLimit)
 
   return (
     <div className="page-content">
@@ -127,6 +138,25 @@ export default function Dashboard() {
       </div>
 
       <OnboardingChecklist />
+
+      {/* Alerta límite al 80% */}
+      {showLimitAlert && (
+        <div className="bg-amber-50 border border-amber-100 rounded-2xl p-3.5 mb-4 flex items-center gap-3">
+          <Zap size={16} className="text-amber-500 flex-shrink-0" />
+          <p className="flex-1 text-xs text-amber-700">
+            {nearProductLimit
+              ? `Te quedan ${planLimits.maxProducts - products.length} productos disponibles en tu plan gratis.`
+              : `Te quedan ${planLimits.maxMonthlySales - monthlySalesCount} ventas este mes en tu plan gratis.`}
+            {' '}
+            <button onClick={handleUpgrade} disabled={upgradeLoading} className="font-bold underline underline-offset-2 disabled:opacity-60">
+              {upgradeLoading ? 'Cargando...' : 'Pasate a Pro'}
+            </button>
+          </p>
+          <button onClick={dismissLimitAlert} className="text-amber-400 active:scale-95 flex-shrink-0">
+            <X size={14} />
+          </button>
+        </div>
+      )}
 
       {/* Cards grid */}
       <div className="grid grid-cols-2 gap-3 mb-5">

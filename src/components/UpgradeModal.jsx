@@ -7,11 +7,11 @@ const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL
 const VARIANTS = {
   products: {
     title: 'Llegaste al límite de productos',
-    text: 'Tu plan gratis permite hasta 3 productos activos. Pásate a Pro para gestionar todos los productos que necesites.',
+    text: 'Tu plan gratis permite hasta 10 productos. Pásate a Pro para gestionar todos los productos que necesites.',
   },
   sales: {
     title: 'Llegaste al límite de ventas mensuales',
-    text: 'Tu plan gratis incluye hasta 20 ventas al mes. Pásate a Pro para seguir registrando ventas sin límites.',
+    text: 'Tu plan gratis incluye hasta 50 ventas al mes. Pásate a Pro para seguir registrando ventas sin límites.',
   },
   whatsapp: {
     title: 'Disponible en Pro',

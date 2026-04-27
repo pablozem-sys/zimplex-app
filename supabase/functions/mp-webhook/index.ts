@@ -1,11 +1,38 @@
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 
-const MP_ACCESS_TOKEN = Deno.env.get('MP_ACCESS_TOKEN')!
-const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!
+const MP_ACCESS_TOKEN     = Deno.env.get('MP_ACCESS_TOKEN')!
+const MP_WEBHOOK_SECRET   = Deno.env.get('MP_WEBHOOK_SECRET') ?? ''
+const SUPABASE_URL        = Deno.env.get('SUPABASE_URL')!
 const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
-const RESEND_API_KEY = Deno.env.get('RESEND_API_KEY')!
-const ADMIN_EMAIL = 'hola@zimplex.app'
+const RESEND_API_KEY      = Deno.env.get('RESEND_API_KEY')!
+const ADMIN_EMAIL         = 'hola@zimplex.app'
+
+// Verifica la firma HMAC-SHA256 que MercadoPago envía en x-signature
+async function verifyMpSignature(req: Request, rawBody: string): Promise<boolean> {
+  if (!MP_WEBHOOK_SECRET) return true // si no está configurado, omitir (modo legacy)
+
+  const xSignature  = req.headers.get('x-signature') ?? ''
+  const xRequestId  = req.headers.get('x-request-id') ?? ''
+  const urlParams   = new URL(req.url).searchParams
+  const dataId      = urlParams.get('data.id') ?? ''
+
+  // Formato: ts=<timestamp>,v1=<hash>
+  const parts = Object.fromEntries(xSignature.split(',').map(p => p.split('=')))
+  const ts    = parts['ts']
+  const v1    = parts['v1']
+  if (!ts || !v1) return false
+
+  const manifest = `id:${dataId};request-id:${xRequestId};ts:${ts}`
+  const key = await crypto.subtle.importKey(
+    'raw', new TextEncoder().encode(MP_WEBHOOK_SECRET),
+    { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']
+  )
+  const sig = await crypto.subtle.sign('HMAC', key, new TextEncoder().encode(manifest))
+  const expected = Array.from(new Uint8Array(sig)).map(b => b.toString(16).padStart(2, '0')).join('')
+
+  return expected === v1
+}
 
 async function alertAdmin(subject: string, body: string) {
   try {
@@ -27,7 +54,16 @@ async function alertAdmin(subject: string, body: string) {
 serve(async (req) => {
   if (req.method === 'GET') return new Response('ok', { status: 200 })
   try {
-    const body = await req.json()
+    const rawBody = await req.text()
+
+    // Verificar firma HMAC de MercadoPago
+    const valid = await verifyMpSignature(req, rawBody)
+    if (!valid) {
+      console.warn('Firma MP inválida — request rechazado')
+      return new Response('unauthorized', { status: 401 })
+    }
+
+    const body = JSON.parse(rawBody)
     console.log('MP webhook:', JSON.stringify(body))
 
     if (body.type !== 'subscription_preapproval') return new Response('ignored', { status: 200 })

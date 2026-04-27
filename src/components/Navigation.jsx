@@ -1,5 +1,5 @@
 import { useApp } from '../context/AppContext'
-import { LayoutDashboard, ShoppingCart, Package, ClipboardList, Target, UserCircle, HelpCircle, Sparkles, LogOut } from 'lucide-react'
+import { LayoutDashboard, ShoppingCart, Package, ClipboardList, UserCircle, HelpCircle, Sparkles, LogOut } from 'lucide-react'
 import { supabase } from '../lib/supabase'
 
 const tabs = [
@@ -7,7 +7,6 @@ const tabs = [
   { id: 'ventas',    label: 'Ventas',   icon: ShoppingCart },
   { id: 'productos', label: 'Stock',    icon: Package },
   { id: 'pedidos',   label: 'Pedidos',  icon: ClipboardList },
-  { id: 'metas',     label: 'Metas',    icon: Target },
   { id: 'ia',        label: 'IA',       icon: Sparkles },
   { id: 'ayuda',     label: 'Ayuda',    icon: HelpCircle },
   { id: 'perfil',    label: 'Perfil',   icon: UserCircle },

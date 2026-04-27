@@ -5,6 +5,7 @@ import { supabase } from '../lib/supabase'
 import { Plus, X, ChevronDown, MessageCircle, Lock, Loader2, Trash2, Pencil } from 'lucide-react'
 import UpgradeModal from '../components/UpgradeModal'
 
+
 const inputClass = 'w-full bg-gray-50 border border-gray-200 rounded-2xl px-4 py-3.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#6366F1] focus:border-transparent'
 
 const statusConfig = {
@@ -46,6 +47,7 @@ const EMPTY_ITEM = { productId: '', quantity: 1, unitPrice: '' }
 
 function CreateOrderModal({ onClose, onAdd, products, transfer }) {
   const { formatCurrency: fmt } = useLocale()
+  const { isPro } = useApp()
   const [customer, setCustomer] = useState('')
   const [phone, setPhone]       = useState('')
   const [note, setNote]         = useState('')
@@ -55,6 +57,7 @@ function CreateOrderModal({ onClose, onAdd, products, transfer }) {
   const [loading, setLoading]   = useState(false)
   const [loadingWA, setLoadingWA] = useState(false)
   const [error, setError]       = useState(null)
+  const [showUpgrade, setShowUpgrade] = useState(false)
 
   const currentProduct  = products.find(p => p.id === current.productId)
   const currentSubtotal = (current.unitPrice || 0) * current.quantity
@@ -263,15 +266,24 @@ function CreateOrderModal({ onClose, onAdd, products, transfer }) {
             {loading ? <><Loader2 size={18} className="animate-spin" />Creando...</> : 'Crear pedido'}
           </button>
 
-          <button type="button" onClick={handleCreateAndWhatsApp} disabled={busy}
-            className="w-full bg-[#25D366] text-white font-semibold py-4 rounded-2xl flex items-center justify-center gap-2 active:scale-[0.98] transition-all shadow-lg shadow-green-200 disabled:opacity-60">
-            {loadingWA
-              ? <><Loader2 size={18} className="animate-spin" />Enviando...</>
-              : <><MessageCircle size={18} />Crear y enviar por WhatsApp</>
-            }
-          </button>
+          {isPro ? (
+            <button type="button" onClick={handleCreateAndWhatsApp} disabled={busy}
+              className="w-full bg-[#25D366] text-white font-semibold py-4 rounded-2xl flex items-center justify-center gap-2 active:scale-[0.98] transition-all shadow-lg shadow-green-200 disabled:opacity-60">
+              {loadingWA
+                ? <><Loader2 size={18} className="animate-spin" />Enviando...</>
+                : <><MessageCircle size={18} />Crear y enviar por WhatsApp</>
+              }
+            </button>
+          ) : (
+            <button type="button" onClick={() => setShowUpgrade(true)}
+              className="w-full bg-gray-100 text-gray-500 font-semibold py-4 rounded-2xl flex items-center justify-center gap-2 active:scale-[0.98] transition-all">
+              <Lock size={18} />
+              Crear y enviar por WhatsApp <span className="text-xs font-bold text-[#6366F1] ml-1">Pro</span>
+            </button>
+          )}
         </form>
       </div>
+      {showUpgrade && <UpgradeModal variant="whatsapp" onClose={() => setShowUpgrade(false)} />}
     </div>
   )
 }

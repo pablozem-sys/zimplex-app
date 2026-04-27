@@ -7,7 +7,6 @@ import Dashboard from './pages/Dashboard'
 import RegisterSale from './pages/RegisterSale'
 import Products from './pages/Products'
 import Orders from './pages/Orders'
-import Goals from './pages/Goals'
 import AuthPage from './pages/auth/AuthPage'
 import ResetPasswordPage from './pages/auth/ResetPasswordPage'
 import Profile from './pages/Profile'
@@ -38,7 +37,6 @@ function AppContent() {
     ventas: <RegisterSale />,
     productos: <Products />,
     pedidos: <Orders />,
-    metas: <Goals />,
     ia: <IA />,
     ayuda: <Help />,
     perfil: <Profile />,

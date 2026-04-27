@@ -1,4 +1,8 @@
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
+
 const ANTHROPIC_API_KEY = Deno.env.get('ANTHROPIC_API_KEY') ?? ''
+const SUPABASE_URL       = Deno.env.get('SUPABASE_URL') ?? ''
+const SUPABASE_ANON_KEY  = Deno.env.get('SUPABASE_ANON_KEY') ?? ''
 
 const CORS = {
   'Access-Control-Allow-Origin': '*',
@@ -10,6 +14,23 @@ const SYSTEM_PROMPT = `Eres el asistente de inventario de Zimplex para comercios
 
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') return new Response('ok', { headers: CORS })
+
+  // Verificar JWT del usuario
+  const authHeader = req.headers.get('Authorization')
+  if (!authHeader?.startsWith('Bearer ')) {
+    return new Response(JSON.stringify({ error: 'No autorizado' }), {
+      status: 401, headers: { 'Content-Type': 'application/json', ...CORS },
+    })
+  }
+  const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+  const { data: { user }, error: authError } = await supabase.auth.getUser(
+    authHeader.replace('Bearer ', '')
+  )
+  if (authError || !user) {
+    return new Response(JSON.stringify({ error: 'Token inválido' }), {
+      status: 401, headers: { 'Content-Type': 'application/json', ...CORS },
+    })
+  }
 
   try {
     const body = await req.json()

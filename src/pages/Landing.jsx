@@ -458,7 +458,7 @@ function MobileCTABar({ onLogin }) {
 function Hero({ onLogin }) {
   return (
     <section style={{ background: DARK, overflow: 'hidden' }}>
-      <div style={{ maxWidth: 1100, margin: '0 auto', padding: '72px 48px 60px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 56, alignItems: 'center' }}>
+      <div className="max-w-[1100px] mx-auto px-6 py-14 md:px-12 md:py-[72px] grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-14 items-center">
         {/* Left */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
           {/* Badge */}
@@ -538,15 +538,15 @@ function Hero({ onLogin }) {
           </div>
         </div>
 
-        {/* Right — Phone animado */}
-        <div style={{ position: 'relative', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+        {/* Right — Phone animado (solo desktop) */}
+        <div className="hidden md:flex relative justify-center items-center">
           <div style={{ position: 'absolute', width: 300, height: 300, borderRadius: '50%', background: `radial-gradient(circle, ${INDIGO2}22 0%, transparent 70%)`, pointerEvents: 'none' }} />
           <AnimatedPhone scale={1.4} />
         </div>
       </div>
 
       {/* Social proof bar */}
-      <div style={{ background: 'rgba(0,0,0,0.3)', borderTop: '1px solid rgba(255,255,255,0.05)', padding: '14px 48px', display: 'flex', justifyContent: 'center', gap: 48 }}>
+      <div className="flex flex-wrap justify-center gap-5 md:gap-12 px-6 md:px-12 py-3.5" style={{ background: 'rgba(0,0,0,0.3)', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
         {['Sin tarjeta de crédito','Sin instalación','Listo en 2 minutos'].map(t => (
           <div key={t} style={{ display: 'flex', alignItems: 'center', gap: 7, fontSize: 13, color: 'rgba(255,255,255,0.4)', fontFamily: POPPINS }}>
             <Check size={13} color="rgba(255,255,255,0.3)" strokeWidth={2.5} />{t}

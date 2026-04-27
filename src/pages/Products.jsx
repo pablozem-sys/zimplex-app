@@ -1,9 +1,12 @@
 import { useState } from 'react'
 import { useApp } from '../context/AppContext'
 import { useLocale } from '../context/LocaleContext'
-import { Plus, AlertTriangle, Package, X, Trash2, Pencil, Bell } from 'lucide-react'
+import { Plus, AlertTriangle, Package, X, Trash2, Pencil, Bell, Zap } from 'lucide-react'
 import UpgradeModal from '../components/UpgradeModal'
 import { requestNotificationPermission } from '../lib/notifications'
+import { supabase } from '../lib/supabase'
+
+const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL
 const inputClass = 'w-full bg-gray-50 border border-gray-200 rounded-2xl px-4 py-3.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#6366F1] focus:border-transparent'
 
 const UNITS = ['unidades', 'kg', 'gramos', 'litros', 'ml', 'metros', 'cajas', 'docenas', 'bolsas', 'porciones']
@@ -141,6 +144,37 @@ export default function Products() {
   const [notifDismissed, setNotifDismissed] = useState(
     () => !('Notification' in window) || Notification.permission !== 'default' || !!localStorage.getItem('notif_banner_dismissed')
   )
+  const [limitAlertDismissed, setLimitAlertDismissed] = useState(
+    () => !!sessionStorage.getItem('limit_alert_dismissed')
+  )
+  const [upgradeLoading, setUpgradeLoading] = useState(false)
+
+  const dismissLimitAlert = () => {
+    sessionStorage.setItem('limit_alert_dismissed', '1')
+    setLimitAlertDismissed(true)
+  }
+
+  const handleUpgrade = async () => {
+    setUpgradeLoading(true)
+    const newWindow = window.open('', '_blank')
+    try {
+      const { data: { session } } = await supabase.auth.getSession()
+      const res = await fetch(`${SUPABASE_URL}/functions/v1/mp-create-subscription`, {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${session?.access_token}`, 'Content-Type': 'application/json' },
+      })
+      const data = await res.json()
+      if (data.init_point && newWindow) {
+        newWindow.location.href = data.init_point
+      } else {
+        newWindow?.close()
+      }
+    } catch {
+      newWindow?.close()
+    } finally {
+      setUpgradeLoading(false)
+    }
+  }
 
   const dismissNotifBanner = () => {
     localStorage.setItem('notif_banner_dismissed', '1')
@@ -148,6 +182,9 @@ export default function Products() {
   }
 
   const atLimit = !isPro && products.length >= planLimits.maxProducts
+  const productPct = Math.min(100, (products.length / planLimits.maxProducts) * 100)
+  const nearLimit = !isPro && !atLimit && productPct >= 80
+  const showLimitAlert = nearLimit && !limitAlertDismissed
 
   const handleActivateNotifications = async () => {
     const result = await requestNotificationPermission()
@@ -195,6 +232,22 @@ export default function Products() {
               }}
             />
           </div>
+        </div>
+      )}
+
+      {/* Alerta límite al 80% */}
+      {showLimitAlert && (
+        <div className="bg-amber-50 border border-amber-100 rounded-2xl p-3.5 mb-4 flex items-center gap-3">
+          <Zap size={16} className="text-amber-500 flex-shrink-0" />
+          <p className="flex-1 text-xs text-amber-700">
+            Te quedan {planLimits.maxProducts - products.length} productos disponibles en tu plan gratis.{' '}
+            <button onClick={handleUpgrade} disabled={upgradeLoading} className="font-bold underline underline-offset-2 disabled:opacity-60">
+              {upgradeLoading ? 'Cargando...' : 'Pasate a Pro'}
+            </button>
+          </p>
+          <button onClick={dismissLimitAlert} className="text-amber-400 active:scale-95 flex-shrink-0">
+            <X size={14} />
+          </button>
         </div>
       )}
 
