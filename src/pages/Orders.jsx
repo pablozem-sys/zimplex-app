@@ -26,7 +26,7 @@ const statusConfig = {
   entregado: { label: 'Entregado', color: 'text-[#7CD09B]', bg: 'bg-green-50',  dot: 'bg-[#7CD09B]' },
 }
 
-function buildWhatsAppMsg(customer, items, total, note, transfer, fmt) {
+export function buildWhatsAppMsg(customer, items, total, note, transfer, fmt) {
   const lines = [`Hola ${customer} 👋`, ``, `Tu pedido está confirmado:`]
   items.forEach(({ quantity, productName, subtotal }) => {
     lines.push(`• ${quantity} × ${productName} — ${fmt(subtotal)}`)
@@ -49,7 +49,7 @@ function buildWhatsAppMsg(customer, items, total, note, transfer, fmt) {
   return lines.join('\n')
 }
 
-function cleanPhone(raw) {
+export function cleanPhone(raw) {
   const digits = raw.replace(/\D/g, '')
   return digits.startsWith('56') ? digits : `56${digits}`
 }

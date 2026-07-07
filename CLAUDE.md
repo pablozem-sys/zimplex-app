@@ -35,3 +35,12 @@ Amigable y cercano. Hablamos simple, directo, sin tecnicismos.
 - No usar jerga técnica en textos visibles al usuario
 - No usar colores fuera de la paleta de marca
 - No cambiar la fuente Nunito por otra
+
+## Testing
+- `npm test` corre la suite (Vitest). Tests viven junto al código (`Orders.jsx` → `Orders.test.jsx`). Ver TESTING.md.
+- 100% de cobertura es la meta — los tests son lo que hace seguro el vibe coding.
+- Al escribir una función nueva, agrega su test.
+- Al arreglar un bug, agrega un test de regresión.
+- Al agregar manejo de errores, agrega un test que dispare ese error.
+- Al agregar un condicional (if/else, switch), testea ambas ramas.
+- Nunca commitear código que rompa tests existentes.
