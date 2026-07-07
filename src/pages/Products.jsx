@@ -109,6 +109,20 @@ function ProductFormModal({ title, initial, onClose, onSave }) {
 }
 
 function DeleteConfirmModal({ product, onClose, onConfirm }) {
+  const [error, setError] = useState(null)
+  const [loading, setLoading] = useState(false)
+
+  const handleDelete = async () => {
+    setLoading(true)
+    const result = await onConfirm(product.id)
+    setLoading(false)
+    if (result?.error) {
+      setError('No se pudo eliminar: este producto tiene ventas o pedidos asociados.')
+      return
+    }
+    onClose()
+  }
+
   return (
     <div className="fixed inset-0 bg-black/40 z-50 flex items-end justify-center" onClick={onClose}>
       <div className="bg-white w-full max-w-[430px] rounded-t-[32px] p-6 pb-10" style={{ marginBottom: '84px' }} onClick={e => e.stopPropagation()}>
@@ -120,14 +134,17 @@ function DeleteConfirmModal({ product, onClose, onConfirm }) {
         <p className="text-sm text-gray-400 text-center mb-6">
           ¿Eliminar <strong className="text-gray-700">{product.name}</strong>? Esta acción no se puede deshacer.
         </p>
+        {error && (
+          <p className="text-sm text-red-500 bg-red-50 rounded-xl px-4 py-3 mb-4 text-center">{error}</p>
+        )}
         <div className="flex gap-3">
           <button onClick={onClose}
             className="flex-1 bg-gray-100 text-gray-700 font-semibold py-4 rounded-2xl active:scale-95 transition-all">
             Cancelar
           </button>
-          <button onClick={() => { onConfirm(product.id); onClose() }}
-            className="flex-1 bg-[#DC4B56] text-white font-semibold py-4 rounded-2xl active:scale-95 transition-all shadow-lg shadow-red-200">
-            Eliminar
+          <button onClick={handleDelete} disabled={loading}
+            className="flex-1 bg-[#DC4B56] text-white font-semibold py-4 rounded-2xl active:scale-95 transition-all shadow-lg shadow-red-200 disabled:opacity-60">
+            {loading ? 'Eliminando...' : 'Eliminar'}
           </button>
         </div>
       </div>

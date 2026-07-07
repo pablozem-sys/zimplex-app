@@ -224,7 +224,8 @@ export function AppProvider({ children }) {
   }
 
   const deleteProduct = async (id) => {
-    await supabase.from('products').delete().eq('id', id)
+    const { error } = await supabase.from('products').delete().eq('id', id)
+    if (error) return { error }
     setProducts(prev => prev.filter(p => p.id !== id))
   }
 
