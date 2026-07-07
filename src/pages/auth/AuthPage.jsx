@@ -14,7 +14,9 @@ function GoogleIcon() {
 }
 
 export default function AuthPage() {
-  const [mode, setMode] = useState('login') // 'login' | 'register'
+  const [mode, setMode] = useState(() =>
+    window.location.pathname === '/signup' ? 'register' : 'login'
+  )
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)

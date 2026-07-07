@@ -178,6 +178,7 @@ export function AppProvider({ children }) {
     total: r.total,
     status: r.status,
     paymentStatus: r.payment_status,
+    paymentMethod: r.payment_method || 'efectivo',
     note: r.note,
     date: r.date,
     paymentLink: r.payment_link,
@@ -280,6 +281,7 @@ export function AppProvider({ children }) {
       quantity: totalQty,
       total: grandTotal,
       status: 'pendiente',
+      payment_method: order.paymentMethod || 'efectivo',
       note: order.note || null,
       date: fmt(new Date()),
       updated_at: new Date().toISOString(),
@@ -308,13 +310,50 @@ export function AppProvider({ children }) {
   const updateOrderStatus = async (id, status) => {
     await supabase.from('orders').update({ status, updated_at: new Date().toISOString() }).eq('id', id)
     setOrders(prev => prev.map(o => o.id === id ? { ...o, status } : o))
+
+    if (status === 'pagado') {
+      const order = orders.find(x => x.id === id)
+      const { data: orderItems } = await supabase.from('order_items').select('*').eq('order_id', id)
+
+      const itemsToProcess = orderItems?.length > 0
+        ? orderItems
+        : order?.productId ? [{
+            product_id:   order.productId,
+            product_name: order.productName,
+            quantity:     order.quantity,
+            unit_price:   order.quantity > 0 ? Math.round(order.total / order.quantity) : 0,
+            subtotal:     order.total,
+          }] : []
+
+      for (const item of itemsToProcess) {
+        const product = products.find(p => p.id === item.product_id)
+        if (product) {
+          await updateProduct(item.product_id, { stock: Math.max(0, product.stock - item.quantity) })
+        }
+
+        const { data: saleData } = await supabase.from('sales').insert({
+          user_id:        userId,
+          product_id:     item.product_id,
+          product_name:   item.product_name,
+          quantity:       item.quantity,
+          unit_price:     item.unit_price,
+          total_amount:   item.subtotal,
+          customer_name:  order?.customer || null,
+          payment_method: order?.paymentMethod || 'efectivo',
+          sale_date:      fmt(new Date()),
+        }).select().single()
+
+        if (saleData) setSales(prev => [dbToSale(saleData), ...prev])
+      }
+    }
   }
 
   const updateOrder = async (id, updates) => {
     const dbUpdates = { updated_at: new Date().toISOString() }
-    if (updates.customer   !== undefined) dbUpdates.customer       = updates.customer
+    if (updates.customer      !== undefined) dbUpdates.customer       = updates.customer
     if (updates.customerPhone !== undefined) dbUpdates.customer_phone = updates.customerPhone
-    if (updates.note       !== undefined) dbUpdates.note           = updates.note
+    if (updates.note          !== undefined) dbUpdates.note           = updates.note
+    if (updates.paymentMethod !== undefined) dbUpdates.payment_method = updates.paymentMethod
 
     if (updates.items?.length > 0) {
       const items      = updates.items
@@ -350,6 +389,20 @@ export function AppProvider({ children }) {
   }
 
   const deleteOrder = async (id) => {
+    const order = orders.find(o => o.id === id)
+    if (order?.status === 'pagado') {
+      const { data: items } = await supabase.from('order_items').select('*').eq('order_id', id)
+      const itemsToRestore = items?.length > 0
+        ? items
+        : order.productId ? [{ product_id: order.productId, quantity: order.quantity }] : []
+
+      for (const item of itemsToRestore) {
+        const product = products.find(p => p.id === item.product_id)
+        if (product) {
+          await updateProduct(item.product_id, { stock: product.stock + item.quantity })
+        }
+      }
+    }
     await supabase.from('orders').delete().eq('id', id)
     setOrders(prev => prev.filter(o => o.id !== id))
   }

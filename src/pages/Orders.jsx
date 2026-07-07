@@ -8,6 +8,18 @@ import UpgradeModal from '../components/UpgradeModal'
 
 const inputClass = 'w-full bg-gray-50 border border-gray-200 rounded-2xl px-4 py-3.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#6366F1] focus:border-transparent'
 
+const paymentMethods = [
+  { id: 'efectivo',      label: 'Efectivo',     emoji: '💵' },
+  { id: 'transferencia', label: 'Transferencia', emoji: '📲' },
+  { id: 'tarjeta',       label: 'Tarjeta',       emoji: '💳' },
+]
+const paymentColors = {
+  efectivo:      'text-emerald-600 bg-emerald-50',
+  transferencia: 'text-[#6366F1] bg-indigo-50',
+  tarjeta:       'text-purple-600 bg-purple-50',
+}
+const paymentLabels = { efectivo: 'Efectivo', transferencia: 'Transferencia', tarjeta: 'Tarjeta' }
+
 const statusConfig = {
   pendiente: { label: 'Pendiente', color: 'text-amber-600', bg: 'bg-amber-50', dot: 'bg-amber-400' },
   pagado:    { label: 'Pagado',    color: 'text-[#6366F1]', bg: 'bg-indigo-50', dot: 'bg-[#6366F1]' },
@@ -51,6 +63,7 @@ function CreateOrderModal({ onClose, onAdd, products, transfer }) {
   const [customer, setCustomer] = useState('')
   const [phone, setPhone]       = useState('')
   const [note, setNote]         = useState('')
+  const [paymentMethod, setPaymentMethod] = useState('efectivo')
   const [items, setItems]       = useState([])
   const [current, setCurrent]   = useState(EMPTY_ITEM)
   const [itemError, setItemError] = useState(null)
@@ -104,6 +117,7 @@ function CreateOrderModal({ onClose, onAdd, products, transfer }) {
     customer,
     customerPhone: phone ? cleanPhone(phone) : null,
     note,
+    paymentMethod,
     items,
   })
 
@@ -204,6 +218,10 @@ function CreateOrderModal({ onClose, onAdd, products, transfer }) {
               <ChevronDown size={16} className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
             </div>
 
+            {currentProduct && currentProduct.stock < current.quantity && (
+              <p className="text-xs text-amber-500">⚠️ Stock disponible: {currentProduct.stock} {currentProduct.unit || 'unidades'}</p>
+            )}
+
             <div className="space-y-3">
               <div>
                 <label className="text-xs font-medium text-gray-400 mb-1.5 block">Cantidad</label>
@@ -246,6 +264,24 @@ function CreateOrderModal({ onClose, onAdd, products, transfer }) {
             </label>
             <input value={note} onChange={e => setNote(e.target.value)}
               placeholder="Ej: dirección de entrega, sin sal..." className={inputClass} />
+          </div>
+
+          {/* Método de pago */}
+          <div>
+            <label className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2 block">Método de pago</label>
+            <div className="grid grid-cols-3 gap-2">
+              {paymentMethods.map(pm => (
+                <button key={pm.id} type="button" onClick={() => setPaymentMethod(pm.id)}
+                  className={`py-3.5 rounded-2xl border text-sm font-medium flex flex-col items-center gap-1 transition-all shadow-sm ${
+                    paymentMethod === pm.id
+                      ? 'border-[#6366F1] bg-indigo-50 text-[#6366F1] shadow-blue-100'
+                      : 'border-gray-200 bg-white text-gray-400'
+                  }`}>
+                  <span className="text-xl">{pm.emoji}</span>
+                  <span className="text-xs">{pm.label}</span>
+                </button>
+              ))}
+            </div>
           </div>
 
           {/* Total */}
@@ -294,6 +330,7 @@ function EditOrderModal({ order, onClose, onSave, products }) {
   const [customer, setCustomer]     = useState(order.customer || '')
   const [phone, setPhone]           = useState(order.customerPhone ? String(order.customerPhone).replace(/^56/, '') : '')
   const [note, setNote]             = useState(order.note || '')
+  const [paymentMethod, setPaymentMethod] = useState(order.paymentMethod || 'efectivo')
   const [items, setItems]           = useState([])
   const [loadingItems, setLoadingItems] = useState(true)
 
@@ -355,7 +392,7 @@ function EditOrderModal({ order, onClose, onSave, products }) {
     if (items.length === 0) { setError('Agrega al menos un producto.'); return }
     setError(null)
     setLoading(true)
-    await onSave(order.id, { customer, customerPhone: phone ? cleanPhone(phone) : null, note, items })
+    await onSave(order.id, { customer, customerPhone: phone ? cleanPhone(phone) : null, note, paymentMethod, items })
     setLoading(false)
     onClose()
   }
@@ -463,6 +500,24 @@ function EditOrderModal({ order, onClose, onSave, products }) {
               Nota <span className="text-gray-300 normal-case font-normal">(opcional)</span>
             </label>
             <input value={note} onChange={e => setNote(e.target.value)} placeholder="Ej: dirección de entrega..." className={inputClass} />
+          </div>
+
+          {/* Método de pago */}
+          <div>
+            <label className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2 block">Método de pago</label>
+            <div className="grid grid-cols-3 gap-2">
+              {paymentMethods.map(pm => (
+                <button key={pm.id} type="button" onClick={() => setPaymentMethod(pm.id)}
+                  className={`py-3.5 rounded-2xl border text-sm font-medium flex flex-col items-center gap-1 transition-all shadow-sm ${
+                    paymentMethod === pm.id
+                      ? 'border-[#6366F1] bg-indigo-50 text-[#6366F1] shadow-blue-100'
+                      : 'border-gray-200 bg-white text-gray-400'
+                  }`}>
+                  <span className="text-xl">{pm.emoji}</span>
+                  <span className="text-xs">{pm.label}</span>
+                </button>
+              ))}
+            </div>
           </div>
 
           {grandTotal > 0 && (
@@ -589,6 +644,11 @@ function OrderCard({ order, onStatusChange, onUpdate, onDelete, transfer, produc
               {config.label}
             </span>
             <p className="text-sm font-bold text-gray-900">{fmt(order.total)}</p>
+            {order.paymentMethod && (
+              <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${paymentColors[order.paymentMethod] || 'text-gray-500 bg-gray-100'}`}>
+                {paymentLabels[order.paymentMethod] || order.paymentMethod}
+              </span>
+            )}
           </div>
         </div>
 
