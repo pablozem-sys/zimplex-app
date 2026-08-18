@@ -25,3 +25,6 @@ dist-ssr
 *.sw?
 .vercel
 .gstack/
+.playwright-cli/
+.claude/commands/
+qa_signup_fixed.png
