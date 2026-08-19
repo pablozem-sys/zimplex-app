@@ -340,8 +340,6 @@ export function AppProvider({ children }) {
 
   const updateOrderStatus = async (id, status) => {
     const order = orders.find(x => x.id === id)
-    // Idempotente: un doble clic (o dos taps rápidos en mobile) no debe
-    // procesar el pago dos veces ni duplicar stock/venta.
     if (!order || order.status === status) return { error: null }
     const isBeingPaid = status === 'pagado' && order.status !== 'pagado'
 
@@ -349,8 +347,19 @@ export function AppProvider({ children }) {
       return { error: { message: 'LIMIT_REACHED' } }
     }
 
-    const { error: orderError } = await supabase.from('orders').update({ status, updated_at: new Date().toISOString() }).eq('id', id)
+    // Compare-and-swap contra el estado en la base (no contra el estado de
+    // React, que dos invocaciones concurrentes del mismo doble clic todavía
+    // leerían igual de "viejo" antes de que cualquiera termine de escribir).
+    // Si ninguna fila calzó con .eq('status', order.status), es porque otra
+    // invocación ya ganó la carrera — no se vuelve a aplicar el efecto.
+    const { data: updatedRows, error: orderError } = await supabase
+      .from('orders')
+      .update({ status, updated_at: new Date().toISOString() })
+      .eq('id', id)
+      .eq('status', order.status)
+      .select('id')
     if (orderError) return { error: orderError }
+    if (!updatedRows || updatedRows.length === 0) return { error: null }
     setOrders(prev => prev.map(o => o.id === id ? { ...o, status } : o))
 
     if (isBeingPaid) {
