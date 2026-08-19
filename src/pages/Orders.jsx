@@ -392,8 +392,9 @@ function EditOrderModal({ order, onClose, onSave, products }) {
     if (items.length === 0) { setError('Agrega al menos un producto.'); return }
     setError(null)
     setLoading(true)
-    await onSave(order.id, { customer, customerPhone: phone ? cleanPhone(phone) : null, note, paymentMethod, items })
+    const { error: err } = await onSave(order.id, { customer, customerPhone: phone ? cleanPhone(phone) : null, note, paymentMethod, items })
     setLoading(false)
+    if (err) { setError('Error al guardar los cambios. Intenta de nuevo.'); return }
     onClose()
   }
 

@@ -375,6 +375,9 @@ export function AppProvider({ children }) {
     if (updates.note          !== undefined) dbUpdates.note           = updates.note
     if (updates.paymentMethod !== undefined) dbUpdates.payment_method = updates.paymentMethod
 
+    const order = orders.find(o => o.id === id)
+    let stockDeltas = null
+
     if (updates.items?.length > 0) {
       const items      = updates.items
       const grandTotal = items.reduce((s, i) => s + i.subtotal, 0)
@@ -384,18 +387,53 @@ export function AppProvider({ children }) {
       dbUpdates.quantity     = totalQty
       dbUpdates.total        = grandTotal
 
-      await supabase.from('order_items').delete().eq('order_id', id)
+      // El pedido ya se pagó (stock ya descontado con los items viejos) — hay
+      // que calcular cuánto cambia el stock por producto para no corromperlo
+      // al reflejar los items nuevos (y para que un delete posterior, que
+      // restaura stock según los items vigentes, quede correcto).
+      if (order?.status === 'pagado') {
+        const { data: oldItems } = await supabase.from('order_items').select('*').eq('order_id', id)
+        const before = new Map()
+        const oldList = oldItems?.length > 0
+          ? oldItems.map(i => ({ productId: i.product_id, quantity: i.quantity }))
+          : order.productId ? [{ productId: order.productId, quantity: order.quantity }] : []
+        oldList.forEach(i => { if (i.productId) before.set(i.productId, (before.get(i.productId) || 0) + i.quantity) })
+
+        const after = new Map()
+        items.forEach(i => { if (i.productId) after.set(i.productId, (after.get(i.productId) || 0) + i.quantity) })
+
+        stockDeltas = new Map()
+        new Set([...before.keys(), ...after.keys()]).forEach(pid => {
+          const delta = (after.get(pid) || 0) - (before.get(pid) || 0)
+          if (delta !== 0) stockDeltas.set(pid, delta)
+        })
+      }
+
+      const { error: deleteError } = await supabase.from('order_items').delete().eq('order_id', id)
+      if (deleteError) return { error: deleteError }
       for (const item of items) {
         if (item.productId) {
-          await supabase.from('order_items').insert({
+          const { error: itemError } = await supabase.from('order_items').insert({
             order_id: id, product_id: item.productId, product_name: item.productName,
             quantity: item.quantity, unit_price: item.unitPrice, subtotal: item.subtotal,
           })
+          if (itemError) return { error: itemError }
         }
       }
     }
 
-    await supabase.from('orders').update(dbUpdates).eq('id', id)
+    const { error: orderError } = await supabase.from('orders').update(dbUpdates).eq('id', id)
+    if (orderError) return { error: orderError }
+
+    if (stockDeltas) {
+      for (const [productId, delta] of stockDeltas) {
+        const product = products.find(p => p.id === productId)
+        if (product) {
+          await updateProduct(productId, { stock: Math.max(0, product.stock - delta) })
+        }
+      }
+    }
+
     setOrders(prev => prev.map(o => {
       if (o.id !== id) return o
       const updated = { ...o, ...updates }
@@ -406,6 +444,7 @@ export function AppProvider({ children }) {
       }
       return updated
     }))
+    return { error: null }
   }
 
   const deleteOrder = async (id) => {
