@@ -219,8 +219,10 @@ export function AppProvider({ children }) {
     if (changes.lowStockThreshold !== undefined) dbChanges.low_stock_threshold = changes.lowStockThreshold
     if (changes.description !== undefined) dbChanges.description = changes.description
     if (changes.unit !== undefined) dbChanges.unit = changes.unit
-    await supabase.from('products').update(dbChanges).eq('id', id)
+    const { error } = await supabase.from('products').update(dbChanges).eq('id', id)
+    if (error) return { error }
     setProducts(prev => prev.map(p => p.id === id ? { ...p, ...changes } : p))
+    return { error: null }
   }
 
   const deleteProduct = async (id) => {
