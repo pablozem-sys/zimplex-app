@@ -16,6 +16,29 @@ const fmt = (d) => {
 }
 const daysAgo = (n) => { const d = new Date(); d.setDate(d.getDate() - n); return fmt(d) }
 
+// Cuánto debe cambiar el stock de cada producto al reemplazar los items de un
+// pedido YA pagado por unos nuevos (positivo = descontar más stock, negativo
+// = restaurar). Ambas listas usan { productId, quantity }; items sin
+// productId (ej. texto libre) se ignoran porque no afectan stock.
+export function computeStockDeltas(oldItems, newItems) {
+  const sumByProduct = (list) => {
+    const map = new Map()
+    for (const item of list) {
+      if (!item.productId) continue
+      map.set(item.productId, (map.get(item.productId) || 0) + item.quantity)
+    }
+    return map
+  }
+  const before = sumByProduct(oldItems)
+  const after = sumByProduct(newItems)
+  const deltas = new Map()
+  for (const productId of new Set([...before.keys(), ...after.keys()])) {
+    const delta = (after.get(productId) || 0) - (before.get(productId) || 0)
+    if (delta !== 0) deltas.set(productId, delta)
+  }
+  return deltas
+}
+
 export function AppProvider({ children }) {
   const { country } = useLocale()
   const [products, setProducts] = useState([])
@@ -393,20 +416,10 @@ export function AppProvider({ children }) {
       // restaura stock según los items vigentes, quede correcto).
       if (order?.status === 'pagado') {
         const { data: oldItems } = await supabase.from('order_items').select('*').eq('order_id', id)
-        const before = new Map()
         const oldList = oldItems?.length > 0
           ? oldItems.map(i => ({ productId: i.product_id, quantity: i.quantity }))
           : order.productId ? [{ productId: order.productId, quantity: order.quantity }] : []
-        oldList.forEach(i => { if (i.productId) before.set(i.productId, (before.get(i.productId) || 0) + i.quantity) })
-
-        const after = new Map()
-        items.forEach(i => { if (i.productId) after.set(i.productId, (after.get(i.productId) || 0) + i.quantity) })
-
-        stockDeltas = new Map()
-        new Set([...before.keys(), ...after.keys()]).forEach(pid => {
-          const delta = (after.get(pid) || 0) - (before.get(pid) || 0)
-          if (delta !== 0) stockDeltas.set(pid, delta)
-        })
+        stockDeltas = computeStockDeltas(oldList, items)
       }
 
       const { error: deleteError } = await supabase.from('order_items').delete().eq('order_id', id)
