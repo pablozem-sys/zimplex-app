@@ -311,11 +311,21 @@ export function AppProvider({ children }) {
   }
 
   const updateOrderStatus = async (id, status) => {
-    await supabase.from('orders').update({ status, updated_at: new Date().toISOString() }).eq('id', id)
+    const order = orders.find(x => x.id === id)
+    // Idempotente: un doble clic (o dos taps rápidos en mobile) no debe
+    // procesar el pago dos veces ni duplicar stock/venta.
+    if (!order || order.status === status) return { error: null }
+    const isBeingPaid = status === 'pagado' && order.status !== 'pagado'
+
+    if (isBeingPaid && !isPro && monthlySalesCount >= planLimits.maxMonthlySales) {
+      return { error: { message: 'LIMIT_REACHED' } }
+    }
+
+    const { error: orderError } = await supabase.from('orders').update({ status, updated_at: new Date().toISOString() }).eq('id', id)
+    if (orderError) return { error: orderError }
     setOrders(prev => prev.map(o => o.id === id ? { ...o, status } : o))
 
-    if (status === 'pagado') {
-      const order = orders.find(x => x.id === id)
+    if (isBeingPaid) {
       const { data: orderItems } = await supabase.from('order_items').select('*').eq('order_id', id)
 
       const itemsToProcess = orderItems?.length > 0
@@ -334,7 +344,7 @@ export function AppProvider({ children }) {
           await updateProduct(item.product_id, { stock: Math.max(0, product.stock - item.quantity) })
         }
 
-        const { data: saleData } = await supabase.from('sales').insert({
+        const { data: saleData, error: saleError } = await supabase.from('sales').insert({
           user_id:        userId,
           product_id:     item.product_id,
           product_name:   item.product_name,
@@ -346,9 +356,11 @@ export function AppProvider({ children }) {
           sale_date:      fmt(new Date()),
         }).select().single()
 
+        if (saleError) { console.error('Error al registrar venta del pedido:', saleError); continue }
         if (saleData) setSales(prev => [dbToSale(saleData), ...prev])
       }
     }
+    return { error: null }
   }
 
   const updateOrder = async (id, updates) => {

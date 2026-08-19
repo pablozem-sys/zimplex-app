@@ -607,18 +607,28 @@ function OrderCard({ order, onStatusChange, onUpdate, onDelete, transfer, produc
   const { isPro } = useApp()
   const { formatCurrency: fmt } = useLocale()
   const [showUpgrade, setShowUpgrade] = useState(false)
+  const [upgradeVariant, setUpgradeVariant] = useState('whatsapp')
   const [confirmDelete, setConfirmDelete] = useState(false)
   const [showEdit, setShowEdit] = useState(false)
+  const [changingStatus, setChangingStatus] = useState(false)
   const config = statusConfig[order.status]
   const statuses = ['pendiente', 'pagado', 'entregado']
 
-  const nextStatus = () => {
+  const nextStatus = async () => {
+    if (changingStatus) return
     const idx = statuses.indexOf(order.status)
-    if (idx < statuses.length - 1) onStatusChange(order.id, statuses[idx + 1])
+    if (idx >= statuses.length - 1) return
+    setChangingStatus(true)
+    const { error } = await onStatusChange(order.id, statuses[idx + 1])
+    setChangingStatus(false)
+    if (error?.message === 'LIMIT_REACHED') {
+      setUpgradeVariant('sales')
+      setShowUpgrade(true)
+    }
   }
 
   const handleWhatsApp = () => {
-    if (!isPro) { setShowUpgrade(true); return }
+    if (!isPro) { setUpgradeVariant('whatsapp'); setShowUpgrade(true); return }
     const items = [{ quantity: order.quantity, productName: order.productName, subtotal: order.total }]
     const msg = buildWhatsAppMsg(order.customer, items, order.total, order.note, transfer, fmt)
     const url = order.customerPhone
@@ -675,8 +685,8 @@ function OrderCard({ order, onStatusChange, onUpdate, onDelete, transfer, produc
 
         <div className="flex gap-2 mt-2">
           {order.status !== 'entregado' && (
-            <button onClick={nextStatus}
-              className="flex-1 bg-[#6366F1] text-white text-xs font-semibold py-3 rounded-2xl active:scale-95 transition-all shadow-md shadow-blue-100">
+            <button onClick={nextStatus} disabled={changingStatus}
+              className="flex-1 bg-[#6366F1] text-white text-xs font-semibold py-3 rounded-2xl active:scale-95 transition-all shadow-md shadow-blue-100 disabled:opacity-60">
               {order.status === 'pendiente' ? 'Marcar como pagado' : 'Marcar como entregado'}
             </button>
           )}
@@ -699,7 +709,7 @@ function OrderCard({ order, onStatusChange, onUpdate, onDelete, transfer, produc
           </button>
         </div>
       </div>
-      {showUpgrade && <UpgradeModal variant="whatsapp" onClose={() => setShowUpgrade(false)} />}
+      {showUpgrade && <UpgradeModal variant={upgradeVariant} onClose={() => setShowUpgrade(false)} />}
       {showEdit && <EditOrderModal order={order} onClose={() => setShowEdit(false)} onSave={onUpdate} products={products} />}
     </>
   )
