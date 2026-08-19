@@ -294,7 +294,7 @@ export function AppProvider({ children }) {
 
     for (const item of items) {
       if (item.productId) {
-        await supabase.from('order_items').insert({
+        const { error: itemError } = await supabase.from('order_items').insert({
           order_id: data.id,
           product_id: item.productId,
           product_name: item.productName,
@@ -302,6 +302,11 @@ export function AppProvider({ children }) {
           unit_price: item.unitPrice,
           subtotal: item.subtotal,
         })
+        if (itemError) {
+          // No dejar un pedido "fantasma" con menos productos de los que dice tener
+          await supabase.from('orders').delete().eq('id', data.id)
+          return { data: null, error: itemError }
+        }
       }
     }
 
